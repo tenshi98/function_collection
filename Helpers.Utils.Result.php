@@ -22,7 +22,7 @@ foreach($_SESSION['ErrorListing'] as $producto) {
 if($_SESSION['usuario']['basic_data']['idTipoUsuario']==1){ 
 
 	//Obtengo la memoria del sistema
-	$memUsage = getServerMemoryUsage(false);
+	$memUsage = obtenerUsoMemoriaServidor(false);
 	//Calculos
 	$total_memory    = $memUsage["total"];
 	$server_memory   = $memUsage["total"] - $memUsage["free"];

@@ -10,22 +10,57 @@ if( ! defined('XMBCXRXSKGC')) {
 /*                                                  Funciones                                                      */
 /*                                                                                                                 */
 /*******************************************************************************************************************/
-/*******************************************************************************************************************/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Conectar Base de Datos
+* 
+*===========================     Detalles    ===========================
+* Funcion para conectarse a la base de datos
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se ejecuta codigo
+* 	conectar ();
+* 
+*===========================    Parametros   ===========================
+* Constantes  DB_SERVER  Ubicacion o direccion web donde se ubica la base de datos
+* Constantes  DB_USER    Usuario de acceso a la BD
+* Constantes  DB_PASS    Contraseña de acceso a la BD
+* Constantes  DB_NAME    Nombre de la BD
+* @return  db_con
+************************************************************************/
 //Funcion para conectarse a la base de datos
 function conectar () {
 	$db_con = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
 	$db_con->set_charset("utf8");
 	return $db_con; 
 }
-/*******************************************************************************************************************/
-//Funcion para seleccionar data desde la base de datos
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Seleccionar datos
+* 
+*===========================     Detalles    ===========================
+* Funcion para seleccionar data desde la base de datos
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se ejecuta codigo
+* 	db_select_data('tabla1.columnaA1,tabla2.columnaB1','tabla1','LEFT JOIN tabla2 ON tabla2.id = tabla1.id','tabla1.id=1',$dbConn);
+* 
+*===========================    Parametros   ===========================
+* String   $data     Columnas seleccionadas en la consulta
+* String   $table    Tabla desde donde traer los datos
+* String   $join     Concatenaciones con otras tablas
+* String   $where    Definicion del dato a traer
+* db_con   $dbConn   Conexion a la base de datos
+* @return  Object
+************************************************************************/
 function db_select_data ($data, $table, $join, $where, $dbConn) {
 	
 	// Se hace consulta
 	$query = "SELECT ".$data."
 	FROM `".$table."`
 	".$join."
-	WHERE ".$where;
+	WHERE ".$where."
+	LIMIT 1";
 	//Consulta
 	$resultado = mysqli_query ($dbConn, $query);
 	//Si ejecuto correctamente la consulta
@@ -48,8 +83,25 @@ function db_select_data ($data, $table, $join, $where, $dbConn) {
 	//devolver objeto
 	return $rowData;
 }
-/*******************************************************************************************************************/
-//Funcion para seleccionar data desde la base de datos
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Contar datos
+* 
+*===========================     Detalles    ===========================
+* Funcion para contar data desde la base de datos
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se ejecuta codigo
+* 	db_select_nrows('tabla1.columnaA1,tabla2.columnaB1','tabla1','LEFT JOIN tabla2 ON tabla2.id = tabla1.id','tabla1.id=1',$dbConn);
+* 
+*===========================    Parametros   ===========================
+* String   $data     Columnas seleccionadas en la consulta
+* String   $table    Tabla desde donde traer los datos
+* String   $join     Concatenaciones con otras tablas
+* String   $where    Definicion del dato a traer
+* db_con   $dbConn   Conexion a la base de datos
+* @return  Integer
+************************************************************************/
 function db_select_nrows ($data, $table, $join, $where, $dbConn) {
 	
 	// Se hace consulta

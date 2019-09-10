@@ -10,27 +10,50 @@ if( ! defined('XMBCXRXSKGC')) {
 /*                                                  Funciones                                                      */
 /*                                                                                                                 */
 /*******************************************************************************************************************/
-/*******************************************************************************************************************/
-// Validador de RUT con digito verificador 
-function RutValidate($rut) {
-    $rut=str_replace('.', '', $rut);
-    if (preg_match('/^(\d{1,9})-((\d|k|K){1})$/',$rut,$d)) {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Validador de RUT con digito verificador 
+* 
+*===========================     Detalles    ===========================
+* Valida el Rut chileno si esta correcto
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se valida dato
+* 	validarRut('10.569.874-5');
+* 
+*===========================    Parametros   ===========================
+* String   $Rut    Dato a validar
+* @return  Bolean
+************************************************************************/
+function validarRut($Rut) {
+    $Rut=str_replace('.', '', $Rut);
+    if (preg_match('/^(\d{1,9})-((\d|k|K){1})$/',$Rut,$d)) {
         $s=1;$r=$d[1];for($m=0;$r!=0;$r/=10)$s=($s+$r%10*(9-$m++%6))%11;
         return chr($s?$s+47:75)==strtoupper($d[2]);
     }   
 }
-/*******************************************************************************************************************/
-/*Valida el email, el formato y si es un correo real
- * Modo de Uso:
- * validateEmail("user@gmail.com");
- * devuelve true o false
- * */
-function validaremail($address, $tempEmailAllowed = true){ 
-	if (!preg_match('{^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[_a-z0-9-]+)*(\.[a-z]{2,3})$}',$address)){
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Validar correo
+* 
+*===========================     Detalles    ===========================
+* Valida si el correo esta correcto
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se valida dato
+* 	validarEmail('asd@asd.cl');
+* 
+*===========================    Parametros   ===========================
+* String   $Direccion    Dato a validar
+* @return  Bolean
+************************************************************************/
+function validarEmail($Direccion, $tempEmailAllowed = false){ 
+	if (!preg_match('{^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[_a-z0-9-]+)*(\.[a-z]{2,3})$}',$Direccion)){
         return FALSE; 
     }else { 
-		strpos($address, '@') ? list(, $mailDomain) = explode('@', $address) : $mailDomain = null;
-        if (filter_var($address, FILTER_VALIDATE_EMAIL) &&
+		return TRUE; 
+		/*strpos($Direccion, '@') ? list(, $mailDomain) = explode('@', $Direccion) : $mailDomain = null;
+        if (filter_var($Direccion, FILTER_VALIDATE_EMAIL) &&
             !is_null($mailDomain) &&
             checkdnsrr($mailDomain, 'MX')
         ) {
@@ -48,27 +71,48 @@ function validaremail($address, $tempEmailAllowed = true){
                 return true;
             }
         }
-        return false; 
+        return false;*/ 
 	}
 }
-/*******************************************************************************************************************/
-//esta funcion valida el numero
-function validarnumero($numero){ 
-	if($numero=='0'){
-		return FALSE; 
-	}else{
-		//si es numerico no hace nada
-		if(is_numeric($numero)) {
-		   return FALSE; 
-		//si es texto alerta
-		} else {
-			return TRUE;
-		}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Validar numero
+* 
+*===========================     Detalles    ===========================
+* Valida si el dato ingresado es un numero
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se valida dato
+* 	validarNumero(25);
+* 
+*===========================    Parametros   ===========================
+* Decimal  $numero    Dato a validar
+* @return  Bolean
+************************************************************************/
+function validarNumero($numero){ 
+	//Verfica si es un numero
+	if(is_numeric($numero)) {
+		return TRUE; 
+	} else {
+		return FALSE;
 	}
 }
-/*******************************************************************************************************************/
-//Validar patente vehicular
-function ValidaPatente($patente){
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Validar Patente
+* 
+*===========================     Detalles    ===========================
+* Valida si la patente chilena ingresada esta correcta
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se valida dato
+* 	ValidarPatente('AU1825');
+* 
+*===========================    Parametros   ===========================
+* String   $patente    Dato a validar
+* @return  Bolean
+************************************************************************/
+function ValidarPatente($patente){
 	//elimino los posibles guones
 	$value = str_replace("-","",$patente);
  	//caracteres admitidos
@@ -80,53 +124,151 @@ function ValidaPatente($patente){
 	  return "Patente incorrecta o con formato incorrecto";
 	}
 }
-/*******************************************************************************************************************/
-/*Valida si la URL ingresada es valida o no*/
-function validateURL($url){
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Validar URL
+* 
+*===========================     Detalles    ===========================
+* Valida si la URL ingresada es valida o no
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se valida dato
+* 	validarURL(http://www.google.cl');
+* 
+*===========================    Parametros   ===========================
+* String   $url    Dato a validar
+* @return  Bolean
+************************************************************************/
+function validarURL($url){
     return (bool) filter_var($url, FILTER_VALIDATE_URL);
 }
-/*******************************************************************************************************************/
-/*Detecta si la pagina es HTTPS
- * Modo de Uso
- * $isHttps = isHttps();
- * var_dump($isHttps);
- * outputs: TRUE - FALSE
- * */
-function isHttps(){
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Validar HTTPS
+* 
+*===========================     Detalles    ===========================
+* Detecta si la pagina es HTTPS
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se valida dato
+* 	validarHttps();
+* 
+*===========================    Parametros   ===========================
+* @return  Bolean
+************************************************************************/
+function validarHttps(){
     return isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 }
-/*******************************************************************************************************************/
-/*Detecta si la pagina es AJAX
- * Modo de Uso
- * $isAjax = isAjax();
- * var_dump($isHttps);
- * outputs: TRUE - FALSE
- * */
-function isAjax(){
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Validar Ajax
+* 
+*===========================     Detalles    ===========================
+* Detecta si la pagina es AJAX
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se valida dato
+* 	validarAjax();
+* 
+*===========================    Parametros   ===========================
+* @return  Bolean
+************************************************************************/
+function validarAjax(){
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         return true;
     }
-
     return false;
 }
-/*******************************************************************************************************************/
-/*Detecta si la pagina es AJAX
- * Modo de Uso
- * $isAjax = isAjax();
- * var_dump($isHttps);
- * outputs: TRUE - FALSE
- * */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Validar Hora
+* 
+*===========================     Detalles    ===========================
+* Permite validar si el dato ingresado es una hora
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se valida dato
+* 	validaHora('16:24:00', 'H:i:s');
+* 
+*===========================    Parametros   ===========================
+* Time     $time     Dato a validar
+* String   $format   (Opcional)formato a validar
+* @return  Bolean
+************************************************************************/
 function validaHora($time, $format='H:i:s') {
     $d = DateTime::createFromFormat("Y-m-d $format", "2017-12-01 $time");
     return $d && $d->format($format) == $time;
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Validar Fecha
+* 
+*===========================     Detalles    ===========================
+* Permite validar si el dato ingresado es una fecha
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se valida dato
+* 	validaFecha('1900-01-01', 'Y-m-d');
+* 
+*===========================    Parametros   ===========================
+* Date     $date     Dato a validar
+* String   $format   (Opcional)formato a validar
+* @return  Bolean
+************************************************************************/
 function validaFecha($date, $format = 'Y-m-d'){
-	$d = DateTime::createFromFormat($format, $date);
-	return $d && $d->format($format) == $date;
+	if($date=='0000-00-00'){
+		return 'Sin Fecha';
+	}else{
+		$d = DateTime::createFromFormat($format, $date);
+		return $d && $d->format($format) == $date;
+	}
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Validar entero
+* 
+*===========================     Detalles    ===========================
+* Permite validar si el valor ingresado es un numero entero
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se valida dato
+* 	validaEntero(1);
+* 
+*===========================    Parametros   ===========================
+* Integer  $input    Dato a validar
+* @return  Bolean
+************************************************************************/
 function validaEntero($input){
-    return(ctype_digit(strval($input)));
+    //se verifica si es un numero lo que se recibe
+	if (is_numeric($input)){ 
+		return(ctype_digit(strval($input)));
+	} else { 
+		return 'El dato ingresado no es un numero';
+	}	
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Validar Dispositivo Movil
+* 
+*===========================     Detalles    ===========================
+* Permite validar el tipo de dispositivo con el cual se accede
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se valida dato
+* 	validaDispositivoMovil();
+* 
+*===========================    Parametros   ===========================
+* Integer  $input    Dato a validar
+* @return  Bolean
+************************************************************************/
+function validaDispositivoMovil(){
+    $useragent=$_SERVER['HTTP_USER_AGENT'];
+	if(preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i',$useragent)||preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i',substr($useragent,0,4))){
+		return true;
+	}else{	
+		return false;
+	}
 }
  
 ?>

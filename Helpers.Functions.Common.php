@@ -73,7 +73,7 @@ function filtrar(&$array, $clave_orden ) {
 function genera_password($longitud,$tipo){
 	
 	//verifico si los datos estan bien entregados
-	if (is_numeric($longitud)&&($tipo=="alfanumerico" || $tipo=="numerico")){
+	if (validarNumero($longitud)&&($tipo=="alfanumerico" || $tipo=="numerico")){
 		
 		//selecciono el tipo de password
 		if ($tipo=="alfanumerico"){

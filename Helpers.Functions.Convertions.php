@@ -27,7 +27,7 @@ if( ! defined('XMBCXRXSKGC')) {
 ************************************************************************/
 function minutos2horas($mins) {
 	//se verifica si es un numero lo que se recibe
-	if (is_numeric($numero)){ 
+	if (validarNumero($mins)){ 
 		if ($mins < 0){
 			$min = abs($mins);
 		}else{
@@ -72,7 +72,7 @@ function minutos2horas($mins) {
 ************************************************************************/
 function segundos2horas($segundos) {
 	//se verifica si es un numero lo que se recibe
-	if (is_numeric($numero)){ 
+	if (validarNumero($segundos)){ 
 		$t = round($segundos);
 		return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
 	} else { 
@@ -211,7 +211,7 @@ function Devolver_mes($mes){
 ************************************************************************/
 function numero_mes($numero){
 	//se verifica si es un numero lo que se recibe
-	if (is_numeric($numero)){ 
+	if (validarNumero($numero)){ 
 		//verifico que este dentro de los valores esperados
 		if($numero>0&&$numero<13){
 			switch ($numero) {
@@ -254,7 +254,7 @@ function numero_mes($numero){
 ************************************************************************/
 function numero_a_mes($numero){	
 	//se verifica si es un numero lo que se recibe
-	if (is_numeric($numero)){ 
+	if (validarNumero($numero)){ 
 		//verifico que este dentro de los valores esperados
 		if($numero>0&&$numero<13){
 			switch ($numero) {
@@ -298,7 +298,7 @@ function numero_a_mes($numero){
 ************************************************************************/
 function numero_a_mes_corto($numero){	
 	//se verifica si es un numero lo que se recibe
-	if (is_numeric($numero)){ 
+	if (validarNumero($numero)){ 
 		//verifico que este dentro de los valores esperados
 		if($numero>0&&$numero<13){
 			switch ($numero) {
@@ -340,7 +340,7 @@ function numero_a_mes_corto($numero){
 ************************************************************************/
 function numero_nombreDia($numero){
 	//se verifica si es un numero lo que se recibe
-	if (is_numeric($numero)){ 
+	if (validarNumero($numero)){ 
 		//verifico que este dentro de los valores esperados
 		if($numero>0&&$numero<8){
 			switch ($numero) {
@@ -389,7 +389,7 @@ function numero_nombreDia($numero){
 ************************************************************************/
 function porcentaje($valor){
 	//se verifica si es un numero lo que se recibe
-	if (is_numeric($numero)){ 
+	if (validarNumero($valor)){ 
 		$porcentaje = $valor *100;
 		return number_format($porcentaje,0,',','.').' %';
 	} else { 
@@ -421,7 +421,7 @@ function porcentaje($valor){
 ************************************************************************/
 function numtoletras($monto){
 	//se verifica si es un numero lo que se recibe
-	if (is_numeric($monto)){ 
+	if (validarNumero($monto)){ 
 		$xarray = array(0 => "Cero",
 			1 => "UN", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE",
 			"DIEZ", "ONCE", "DOCE", "TRECE", "CATORCE", "QUINCE", "DIECISEIS", "DIECISIETE", "DIECIOCHO", "DIECINUEVE",

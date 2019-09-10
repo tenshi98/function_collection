@@ -2,6 +2,7 @@
 //variables
 $idUsuario   = $_SESSION['usuario']['basic_data']['idUsuario'];
 $NombreUsr   = $_SESSION['usuario']['basic_data']['Nombre'];
+$idSistema   = $_SESSION['usuario']['basic_data']['idSistema'];
 $Fecha       = fecha_actual();
 $Transaccion = $original;
 $email       = DB_ERROR_MAIL;
@@ -76,12 +77,9 @@ if(isset($MailBody)&&$MailBody!=''&&$CountError!=0){
 		
 	/*********************************/
 	//Busco al usuario en el sistema
-	$query = "SELECT 
-	core_sistemas.Nombre AS RazonSocial,
-	core_sistemas.email_principal AS email_principal
-	FROM `usuarios_listado` 
-	LEFT JOIN `core_sistemas` ON core_sistemas.idSistema = usuarios_listado.idSistema
-	WHERE usuarios_listado.idUsuario = '".$idUsuario."'";
+	$query = "SELECT Nombre AS RazonSocial, email_principal AS email_principal
+	FROM `core_sistemas` 
+	WHERE idSistema = '".$idUsuario."'";
 	$resultado = mysqli_query($dbConn, $query);
 	$rowUser = mysqli_fetch_array($resultado);
 

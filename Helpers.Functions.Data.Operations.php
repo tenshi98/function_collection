@@ -32,7 +32,7 @@ function divHoras($hora,$divisor) {
 	//valido la hora
 	if(validaHora($hora)){
 		//se verifica si es un numero lo que se recibe
-		if (is_numeric($divisor)){ 
+		if (validarNumero($divisor)){ 
 			//Verifica si el numero recibido es un entero
 			if (validaEntero($divisor)){ 
 				$h1      = substr($hora,0,-3);
@@ -49,8 +49,7 @@ function divHoras($hora,$divisor) {
 		}
 	}else{
 		return 'El dato ingresado no es una hora';
-	} 
-	 
+	}  
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /***********************************************************************
@@ -73,7 +72,7 @@ function multHoras($hora,$multiplicador) {
 	//valido la hora
 	if(validaHora($hora)){
 		//se verifica si es un numero lo que se recibe
-		if (is_numeric($multiplicador)){ 
+		if (validarNumero($multiplicador)){ 
 			//Verifica si el numero recibido es un entero
 			if (validaEntero($multiplicador)){ 
 				$seconds  = strtotime("1970-01-01 $hora UTC");
@@ -92,7 +91,6 @@ function multHoras($hora,$multiplicador) {
 	}else{
 		return 'El dato ingresado no es una hora';
 	} 
-	
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /***********************************************************************
@@ -116,8 +114,8 @@ function restahoras($hora, $horaresta){
 	//valido la hora
 	if(validaHora($hora)&&validaHora($horaresta)){
 		//Se verifica cual es el mayor
-		if(strtotime($horaini)>strtotime($horafin)){
-			$horaresta  = sumahoras($horafin, '24:00:00');
+		if(strtotime($hora)>strtotime($horaresta)){
+			$horaresta  = sumahoras($horaresta, '24:00:00');
 		}
 		
 		$horai = substr($hora,0,2);
@@ -174,7 +172,6 @@ function sumahoras($hora,$horasuma){
 	}else{
 		return 'El dato ingresado no es una hora';
 	} 
-	
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /***********************************************************************
@@ -196,7 +193,7 @@ function sumarDias($Fecha,$nDias){
 	//valido las fechas
 	if(validaFecha($Fecha)){
 		//se verifica si es un numero lo que se recibe
-		if (is_numeric($nDias)){ 
+		if (validarNumero($nDias)){ 
 			//Verifica si el numero recibido es un entero
 			if (validaEntero($nDias)){ 
 				$nuevafecha = strtotime ( '+'.$nDias.' day' , strtotime ( $Fecha ) ) ;
@@ -232,7 +229,7 @@ function restarDias($Fecha,$nDias){
 	//valido las fechas
 	if(validaFecha($Fecha)){
 		//se verifica si es un numero lo que se recibe
-		if (is_numeric($nDias)){ 
+		if (validarNumero($nDias)){ 
 			//Verifica si el numero recibido es un entero
 			if (validaEntero($nDias)){ 
 				$nuevafecha = strtotime ( '-'.$nDias.' day' , strtotime ( $Fecha ) ) ;
@@ -247,7 +244,6 @@ function restarDias($Fecha,$nDias){
 	}else{
 		return 'El dato ingresado no es una fecha';
 	}
-	
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /***********************************************************************
