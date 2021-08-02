@@ -7,6 +7,12 @@ if( ! defined('XMBCXRXSKGC')) {
 }
 /*******************************************************************************************************************/
 /*                                                                                                                 */
+/*                                        Control de numero de funciones                                           */
+/*                                                                                                                 */
+/*******************************************************************************************************************/
+$n_funct_datatime = 0;
+/*******************************************************************************************************************/
+/*                                                                                                                 */
 /*                                                  Funciones                                                      */
 /*                                                                                                                 */
 /*******************************************************************************************************************/
@@ -25,6 +31,9 @@ if( ! defined('XMBCXRXSKGC')) {
 * Time     $Hora   Hora a formatear
 * @return  Time
 ************************************************************************/
+//control numero funciones
+$n_funct_datatime++;
+//Funcion
 function Hora_estandar($Hora){
 	//valido la hora
 	if(validaHora($Hora)){
@@ -35,7 +44,7 @@ function Hora_estandar($Hora){
 			return 'Sin Hora';
 		}
 	}else{
-		return 'El dato ingresado no es una hora';
+		return 'El dato ingresado no es una hora ('.$Hora.')';
 	}	
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,17 +62,50 @@ function Hora_estandar($Hora){
 * Time     $Hora   Hora a formatear
 * @return  Time
 ************************************************************************/
+//control numero funciones
+$n_funct_datatime++;
+//Funcion
 function Hora_prog($Hora){	
 	//valido la hora
-	if(validaHora($Hora)){
+	//if(validaHora($Hora)){
 		if($Hora!='00:00:00'){
-			return date("H:i", strtotime($Hora));
+			return date("H:i:s", strtotime($Hora));
 		}else{
 			return 'Sin Hora';
 		}
-	}else{
-		return 'El dato ingresado no es una hora';
-	}	
+	/*}else{
+		return 'El dato ingresado no es una hora ('.$Hora.')';
+	}*/	
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Devuelve la hora programada
+* 
+*===========================     Detalles    ===========================
+* Transforma la hora ingresada al formato de hora programada
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se formatea la hora
+* 	Hora_archivos('1:1');
+* 
+*===========================    Parametros   ===========================
+* Time     $Hora   Hora a formatear
+* @return  Time
+************************************************************************/
+//control numero funciones
+$n_funct_datatime++;
+//Funcion
+function Hora_archivos($Hora){	
+	//valido la hora
+	//if(validaHora($Hora)){
+		if($Hora!='00:00:00'){
+			return date("His", strtotime($Hora));
+		}else{
+			return 'Sin Hora';
+		}
+	/*}else{
+		return 'El dato ingresado no es una hora ('.$Hora.')';
+	}*/	
 }
 
 ?>

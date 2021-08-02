@@ -182,6 +182,109 @@ class Basic_Inputs{
 	/////////////////////////////        PUBLICAS        /////////////////////////////
     /*******************************************************************************************************************/
 	/***********************************************************************
+	* Crea un titulo
+	* 
+	*===========================     Detalles    ===========================
+	* Permite un titulo para los formularios
+	*===========================    Modo de uso  ===========================
+	* 	
+	* 	//se imprime input	
+	* 	$Form->form_tittle(1, 'dato' );
+	* 	$Form->form_tittle(2, '<strong>Dato:</strong>explicacion' );
+	* 	$Form->form_tittle(3, '<strong>Dato 1:</strong>explicacion 1 <br/><strong>Dato 2:</strong>explicacion 2' );
+	* 	$Form->form_tittle(4, 'bla' );
+	* 	$Form->form_tittle(5, 'bla' );
+	* 	$Form->form_tittle(6, 'bla' );
+	* 
+	*===========================    Parametros   ===========================
+	* String   $type      Tipo de titulo
+	* String   $Text      Texto del titulo
+	* @return  String
+	************************************************************************/
+	public function form_tittle($type, $Text){
+		
+		//Definicion de errores
+		$errorn = 0;
+		//se definen las opciones disponibles
+		$tipos = array(1, 2, 3, 4, 5, 6);
+		//verifico si el dato ingresado existe dentro de las opciones
+		if (!in_array($type, $tipos)) {
+			alert_post_data(4,1,1, 'La configuracion $type ('.$type.') entregada no esta dentro de las opciones');
+			$errorn++;
+		}
+		/********************************************************/
+		//Ejecucion si no hay errores
+		if($errorn==0){
+			//Selecciono el tipo de mensaje
+			switch ($type) {
+				case 1:
+					$tipo = 'h1';
+					break;
+				case 2:
+					$tipo = 'h2';
+					break;
+				case 3:
+					$tipo = 'h3';
+					break;
+				case 4:
+					$tipo = 'h4';
+					break;
+				case 5:
+					$tipo = 'h5';
+					break;
+				case 6:
+					$tipo = 'p';
+					break;
+			}
+
+			//generacion del mensaje
+			$input = '<'.$tipo.'>'.$Text.'</'.$tipo.'>';	
+				
+			//Imprimir dato	
+			echo $input;
+		}
+	}
+	/*******************************************************************************************************************/
+	/***********************************************************************
+	* Crea un cuadro de mensaje
+	* 
+	*===========================     Detalles    ===========================
+	* Permite crear un cuadro de alerta mostrando mensajes de explicacion 
+	* para los inputs
+	*===========================    Modo de uso  ===========================
+	* 	
+	* 	//se imprime input	
+	* 	$Form->form_post_data(1, 'dato' );
+	* 	$Form->form_post_data(2, '<strong>Dato:</strong>explicacion' );
+	* 	$Form->form_post_data(3, '<strong>Dato 1:</strong>explicacion 1 <br/><strong>Dato 2:</strong>explicacion 2' );
+	* 	$Form->form_post_data(4, 'bla' );
+	* 
+	*===========================    Parametros   ===========================
+	* String   $type      Tipo de mensaje
+	* String   $Text      Texto del mensaje
+	* @return  String
+	************************************************************************/
+	public function form_post_data($type, $Text){
+		
+		/********************************************************/
+		//Definicion de errores
+		$errorn = 0;
+		//se definen las opciones disponibles
+		$tipos = array(1, 2, 3, 4);
+		//verifico si el dato ingresado existe dentro de las opciones
+		if (!in_array($type, $tipos)) {
+			alert_post_data(4,1,1, 'La configuracion $type ('.$type.') entregada no esta dentro de las opciones');
+			$errorn++;
+		}
+		/********************************************************/
+		//Ejecucion si no hay errores
+		if($errorn==0){
+			alert_post_data($type,1,1, $Text);
+		}
+		
+	}
+	
+	/***********************************************************************
 	* Crea un input tipo texto
 	* 
 	*===========================     Detalles    ===========================
@@ -200,9 +303,6 @@ class Basic_Inputs{
 	public function input_login_usr($placeholder,$name, $value){
 		
 		/********************************************************/
-		//Dato obligatorio
-		$_SESSION['form_require'].=','.$name;
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		/********************************************************/
@@ -211,6 +311,7 @@ class Basic_Inputs{
 			//Validacion de variables
 			if($value==0){$w='';}elseif($value!=0){$w=$value;}
 			$x='required';
+			$_SESSION['form_require'].=','.$name;
 			
 			//filtrado de teclas
 			$input = $this->solo_letras($name);
@@ -246,10 +347,7 @@ class Basic_Inputs{
 	************************************************************************/
 	public function input_login_rut($placeholder,$name, $value){
 		
-		/********************************************************/
-		//Dato obligatorio
-		$_SESSION['form_require'].=','.$name;
-		/********************************************************/
+		//********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		/********************************************************/
@@ -258,6 +356,7 @@ class Basic_Inputs{
 			//Validacion de variables
 			if($value==0){$w='';}elseif($value!=0){$w=$value;}
 			$x='required';
+			$_SESSION['form_require'].=','.$name;
 			
 			//filtrado de teclas
 			$input = $this->solo_rut($name);
@@ -269,7 +368,7 @@ class Basic_Inputs{
 				</div>';
 					
 			//Validacion Script		
-			$input .='<script type="text/javascript" src="'.DB_SITE.'/LIBS_js/rut_validate/jquery.rut.min.js"></script>';
+			$input .='<script type="text/javascript" src="'.DB_SITE_REPO.'/LIBS_js/rut_validate/jquery.rut.min.js"></script>';
 			
 			//script ejecucion
 			$input .='
@@ -302,9 +401,6 @@ class Basic_Inputs{
 	public function input_login_pass($placeholder,$name, $value){
 		
 		/********************************************************/
-		//Dato obligatorio
-		$_SESSION['form_require'].=','.$name;
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		/********************************************************/
@@ -313,6 +409,7 @@ class Basic_Inputs{
 			//Validacion de variables
 			if($value==0){$w='';}elseif($value!=0){$w=$value;}
 			$x='required';
+			$_SESSION['form_require'].=','.$name;
 			
 			//filtrado de teclas
 			$input = $this->solo_letras($name);
@@ -410,35 +507,35 @@ class Basic_Inputs{
 	public function input($type,$placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
-			//Se eliminan datos
-			$name = str_replace('[]', '', $name);
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
 			
 			//Validacion de variables
-			if($value==0){$w='';}elseif($value!=0){$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($value==''){$w='';}else{$w=$value;}
+			//if($value==0){$w='';echo $value;}else{$w=$value;}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 				
 			//filtrado de teclas
-			$input = $this->solo_letras($name);
+			$input = $this->solo_letras($EXname);
 				
 			//generacion del input
 			$input .= '
 				<div class="field">
-					<input class="form-control" type="'.$type.'" placeholder="'.$placeholder.'"  name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloLetras_'.$name.'(event)">
+					<input class="form-control" type="'.$type.'" placeholder="'.$placeholder.'"  name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.' onkeypress="return soloLetras_'.$EXname.'(event)">
 				</div>
 			';	
 			
@@ -468,32 +565,34 @@ class Basic_Inputs{
 	public function input_hold($type,$placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
 			//Validacion de variables
 			if($value==0){$w='';}elseif($value!=0){$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 				
 			//filtrado de teclas
-			$input = $this->solo_letras($name);
+			$input = $this->solo_letras($EXname);
 				
 			//generacion del input
 			$input .= '
 				<div class="field">
-					<input class="form-control" type="'.$type.'" placeholder="'.$placeholder.'"  name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloLetras_'.$name.'(event)">
+					<input class="form-control" type="'.$type.'" placeholder="'.$placeholder.'"  name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.' onkeypress="return soloLetras_'.$EXname.'(event)">
 				</div>';	
 			
 			//Imprimir dato	
@@ -523,16 +622,13 @@ class Basic_Inputs{
 	public function input_hidden($name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
@@ -540,7 +636,7 @@ class Basic_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value!=''){$w=$value;}else{$w='';}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 			
 			//generacion del input
 			$input = '<input type="hidden" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' >';	
@@ -573,26 +669,23 @@ class Basic_Inputs{
 	public function input_values_val($type,$placeholder,$name,$required,$extra_class,$style,$value){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -600,13 +693,16 @@ class Basic_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value==''){$w='';}else{$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 			
 			//filtrado de teclas
 			$input = $this->solo_numeros_naturales_enteros($name);
 				
 			//generacion del input
-			$input .= '<input placeholder="'.$placeholder.'"  class="form-control '.$extra_class.'" style="'.$style.'" type="'.$type.'" name="'.$name.'" id="'.$name.'"  '.$x.' onkeypress="return soloNumeros_'.$name.'(event)" value="'.$w.'" >';
+			$input .= '
+			<div class="field">
+				<input placeholder="'.$placeholder.'"  class="form-control '.$extra_class.'" style="'.$style.'" type="'.$type.'" name="'.$name.'" id="'.$name.'"  '.$x.' onkeypress="return soloNumeros_'.$name.'(event)" value="'.$w.'" >
+			</div>';
 			
 			//Imprimir dato	
 			echo $input;
@@ -634,39 +730,39 @@ class Basic_Inputs{
 	public function input_textarea_obs($placeholder,$name, $required,$style,$value){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
-			$errorn++;
-		}
-		//se verifica si es un numero lo que se recibe
-		if (!validarNumero($height)&&$height!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $height en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
 			//Validacion de variables
 			if($value==''){    $w = '';  }else{   $w = $value;}
-			if($required==1){  $x = '';  }elseif( $required==2){ $x='required';}
+			if($required==1){  $x = '';  }elseif( $required==2){ $x='required';$_SESSION['form_require'].=','.$name;}
 			
 			//filtrado de teclas
-			$input = $this->solo_letras_textarea($name);
+			$input = $this->solo_letras_textarea($EXname);
 				
 			//generacion del input
-			$input .= '<textarea placeholder="'.$placeholder.'" name="'.$name.'" id="'.$name.'" class="form-control" style="overflow: auto; word-wrap: break-word; resize: horizontal; '.$style.'" '.$x.' onkeypress="return soloLetrasTextArea_'.$name.'(event)" >'.$w.'</textarea>';
+			$input .= '
+			<div class="field">
+				<textarea placeholder="'.$placeholder.'" name="'.$name.'" id="'.$EXname.'" class="form-control" style="overflow: auto; word-wrap: break-word; resize: horizontal; '.$style.'" '.$x.' onkeypress="return soloLetrasTextArea_'.$EXname.'(event)" >'.$w.'</textarea>
+			</div>';
 			
 			//Ejecucion Javascript
 			$input .= '
-				<script src=\''.DB_SITE.'/LIBS_js/autosize/dist/autosize.js\'></script>
+				<script src=\''.DB_SITE_REPO.'/LIBS_js/autosize/dist/autosize.js\'></script>
 				<script>
 					autosize(document.querySelectorAll(\'textarea\'));
 				</script>
@@ -699,29 +795,34 @@ class Basic_Inputs{
 	public function input_text($type,$placeholder,$name,$required,$extra_class,$style){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
 			//Validacion de variables
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 			
 			//filtrado de teclas
-			$input = $this->solo_letras($name);
+			$input = $this->solo_letras($EXname);
 				
 			//generacion del input
-			$input .= '<input class="form-control '.$extra_class.'" style="'.$style.'" "type="'.$type.'" placeholder="'.$placeholder.'"  name="'.$name.'" id="'.$name.'"  '.$x.' onkeypress="return soloLetras_'.$name.'(event)">';	
+			$input .= '
+			<div class="field">
+				<input class="form-control '.$extra_class.'" style="'.$style.'" "type="'.$type.'" placeholder="'.$placeholder.'"  name="'.$name.'" id="'.$EXname.'"  '.$x.' onkeypress="return soloLetras_'.$EXname.'(event)">
+			</div>';	
 			
 			//Imprimir dato	
 			echo $input;
@@ -751,30 +852,35 @@ class Basic_Inputs{
 	public function input_text_val($type,$placeholder,$name,$required,$extra_class,$style,$value){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
 			//Validacion de variables
 			if($value==''){   $w = ''; }else{   $w=$value;}
-			if($required==1){ $x = ''; }elseif( $required==2){$x='required';}	
+			if($required==1){ $x = ''; }elseif( $required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 			
 			//filtrado de teclas
-			$input = $this->solo_letras($name);
+			$input = $this->solo_letras($EXname);
 				
 			//generacion del input
-			$input .= '<input class="form-control '.$extra_class.'" style="'.$style.'" type="'.$type.'" placeholder="'.$placeholder.'"  name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloLetras_'.$name.'(event)">';	
+			$input .= '
+			<div class="field">
+				<input class="form-control '.$extra_class.'" style="'.$style.'" type="'.$type.'" placeholder="'.$placeholder.'"  name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.' onkeypress="return soloLetras_'.$EXname.'(event)">
+			</div>';	
 			
 			//Imprimir dato	
 			echo $input;
@@ -804,30 +910,35 @@ class Basic_Inputs{
 	public function input_values_val_2($type,$placeholder,$name,$required,$extra_class,$style,$value){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
 			//Validacion de variables
 			if($value==''){$w='0';}else{$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 			
 			//filtrado de teclas
-			$input = $this->solo_numeros_naturales($name);
+			$input = $this->solo_numeros_naturales($EXname);
 				
 			//generacion del input
-			$input .= '<input placeholder="'.$placeholder.'"  class="form-control '.$extra_class.'" style="'.$style.'" type="'.$type.'" name="'.$name.'" id="'.$name.'"  '.$x.' onkeypress="return soloNumeros_'.$name.'(event)" value="'.$w.'" >';
+			$input .= '
+			<div class="field">
+				<input placeholder="'.$placeholder.'"  class="form-control '.$extra_class.'" style="'.$style.'" type="'.$type.'" name="'.$name.'" id="'.$EXname.'"  '.$x.' onkeypress="return soloNumeros_'.$EXname.'(event)" value="'.$w.'" >
+			</div>';
 			
 			//Imprimir dato	
 			echo $input;
@@ -855,32 +966,33 @@ class Basic_Inputs{
 	public function input_date($placeholder,$name, $required){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			
 			//Validacion de variables
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 			
 			//Solicitud de recursos
-			$input  ='<link rel="stylesheet" href="'.DB_SITE.'/LIBS_js/material_datetimepicker/css/bootstrap-material-datetimepicker.css" />';
+			$input  ='<link rel="stylesheet" href="'.DB_SITE_REPO.'/LIBS_js/material_datetimepicker/css/bootstrap-material-datetimepicker.css" />';
 			$input .='<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">';
-			$input .='<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>';
-			$input .='<script type="text/javascript" src="'.DB_SITE.'/LIBS_js/material_datetimepicker/js/bootstrap-material-datetimepicker.js"></script>';
+			$input .='<script type="text/javascript" src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>';
+			$input .='<script type="text/javascript" src="'.DB_SITE_REPO.'/LIBS_js/material_datetimepicker/js/bootstrap-material-datetimepicker.js"></script>';
 				
 			//generacion del input
-			$input .='<input placeholder="'.$placeholder.'" class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'"  '.$x.'> ';
+			$input .='
+			<div class="field">
+				<input placeholder="'.$placeholder.'" class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'"  '.$x.'>
+			</div>';
 			
 			//script activacion
 			$input .='<script type="text/javascript">
@@ -926,42 +1038,47 @@ class Basic_Inputs{
 	public function input_time($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validaHora($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es una hora</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es una hora');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
 			//Validacion de variables
 			if($value==''){   $w = ''; }else{   $w=$value;}
-			if($required==1){ $x = ''; }elseif( $required==2){$x='required';}
+			if($required==1){ $x = ''; }elseif( $required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			
 			//solicitud de recursos
-			$input  ='<link rel="stylesheet" type="text/css" href="'.DB_SITE.'/LIBS_js/clock_timepicker/dist/bootstrap-clockpicker.min.css">';
+			$input  ='<link rel="stylesheet" type="text/css" href="'.DB_SITE_REPO.'/LIBS_js/clock_timepicker/dist/bootstrap-clockpicker.min.css">';
 			
 			//generacion del input
-			$input .='<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.'   >';
+			$input .='
+			<div class="field">
+				<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.' >
+			</div>';
 			
 			//solicitud de recursos
-			$input .='<script type="text/javascript" src="'.DB_SITE.'/LIBS_js/clock_timepicker/dist/bootstrap-clockpicker.min.js"></script>';
+			$input .='<script type="text/javascript" src="'.DB_SITE_REPO.'/LIBS_js/clock_timepicker/dist/bootstrap-clockpicker.min.js"></script>';
 			
 			//script activacion
 			$input .='<script type="text/javascript">
-				$("#'.$name.'").clockpicker({
+				$("#'.$EXname.'").clockpicker({
 					placement: "top",
 					align: "right",
 					donetext: "Listo"
@@ -995,39 +1112,44 @@ class Basic_Inputs{
 	public function input_time_popover($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//valido la hora
 		if(!validaHora($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El dato ingresado en $value en <strong>'.$placeholder.'</strong> no es una hora</div>';
+			alert_post_data(4,1,1, 'El dato ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es una hora');
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
 			//Validacion de variables
 			if($value==''){   $w = ''; }else{   $w=$value;}
-			if($required==1){ $x = ''; }elseif( $required==2){$x='required';}
+			if($required==1){ $x = ''; }elseif( $required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			
 			//solicitud de recursos
-			$input  ='<link rel="stylesheet" type="text/css" href="'.DB_SITE.'/LIBS_js/popover_timepicker/css/timepicker.css">';
-			$input .='<link rel="stylesheet" type="text/css" href="'.DB_SITE.'/LIBS_js/popover_timepicker/js/timepicker.js">';
+			$input  ='<link rel="stylesheet" type="text/css" href="'.DB_SITE_REPO.'/LIBS_js/popover_timepicker/css/timepicker.css">';
+			$input .='<link rel="stylesheet" type="text/css" href="'.DB_SITE_REPO.'/LIBS_js/popover_timepicker/js/timepicker.js">';
 			
 			//generacion del input
-			$input .='<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.'   >';
+			$input .='
+			<div class="field">
+				<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.' >
+			</div>';
 			
 			//script activacion
 			$input .='<script type="text/javascript">
-				$("#'.$name.'").timepicker();
+				$("#'.$EXname.'").timepicker();
 				</script>';
 			
 			//Imprimir dato	
@@ -1061,7 +1183,7 @@ class Basic_Inputs{
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($checked, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $checked entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $checked ('.$checked.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
@@ -1072,11 +1194,11 @@ class Basic_Inputs{
 				
 			//generacion del input
 			$input = '
-			<div class="radio">
-				<label>
+			<div class="field">
+				<div class="radio">
 					<input type="radio" name="'.$name.'" id="'.$name.'" value="'.$value.'" '.$x.'>
-					'.$placeholder.'
-				</label>
+					<label>'.$placeholder.'</label>
+				</div>
 			</div>';
 			
 			//Imprimir dato	
@@ -1110,16 +1232,77 @@ class Basic_Inputs{
 		if($errorn==0){
 			//generacion del input
 			$input = '
-			<div class="checkbox">
-				<label>
+			<div class="field">
+				<div class="checkbox">
 					<input type="checkbox" name="'.$name.'" id="'.$name.'" value="'.$value.'">
-					'.$placeholder.'
-				</label>
+					<label>'.$placeholder.'</label>
+				</div>
 			</div>';
 			
 			//Imprimir dato	
 			echo $input;
 		}
+	}
+	/*******************************************************************************************************************/
+	/***********************************************************************
+	* Crea una linea con un checkbox de terminos y condiciones
+	* 
+	*===========================     Detalles    ===========================
+	* Permite crear una linea en donde muestra la opcion de terminos y 
+	* condiciones, al tener esta opcion presente deshabilita el boton 
+	* submit del formulario, impidiendo su ejecucion hasta que no se 
+	* acepte, el enlace abre un popup con lo que el usuario debe aceptar
+	*===========================    Modo de uso  ===========================
+	* 	
+	* 	//se imprime input	
+	* 	$Form->form_terms_and_conditions('terminos','He leido los ','www.google.cl','terminos y condiciones', 'submit_btn' );
+	* 
+	*===========================    Parametros   ===========================
+	* String   $name         Nombre del identificador del Input
+	* String   $inicio       Texto inicio
+	* String   $link         Enlace con el documento a mostrar en el popup
+	* String   $fin          Texto final
+	* String   $submit_name  Identificador del boton submit del formulario
+	* @return  String
+	************************************************************************/
+	public function terms_and_conditions($name, $inicio, $link, $fin, $submit_name){
+		
+		//generacion del input
+		$input = '
+		<div class="field">
+			<div class="checkbox checkbox-primary">
+				<input class="styled" type="checkbox" name="'.$name.'" id="'.$name.'" value="1" onchange="acbtn_'.$name.'(this)">
+				<label>
+					'.$inicio.'  <a class="iframe" href="'.$link.'">'.$fin.'</a> 
+				</label>
+			</div>
+		</div>
+		';
+			
+		//ejecucion script	
+		$input .= '
+			<script>
+				//se desactiva el boton f5
+				window.onload = function () {
+					disableSubmit();
+				}
+				//se desactiva el boton submit
+				function disableSubmit() {
+					document.getElementById("'.$submit_name.'").disabled = true;
+				}
+				//si se esta de acuerdo se activa el boton submit
+				function acbtn_'.$name.'(element) {
+					if(element.checked) {
+						document.getElementById("'.$submit_name.'").disabled = false;
+					}else  {
+						document.getElementById("'.$submit_name.'").disabled = true;
+					}
+				}
+			</script>
+			';
+
+		//Imprimir dato	
+		echo $input;
 	}
 	/*******************************************************************************************************************/
 	/***********************************************************************
@@ -1149,67 +1332,72 @@ class Basic_Inputs{
 	public function input_number_spinner($placeholder,$name, $value, $min, $max, $step, $ndecimal, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($min)&&$min!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $min en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $min ('.$min.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($max)&&$max!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $max en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $max ('.$max.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($step)&&$step!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $step en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $step ('.$step.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($ndecimal)&&$ndecimal!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $ndecimal en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $ndecimal ('.$ndecimal.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//se verifica si es un numero entero lo que se recibe
 		if (!validaEntero($ndecimal)&&$ndecimal!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $ndecimal en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $ndecimal ('.$ndecimal.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
 			//Validacion de variables
 			if($value==0){    $w = ''; }elseif($value!=0){   $w = $value;}
-			if($required==1){ $x = ''; }elseif($required==2){$x = 'required';}	
+			if($required==1){ $x = ''; }elseif($required==2){$x = 'required';$_SESSION['form_require'].=','.$name;}	
 			
 			//solicitud de recursos
-			$input  ='<script src="'.DB_SITE.'/LIBS_js/bootstrap_touchspin/src/jquery.bootstrap-touchspin.js"></script>';
-			$input .='<link rel="stylesheet" type="text/css" href="'.DB_SITE.'/LIBS_js/bootstrap_touchspin/src/jquery.bootstrap-touchspin.css">';
+			$input  ='<script src="'.DB_SITE_REPO.'/LIBS_js/bootstrap_touchspin/src/jquery.bootstrap-touchspin.js"></script>';
+			$input .='<link rel="stylesheet" type="text/css" href="'.DB_SITE_REPO.'/LIBS_js/bootstrap_touchspin/src/jquery.bootstrap-touchspin.css">';
 			
 			//generacion del input
-			$input .='<input placeholder="'.$placeholder.'" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosNaturales_'.$name.'(event)">';
+			$input .='
+			<div class="field">
+				<input placeholder="'.$placeholder.'" type="text" name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosNaturales_'.$EXname.'(event)">
+			</div>';
 					
 			//script activacion
 			$input .= '
 				<script>
 					//se inicializa el plugin
-					$("input[name=\''.$name.'\']").TouchSpin({
+					$("input[name=\''.$EXname.'\']").TouchSpin({
 						min: '.$min.',
 						max: '.$max.',
 						step: '.$step.',
@@ -1220,8 +1408,146 @@ class Basic_Inputs{
 				</script>';
 				
 			//filtrado de teclas
-			$input .= $this->solo_numeros_naturales($name);
+			$input .= $this->solo_numeros_naturales($EXname);
 			
+			//Imprimir dato	
+			echo $input;
+		}
+	}
+	/*******************************************************************************************************************/
+	/***********************************************************************
+	* Crea un input que solo admite numeros
+	* 
+	*===========================     Detalles    ===========================
+	* Permite crear un input que solo permite el ingreso de numeros 
+	* enteros positivos, agregando un icono de telefono
+	*===========================    Modo de uso  ===========================
+	* 	
+	* 	//se imprime input	
+	* 	$Form->input_phone('Telefono','fono', '', 1 );
+	* 
+	*===========================    Parametros   ===========================
+	* String   $placeholder   Nombre o texto a mostrar en el navegador
+	* String   $name          Nombre del identificador del Input
+	* Integer  $value         Valor por defecto, ingresar numeros enteros
+	* Integer  $required      Si dato es obligatorio (1=no, 2=si)
+	* @return  String
+	************************************************************************/
+	public function input_phone($placeholder,$name, $value, $required){
+		
+		/********************************************************/
+		//Definicion de errores
+		$errorn = 0;
+		//se definen las opciones disponibles
+		$requerido = array(1, 2);
+		//verifico si el dato ingresado existe dentro de las opciones
+		if (!in_array($required, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
+			$errorn++;
+		}
+		//se verifica si es un numero lo que se recibe
+		if (!validarNumero($value)&&$value!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
+			$errorn++;
+		}
+		//Verifica si el numero recibido es un entero
+		if (!validaEntero($value)&&$value!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		/********************************************************/
+		//Ejecucion si no hay errores
+		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
+			//Validacion de variables
+			if($value==0){$w='';}elseif($value!=0){$w=$value;}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
+					
+			//filtrado de teclas
+			$input = $this->solo_numeros_naturales_enteros_positivos($EXname);
+						
+			//generacion del input
+			$input .= '
+			<div class="field">
+				<div class="input-group bootstrap-timepicker">
+					<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosEnterosPositivos_'.$EXname.'(event)"  >
+					<span class="input-group-addon add-on"><i class="fa fa-phone" aria-hidden="true"></i></span> 
+				</div>
+			</div>';
+
+			//Imprimir dato	
+			echo $input;
+		}	
+	}
+	/*******************************************************************************************************************/
+	/***********************************************************************
+	* Crea un input que solo admite numeros
+	* 
+	*===========================     Detalles    ===========================
+	* Permite crear un input que solo permite el ingreso de numeros 
+	* enteros positivos, agregando un icono de fax
+	*===========================    Modo de uso  ===========================
+	* 	
+	* 	//se imprime input	
+	* 	$Form->form_input_fax('Fax','fax', '', 1 );
+	* 
+	*===========================    Parametros   ===========================
+	* String   $placeholder   Nombre o texto a mostrar en el navegador
+	* String   $name          Nombre del identificador del Input
+	* Integer  $value         Valor por defecto, ingresar numeros enteros
+	* Integer  $required      Si dato es obligatorio (1=no, 2=si)
+	* @return  String
+	************************************************************************/
+	public function input_fax($placeholder,$name, $value, $required){
+		
+		/********************************************************/
+		//Definicion de errores
+		$errorn = 0;
+		//se definen las opciones disponibles
+		$requerido = array(1, 2);
+		//verifico si el dato ingresado existe dentro de las opciones
+		if (!in_array($required, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
+			$errorn++;
+		}
+		//se verifica si es un numero lo que se recibe
+		if (!validarNumero($value)&&$value!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
+			$errorn++;
+		}
+		//Verifica si el numero recibido es un entero
+		if (!validaEntero($value)&&$value!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		/********************************************************/
+		//Ejecucion si no hay errores
+		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
+			//Validacion de variables
+			if($value==0){$w='';}elseif($value!=0){$w=$value;}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
+					
+			//filtrado de teclas
+			$input = $this->solo_numeros_naturales_enteros_positivos($EXname);
+						
+			//generacion del input
+			$input .= '
+			<div class="field">
+				<div class="input-group bootstrap-timepicker">
+					<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosEnterosPositivos_'.$EXname.'(event)"  >
+					<span class="input-group-addon add-on"><i class="fa fa-fax" aria-hidden="true"></i></span> 
+				</div>
+			</div>';
+
 			//Imprimir dato	
 			echo $input;
 		}
@@ -1248,40 +1574,42 @@ class Basic_Inputs{
 	public function input_number($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
 			//Validacion de variables
 			if($value==0){$w='';}elseif($value!=0){$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 			
 			//generacion del input
 			$input ='<div class="field">
 						<div class="input-group bootstrap-timepicker">
-							<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosNaturales_'.$name.'(event)"  >
-							<span class="input-group-addon add-on"><i class="fa fa-subscript"></i></span> 		
+							<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosNaturales_'.$EXname.'(event)"  >
+							<span class="input-group-addon add-on"><i class="fa fa-subscript" aria-hidden="true"></i></span> 		
 						</div>
 					</div>';
 					
 			//filtrado de teclas
-			$input .= $this->solo_numeros_naturales($name);
+			$input .= $this->solo_numeros_naturales($EXname);
 			
 			//Imprimir dato	
 			echo $input;
@@ -1310,16 +1638,13 @@ class Basic_Inputs{
 	public function input_disabled($type,$placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
@@ -1327,7 +1652,7 @@ class Basic_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value==''){$w='';}else{$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 			
 			//generacion del input
 			$input = '<input type="'.$type.'" placeholder="'.$placeholder.'" name="'.$name.'" id="'.$name.'" class="form-control '.$name.'" value="'.$w.'"  '.$x.' disabled="disabled">';	
@@ -1359,44 +1684,45 @@ class Basic_Inputs{
 	public function input_rut($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
 			//Validacion de variables
 			if($value==''){$w='';}else{$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}			
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}			
 			
 			//filtrado de teclas
-			$input = $this->solo_rut($name);
+			$input = $this->solo_rut($EXname);
 				
 			//generacion del input
 			$input .= '<div class="field">
 							<div class="input-group bootstrap-timepicker">
-								<input type="text" placeholder="'.$placeholder.'"  class="form-control timepicker-default" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloRut_'.$name.'(event)"  >
-								<span class="input-group-addon add-on"><i class="fa fa-male"></i></span> 
-								
+								<input type="text" placeholder="'.$placeholder.'"  class="form-control timepicker-default" name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.' onkeypress="return soloRut_'.$EXname.'(event)"  >
+								<span class="input-group-addon add-on"><i class="fa fa-male" aria-hidden="true"></i></span> 
 							</div>
 						</div>';
 			
 			//Validacion Script		
-			$input .='<script type="text/javascript" src="'.DB_SITE.'/LIBS_js/rut_validate/jquery.rut.min.js"></script>';
+			$input .='<script type="text/javascript" src="'.DB_SITE_REPO.'/LIBS_js/rut_validate/jquery.rut.min.js"></script>';
 			
 			//script activacion
 			$input.='
 				<script>
-					$("#'.$name.'").rut();
+					$("#'.$EXname.'").rut();
 				</script>';
 					
 			//Imprimir dato	
@@ -1427,34 +1753,35 @@ class Basic_Inputs{
 	public function input_icon($type,$placeholder,$name, $value, $required, $icon){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
+			//variables internas
+			$random_int = rand(1, 999);
+			$EXname     = str_replace('[]', '', $name);
+			$EXname     = $EXname.'_'.$random_int;
+			
 			//Validacion de variables
 			if($value==''){$w='';}else{$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}			
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}			
 			
 			//filtrado de teclas
-			$input = $this->solo_letras($name);
+			$input = $this->solo_letras($EXname);
 				
 			//generacion del input
 			$input .= '<div class="field">
 						<div class="input-group bootstrap-timepicker">
-							<input type="'.$type.'" placeholder="'.$placeholder.'"  class="form-control timepicker-default" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloLetras_'.$name.'(event)"  >
-							<span class="input-group-addon add-on"><i class="'.$icon.'"></i></span> 
-								
+							<input type="'.$type.'" placeholder="'.$placeholder.'"  class="form-control timepicker-default" name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.' onkeypress="return soloLetras_'.$EXname.'(event)"  >
+							<span class="input-group-addon add-on"><i class="'.$icon.'"></i></span>
 						</div>
 					</div>';		
 			
@@ -1488,26 +1815,23 @@ class Basic_Inputs{
 	public function select($placeholder,$name, $required, $data1, $data2, $table, $filter,$style, $dbConn){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//si dato es requerido
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			//Filtro para el where
 			$filtro = '';
-			if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+			if ($filter!='0'){$filtro .="WHERE ".$filter;	}
 			//explode para poder crear cadena
 			$datos = explode(",", $data2);
 			if(count($datos)==1){
@@ -1572,7 +1896,7 @@ class Basic_Inputs{
 				$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 				
 				//Devuelvo mensaje
-				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+				alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');	
 			}
 		}
 	}
@@ -1604,26 +1928,23 @@ class Basic_Inputs{
 	public function select_change($placeholder,$name, $required, $data1, $data2, $table, $filter,$style,$OnChange,$dbConn){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//si dato es requerido
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			//Filtro para el where
 			$filtro = '';
-			if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+			if ($filter!='0'){$filtro .="WHERE ".$filter;	}
 			//explode para poder crear cadena
 			$datos = explode(",", $data2);
 			if(count($datos)==1){
@@ -1688,7 +2009,7 @@ class Basic_Inputs{
 				$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 				
 				//Devuelvo mensaje
-				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+				alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');	
 			}
 		}
 	}
@@ -1721,26 +2042,23 @@ class Basic_Inputs{
 	public function select_val_filter($placeholder,$name, $required, $data1, $data2, $table, $filter,$style,$value, $dbConn){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -1751,10 +2069,10 @@ class Basic_Inputs{
 				$input = $this->input_select_val($placeholder,$name, $required, $data1, $data2, $table, $filter,$style,$value, $dbConn);
 			}else{
 				//si dato es requerido
-				if($required==1){$x='';}elseif($required==2){$x='required';}
+				if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 				//Filtro para el where
 				$filtro = '';
-				if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+				if ($filter!='0'){$filtro .="WHERE ".$filter;	}
 				//explode para poder crear cadena
 				$datos = explode(",", $data2);
 				if(count($datos)==1){
@@ -1787,7 +2105,7 @@ class Basic_Inputs{
 					}
 					mysqli_free_result($resultado);
 					
-					$input = '<link rel="stylesheet" href="'.DB_SITE.'/LIBS_js/chosen/chosen.css">';
+					$input = '<link rel="stylesheet" href="'.DB_SITE_REPO.'/LIBS_js/chosen/chosen.css">';
 					$input .= '<select name="'.$name.'" id="'.$name.'" '.$x.' style="'.$style.'" data-placeholder="Seleccione una Opcion" class="form-control chosen-select chosendiv_'.$name.'" tabindex="2">
 									<option value=""></option>';
 
@@ -1810,8 +2128,8 @@ class Basic_Inputs{
 										
 										
 					$input .= '</select>
-								<script src="'.DB_SITE.'/LIBS_js/chosen/chosen.jquery.js" type="text/javascript"></script>
-								<script src="'.DB_SITE.'/LIBS_js/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+								<script src="'.DB_SITE_REPO.'/LIBS_js/chosen/chosen.jquery.js" type="text/javascript"></script>
+								<script src="'.DB_SITE_REPO.'/LIBS_js/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
 								<script type="text/javascript">
 									$.fn.oldChosen = $.fn.chosen
 									$.fn.chosen = function(options) {
@@ -1847,7 +2165,7 @@ class Basic_Inputs{
 					$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 					
 					//Devuelvo mensaje
-					echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+					alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');	
 				}
 			}
 		}
@@ -1881,36 +2199,33 @@ class Basic_Inputs{
 	public function input_select_val($placeholder,$name, $required, $data1, $data2, $table, $filter,$style,$value, $dbConn){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//si dato es requerido
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			//Filtro para el where
 			$filtro = '';
-			if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+			if ($filter!='0'){$filtro .="WHERE ".$filter;	}
 			//explode para poder crear cadena
 			$datos = explode(",", $data2);
 			if(count($datos)==1){
@@ -1976,7 +2291,7 @@ class Basic_Inputs{
 				$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 				
 				//Devuelvo mensaje
-				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+				alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');
 			}
 		}
 	}
@@ -2009,36 +2324,33 @@ class Basic_Inputs{
 	public function input_select_val_filter_ot($placeholder,$name, $required, $data1, $data2, $table, $filter,$style,$value, $dbConn){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//si dato es requerido
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			//Filtro para el where
 			$filtro = '';
-			if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+			if ($filter!='0'){$filtro .="WHERE ".$filter;	}
 			//explode para poder crear cadena
 			$datos = explode(",", $data2);
 			if(count($datos)==1){
@@ -2071,7 +2383,7 @@ class Basic_Inputs{
 				}
 				mysqli_free_result($resultado);
 				
-				$input = '<link rel="stylesheet" href="'.DB_SITE.'/LIBS_js/chosen/chosen.css">';
+				$input = '<link rel="stylesheet" href="'.DB_SITE_REPO.'/LIBS_js/chosen/chosen.css">';
 				$input .= '<select name="'.$name.'" id="'.$name.'" '.$x.' style="'.$style.'" data-placeholder="Seleccione una Opcion" class="form-control chosen-select chosendiv_'.$name.'" tabindex="2">
 								<option value=""></option>';
 
@@ -2129,7 +2441,7 @@ class Basic_Inputs{
 				$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 				
 				//Devuelvo mensaje
-				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+				alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');
 			}
 		}
 	}
@@ -2161,36 +2473,33 @@ class Basic_Inputs{
 	public function select_bodega($placeholder,$name, $value, $required, $data1, $data2, $table1, $table2, $filter, $dbConn){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//si dato es requerido
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			//Filtro para el where
 			$filtro = '';
-			if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+			if ($filter!='0'){$filtro .="WHERE ".$filter;	}
 			
 
 			//se trae un listado con todas las categorias
@@ -2240,7 +2549,7 @@ class Basic_Inputs{
 				$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 				
 				//Devuelvo mensaje
-				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+				alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');
 			}
 		}
 	}
@@ -2286,39 +2595,35 @@ class Basic_Inputs{
 								   $dbConn, $form_name){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required1==2){$_SESSION['form_require'].=','.$name1;}
-		if($required2==2){$_SESSION['form_require'].=','.$name2;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required1, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required1 entregada en '.$placeholder1.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required1 ('.$required1.') entregada en '.$placeholder1.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required2, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required2 entregada en '.$placeholder2.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required2 ('.$required2.') entregada en '.$placeholder2.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -2330,18 +2635,18 @@ class Basic_Inputs{
 
 			//DATOS REQUERIDOS
 			$required = array();
-			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';}
-			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';}
+			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';$_SESSION['form_require'].=','.$name1;}
+			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';$_SESSION['form_require'].=','.$name2;}
 			
 			//FILTROS
 			$filtro = array();
-			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1." ";	}
-			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2." ";	}
+			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1;	}
+			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2;	}
 			
 			//COMANDOS EXTRAS
 			$excom = array();
-			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1." ";	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
-			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2." ";	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
+			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1;	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
+			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2;	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
 			
 			//visualizar listado
 			$display = array();
@@ -2390,7 +2695,7 @@ class Basic_Inputs{
 			}
 			//Primera Consulta estandar			
 			$arrSeleccion = array();
-			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1]."";
+			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1];
 			$resultado = mysqli_query ($dbConn, $query);
 			while ( $row = mysqli_fetch_assoc ($resultado)) {
 			array_push( $arrSeleccion,$row );
@@ -2438,7 +2743,7 @@ class Basic_Inputs{
 				// Se trae un listado con los datos previamente seleccionados
 				if ($value[$i-1]!=0&&$value[$i-1]!=''){
 					$arrSeleccion = array();
-					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i]."";
+					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i];
 					$resultado = mysqli_query ($dbConn, $query);
 					while ( $row = mysqli_fetch_assoc ($resultado)) {
 					array_push( $arrSeleccion,$row );
@@ -2447,7 +2752,7 @@ class Basic_Inputs{
 				} 
 				// Se trae un listado con todos los datos
 				$arrTodos = array();
-				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i]."";
+				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i];
 				$resultado = mysqli_query ($dbConn, $query);
 				while ( $row = mysqli_fetch_assoc ($resultado)) {
 				array_push( $arrTodos,$row );

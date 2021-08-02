@@ -182,6 +182,109 @@ class Basic_Form_Inputs{
 	/////////////////////////////        PUBLICAS        /////////////////////////////
 	/*******************************************************************************************************************/
 	/***********************************************************************
+	* Crea un titulo
+	* 
+	*===========================     Detalles    ===========================
+	* Permite un titulo para los formularios
+	*===========================    Modo de uso  ===========================
+	* 	
+	* 	//se imprime input	
+	* 	$Form->form_tittle(1, 'dato' );
+	* 	$Form->form_tittle(2, '<strong>Dato:</strong>explicacion' );
+	* 	$Form->form_tittle(3, '<strong>Dato 1:</strong>explicacion 1 <br/><strong>Dato 2:</strong>explicacion 2' );
+	* 	$Form->form_tittle(4, 'bla' );
+	* 	$Form->form_tittle(5, 'bla' );
+	* 	$Form->form_tittle(6, 'bla' );
+	* 
+	*===========================    Parametros   ===========================
+	* String   $type      Tipo de titulo
+	* String   $Text      Texto del titulo
+	* @return  String
+	************************************************************************/
+	public function form_tittle($type, $Text){
+		
+		//Definicion de errores
+		$errorn = 0;
+		//se definen las opciones disponibles
+		$tipos = array(1, 2, 3, 4, 5, 6);
+		//verifico si el dato ingresado existe dentro de las opciones
+		if (!in_array($type, $tipos)) {
+			alert_post_data(4,1,1, 'La configuracion $type ('.$type.') entregada no esta dentro de las opciones');
+			$errorn++;
+		}
+		/********************************************************/
+		//Ejecucion si no hay errores
+		if($errorn==0){
+			//Selecciono el tipo de mensaje
+			switch ($type) {
+				case 1:
+					$tipo = 'h1';
+					break;
+				case 2:
+					$tipo = 'h2';
+					break;
+				case 3:
+					$tipo = 'h3';
+					break;
+				case 4:
+					$tipo = 'h4';
+					break;
+				case 5:
+					$tipo = 'h5';
+					break;
+				case 6:
+					$tipo = 'p';
+					break;
+			}
+
+			//generacion del mensaje
+			$input = '<'.$tipo.'>'.$Text.'</'.$tipo.'>';	
+				
+			//Imprimir dato	
+			echo $input;
+		}
+	}
+	/*******************************************************************************************************************/
+	/***********************************************************************
+	* Crea un cuadro de mensaje
+	* 
+	*===========================     Detalles    ===========================
+	* Permite crear un cuadro de alerta mostrando mensajes de explicacion 
+	* para los inputs
+	*===========================    Modo de uso  ===========================
+	* 	
+	* 	//se imprime input	
+	* 	$Form->form_post_data(1, 'dato' );
+	* 	$Form->form_post_data(2, '<strong>Dato:</strong>explicacion' );
+	* 	$Form->form_post_data(3, '<strong>Dato 1:</strong>explicacion 1 <br/><strong>Dato 2:</strong>explicacion 2' );
+	* 	$Form->form_post_data(4, 'bla' );
+	* 
+	*===========================    Parametros   ===========================
+	* String   $type      Tipo de mensaje
+	* String   $Text      Texto del mensaje
+	* @return  String
+	************************************************************************/
+	public function form_post_data($type, $Text){
+		
+		/********************************************************/
+		//Definicion de errores
+		$errorn = 0;
+		//se definen las opciones disponibles
+		$tipos = array(1, 2, 3, 4);
+		//verifico si el dato ingresado existe dentro de las opciones
+		if (!in_array($type, $tipos)) {
+			alert_post_data(4,1,1, 'La configuracion $type ('.$type.') entregada no esta dentro de las opciones');
+			$errorn++;
+		}
+		/********************************************************/
+		//Ejecucion si no hay errores
+		if($errorn==0){
+			alert_post_data($type,1,1, $Text);
+		}
+		
+	}
+	/*******************************************************************************************************************/
+	/***********************************************************************
 	* Crea un input invisible
 	* 
 	*===========================     Detalles    ===========================
@@ -203,16 +306,13 @@ class Basic_Form_Inputs{
 	public function form_input_hidden($name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
@@ -220,7 +320,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value!=''){$w=$value;}else{$w='';}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 			
 			//generacion del input
 			$input = '<input type="hidden" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' >';	
@@ -250,16 +350,13 @@ class Basic_Form_Inputs{
 	public function form_input_text($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
@@ -267,7 +364,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value==''){$w='';}else{$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 			
 			//filtrado de teclas
 			$input = $this->solo_letras($name);
@@ -307,16 +404,13 @@ class Basic_Form_Inputs{
 	public function form_input_password($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
@@ -324,7 +418,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value==''){$w='';}else{$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}			
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}			
 			
 			//filtrado de teclas
 			$input = $this->solo_letras($name);
@@ -337,7 +431,7 @@ class Basic_Form_Inputs{
 						<div class="input-group bootstrap-timepicker">
 							<input type="password" placeholder="'.$placeholder.'"  class="form-control timepicker-default" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloLetras_'.$name.'(event)"  >
 							<span class="pass_impt" id="view_button_'.$name.'"><i class="fa fa-eye" aria-hidden="true"></i></span>
-							<span class="input-group-addon add-on" ><i class="fa fa-key"></i></span> 
+							<span class="input-group-addon add-on" ><i class="fa fa-key" aria-hidden="true"></i></span> 
 						</div>
 					</div>
 				</div>';
@@ -381,16 +475,13 @@ class Basic_Form_Inputs{
 	public function form_input_disabled($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
@@ -398,7 +489,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value==''){$w='';}else{$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 			
 			//generacion del input
 			$input = '<div class="form-group" id="div_'.$name.'">
@@ -435,16 +526,13 @@ class Basic_Form_Inputs{
 	public function form_input_icon($placeholder,$name, $value, $required, $icon){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
@@ -452,7 +540,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value==''){$w='';}else{$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}			
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}			
 			
 			//filtrado de teclas
 			$input = $this->solo_letras($name);
@@ -496,16 +584,13 @@ class Basic_Form_Inputs{
 	public function form_input_rut($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
@@ -513,7 +598,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value==''){$w='';}else{$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}			
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}			
 			
 			//filtrado de teclas
 			$input = $this->solo_rut($name);
@@ -525,13 +610,13 @@ class Basic_Form_Inputs{
 					<div class="col-sm-8 field">
 						<div class="input-group bootstrap-timepicker">
 							<input type="text" placeholder="'.$placeholder.'"  class="form-control timepicker-default" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloRut_'.$name.'(event)"  >
-							<span class="input-group-addon add-on"><i class="fa fa-male"></i></span> 
+							<span class="input-group-addon add-on"><i class="fa fa-male" aria-hidden="true"></i></span> 
 						</div>
 					</div>
 				</div>';
 			
 			//Validacion Script		
-			$input .='<script type="text/javascript" src="'.DB_SITE.'/LIBS_js/rut_validate/jquery.rut.min.js"></script>';
+			$input .='<script type="text/javascript" src="'.DB_SITE_REPO.'/LIBS_js/rut_validate/jquery.rut.min.js"></script>';
 			
 			//ejecucion script
 			$input.='
@@ -565,26 +650,23 @@ class Basic_Form_Inputs{
 	public function form_values($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -592,7 +674,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value==0){$w='';}elseif($value!=0){$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 					
 			//filtrado de teclas
 			$input = $this->solo_numeros_naturales_enteros_positivos($name);
@@ -604,7 +686,7 @@ class Basic_Form_Inputs{
 					<div class="col-sm-8 field">
 						<div class="input-group bootstrap-timepicker">
 							<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosEnterosPositivos_'.$name.'(event)"  >
-							<span class="input-group-addon add-on"><i class="fa fa-usd"></i></span> 
+							<span class="input-group-addon add-on"><i class="fa fa-usd" aria-hidden="true"></i></span> 
 						</div>
 					</div>
 				</div>';
@@ -635,29 +717,26 @@ class Basic_Form_Inputs{
 	public function form_input_number($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
-		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+		/*if (!validarNumero($value)&&$value!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
-		}
+		}*/
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//Validacion de variables
 			$w=$value;
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 				
 			//generacion del input
 			$input ='
@@ -666,7 +745,7 @@ class Basic_Form_Inputs{
 					<div class="col-sm-8 field">
 						<div class="input-group bootstrap-timepicker">
 							<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosNaturales_'.$name.'(event)"  >
-							<span class="input-group-addon add-on"><i class="fa fa-subscript"></i></span> 
+							<span class="input-group-addon add-on"><i class="fa fa-subscript" aria-hidden="true"></i></span> 
 						</div>
 					</div>
 				</div>';
@@ -700,26 +779,23 @@ class Basic_Form_Inputs{
 	public function form_input_number_integer($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -727,7 +803,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			$w=$value;
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 					
 			//filtrado de teclas
 			$input = $this->solo_numeros_naturales_enteros($name);
@@ -739,7 +815,7 @@ class Basic_Form_Inputs{
 					<div class="col-sm-8 field">
 						<div class="input-group bootstrap-timepicker">
 							<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosEnteros_'.$name.'(event)"  >
-							<span class="input-group-addon add-on"><i class="fa fa-superscript"></i></span> 
+							<span class="input-group-addon add-on"><i class="fa fa-superscript" aria-hidden="true"></i></span> 
 						</div>
 					</div>
 				</div>';
@@ -770,21 +846,18 @@ class Basic_Form_Inputs{
 	public function form_input_number_alt($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -792,7 +865,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			$w=$value;
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 					
 			//generacion del input
 			$input ='<div class="form-group" id="div_'.$name.'">
@@ -800,7 +873,7 @@ class Basic_Form_Inputs{
 						<div class="col-sm-12 field">
 							<div class="input-group bootstrap-timepicker">
 								<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosNaturales_'.$name.'(event)"  >
-								<span class="input-group-addon add-on"><i class="fa fa-subscript"></i></span> 
+								<span class="input-group-addon add-on"><i class="fa fa-subscript" aria-hidden="true"></i></span> 
 							</div>
 						</div>
 					</div>';
@@ -840,46 +913,43 @@ class Basic_Form_Inputs{
 	public function form_input_number_spinner($placeholder,$name, $value, $min, $max, $step, $ndecimal, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($min)&&$min!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $min en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $min ('.$min.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($max)&&$max!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $max en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $max ('.$max.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($step)&&$step!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $step en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $step ('.$step.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($ndecimal)&&$ndecimal!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $ndecimal en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $ndecimal ('.$ndecimal.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//se verifica si es un numero entero lo que se recibe
 		if (!validaEntero($ndecimal)&&$ndecimal!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $ndecimal en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $ndecimal ('.$ndecimal.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -887,11 +957,11 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			$w=$value;
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 								
 			//se cargan recursos
-			$input  ='<script src="'.DB_SITE.'/LIBS_js/bootstrap_touchspin/src/jquery.bootstrap-touchspin.js"></script>';
-			$input .='<link rel="stylesheet" type="text/css" href="'.DB_SITE.'/LIBS_js/bootstrap_touchspin/src/jquery.bootstrap-touchspin.css">';
+			$input  ='<script src="'.DB_SITE_REPO.'/LIBS_js/bootstrap_touchspin/src/jquery.bootstrap-touchspin.js"></script>';
+			$input .='<link rel="stylesheet" type="text/css" href="'.DB_SITE_REPO.'/LIBS_js/bootstrap_touchspin/src/jquery.bootstrap-touchspin.css">';
 								
 			//generacion del input
 			$input .='
@@ -947,26 +1017,23 @@ class Basic_Form_Inputs{
 	public function form_input_phone($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -974,7 +1041,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value==0){$w='';}elseif($value!=0){$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 					
 			//filtrado de teclas
 			$input = $this->solo_numeros_naturales_enteros_positivos($name);
@@ -986,7 +1053,7 @@ class Basic_Form_Inputs{
 					<div class="col-sm-8 field">
 						<div class="input-group bootstrap-timepicker">
 							<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosEnterosPositivos_'.$name.'(event)"  >
-							<span class="input-group-addon add-on"><i class="fa fa-phone"></i></span> 
+							<span class="input-group-addon add-on"><i class="fa fa-phone" aria-hidden="true"></i></span> 
 						</div>
 					</div>
 				</div>';
@@ -1017,26 +1084,23 @@ class Basic_Form_Inputs{
 	public function form_input_fax($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -1044,7 +1108,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value==0){$w='';}elseif($value!=0){$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 					
 			//filtrado de teclas
 			$input = $this->solo_numeros_naturales_enteros_positivos($name);
@@ -1056,7 +1120,7 @@ class Basic_Form_Inputs{
 					<div class="col-sm-8 field">
 						<div class="input-group bootstrap-timepicker">
 							<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.' onkeypress="return soloNumerosEnterosPositivos_'.$name.'(event)"  >
-							<span class="input-group-addon add-on"><i class="fa fa-fax"></i></span> 
+							<span class="input-group-addon add-on"><i class="fa fa-fax" aria-hidden="true"></i></span> 
 						</div>
 					</div>
 				</div>';
@@ -1088,21 +1152,18 @@ class Basic_Form_Inputs{
 	public function form_date($placeholder,$name, $value, $required){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validaFecha($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es una fecha</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es una fecha');
 			$errorn++;
 		}
 		/********************************************************/
@@ -1115,13 +1176,13 @@ class Basic_Form_Inputs{
 				
 			//Validacion de variables
 			if($value==0){$w='';}elseif($value!=0){$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}	
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
 				
 			//solicitud de recursos
-			$input  ='<link rel="stylesheet" href="'.DB_SITE.'/LIBS_js/material_datetimepicker/css/bootstrap-material-datetimepicker.css" />';
+			$input  ='<link rel="stylesheet" href="'.DB_SITE_REPO.'/LIBS_js/material_datetimepicker/css/bootstrap-material-datetimepicker.css" />';
 			$input .='<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">';
-			$input .='<script type="text/javascript" src="'.DB_SITE.'/LIBS_js/material_datetimepicker/js/moment-with-locales.min.js"></script>';
-			$input .='<script type="text/javascript" src="'.DB_SITE.'/LIBS_js/material_datetimepicker/js/bootstrap-material-datetimepicker.js"></script>';
+			$input .='<script type="text/javascript" src="'.DB_SITE_REPO.'/LIBS_js/material_datetimepicker/js/moment-with-locales.min.js"></script>';
+			$input .='<script type="text/javascript" src="'.DB_SITE_REPO.'/LIBS_js/material_datetimepicker/js/bootstrap-material-datetimepicker.js"></script>';
 					
 			//generacion del input
 			$input .='
@@ -1130,7 +1191,7 @@ class Basic_Form_Inputs{
 					<div class="col-sm-8 field">
 						<div class="input-group bootstrap-timepicker">
 							<input placeholder="'.$placeholder.'" class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$EXname.'" value="'.$w.'" '.$x.'>
-							<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span> 
+							<span class="input-group-addon add-on"><i class="fa fa-calendar" aria-hidden="true"></i></span> 
 						</div>
 					</div>
 				</div>';
@@ -1179,34 +1240,31 @@ class Basic_Form_Inputs{
 	public function form_time($placeholder,$name, $value, $required, $position){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($position, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $position entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $position ('.$position.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
-		if (!validaHora($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es una hora</div>';
+		/*if (!validaHora($value)&&$value!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es una hora');
 			$errorn++;
-		}
+		}*/
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//Validacion de variables
 			if($value==''){$w='';}elseif($value!=''){$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 					
 			//Posicion de la burbuja
 			switch ($position) {
@@ -1215,7 +1273,7 @@ class Basic_Form_Inputs{
 			}
 					
 			//solicitud de recursos
-			$input  ='<link rel="stylesheet" type="text/css" href="'.DB_SITE.'/LIBS_js/clock_timepicker/dist/bootstrap-clockpicker.min.css">';
+			$input  ='<link rel="stylesheet" type="text/css" href="'.DB_SITE_REPO.'/LIBS_js/clock_timepicker/dist/bootstrap-clockpicker.min.css">';
 					
 			//generacion del input
 			$input .='
@@ -1224,13 +1282,13 @@ class Basic_Form_Inputs{
 					<div class="col-sm-8 field">
 						<div class="input-group bootstrap-timepicker">
 							<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.'   >
-							<span class="input-group-addon add-on"><i class="fa fa-clock-o"></i></span> 
+							<span class="input-group-addon add-on"><i class="fa fa-clock-o" aria-hidden="true"></i></span> 
 						</div>
 					</div>
 				</div>';
 					
 			//solicitud de recursos
-			$input .='<script type="text/javascript" src="'.DB_SITE.'/LIBS_js/clock_timepicker/dist/bootstrap-clockpicker.min.js"></script>';
+			$input .='<script type="text/javascript" src="'.DB_SITE_REPO.'/LIBS_js/clock_timepicker/dist/bootstrap-clockpicker.min.js"></script>';
 					
 			//ejecucion script
 			$input .='
@@ -1271,48 +1329,45 @@ class Basic_Form_Inputs{
 	public function form_time_popover($placeholder,$name, $value, $required, $position, $limit){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($position, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $position entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $position ('.$position.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($limit)&&$limit!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $limit en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $limit ('.$limit.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($limit)&&$limit!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $limit en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $limit ('.$limit.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es superior a 24
 		if ($limit!=''&&$limit>24){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $limit en <strong>'.$placeholder.'</strong> es superior a 24</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $limit ('.$limit.') en <strong>'.$placeholder.'</strong> es superior a 24');
 			$errorn++;
 		}
 		//valido la hora
 		if(!validaHora($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El dato ingresado en $value en <strong>'.$placeholder.'</strong> no es una hora</div>';
+			alert_post_data(4,1,1, 'El dato ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es una hora');
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//Validacion de variables
 			if($value==''){$w='';}elseif($value!=''){$w=$value;}
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 						
 			//Posicion de la burbuja
 			switch ($position) {
@@ -1321,8 +1376,8 @@ class Basic_Form_Inputs{
 			}
 						
 			//solicitud recursos
-			$input  ='<script src="'.DB_SITE.'/LIBS_js/popover_timepicker/js/timepicki_'.$x_pos.'.js"></script>';
-			$input .='<link rel="stylesheet" type="text/css" href="'.DB_SITE.'/LIBS_js/popover_timepicker/css/timepicki_'.$x_pos.'.css">';
+			$input  ='<script src="'.DB_SITE_REPO.'/LIBS_js/popover_timepicker/js/timepicki_'.$x_pos.'.js"></script>';
+			$input .='<link rel="stylesheet" type="text/css" href="'.DB_SITE_REPO.'/LIBS_js/popover_timepicker/css/timepicki_'.$x_pos.'.css">';
 						
 			//ejecucion script
 			$input .='
@@ -1349,11 +1404,90 @@ class Basic_Form_Inputs{
 					<div class="col-sm-8 field">
 						<div class="input-group bootstrap-timepicker">
 							<input placeholder="'.$placeholder.'"  class="form-control timepicker-default" type="text" name="'.$name.'" id="'.$name.'" value="'.$w.'" '.$x.'   >
-							<span class="input-group-addon add-on"><i class="fa fa-clock-o"></i></span> 
+							<span class="input-group-addon add-on"><i class="fa fa-clock-o" aria-hidden="true"></i></span> 
 						</div>
 					</div>
 				</div>';
 						
+			//Imprimir dato	
+			echo $input;
+		}
+	}
+	/*******************************************************************************************************************/
+	/***********************************************************************
+	* Crea un input tipo color
+	* 
+	*===========================     Detalles    ===========================
+	* Permite crear un input tipo selector de colores
+	*===========================    Modo de uso  ===========================
+	* 	
+	* 	//se imprime input	
+	* 	$Form->form_input_color('Categoria','idCategoria', 1, 1 );
+	* 
+	*===========================    Parametros   ===========================
+	* String   $placeholder   Nombre o texto a mostrar en el navegador
+	* String   $name          Nombre del identificador del Input
+	* String   $value         Valor por defecto, puede ser texto o valor
+	* Integer  $required      Si dato es obligatorio (1=no, 2=si)
+	* @return  String
+	************************************************************************/
+	public function form_input_color($placeholder,$name, $value, $required){
+		
+		/********************************************************/
+		//Definicion de errores
+		$errorn = 0;
+		//se definen las opciones disponibles
+		$requerido = array(1, 2);
+		//verifico si el dato ingresado existe dentro de las opciones
+		if (!in_array($required, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
+			$errorn++;
+		}
+		/********************************************************/
+		//Ejecucion si no hay errores
+		if($errorn==0){
+			//Validacion de variables
+			if($value==''){$w='';}else{$w=$value;}
+			if($value==''){$bcolor='';}else{$bcolor='style="background-color: '.$value.';"';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}	
+			
+			
+			
+			//filtrado de teclas
+			$input = $this->solo_letras($name);
+			
+			//generacion del input
+			$input .= '
+				<link href="'.DB_SITE_REPO.'/LIBS_js/bootstrap_colorpicker/dist/css/bootstrap-colorpicker.min.css"  rel="stylesheet">
+				<link href="'.DB_SITE_REPO.'/LIBS_js/bootstrap_colorpicker/dist/css/bootstrap-colorpicker-plus.css" rel="stylesheet">';
+    	
+			//generacion del input
+			$input .= '
+				<div class="form-group" id="div_'.$name.'">
+					<label class="control-label col-sm-4" id="label_'.$name.'">'.$placeholder.'</label>
+					<div class="col-sm-8 field">
+						<input type="text" placeholder="'.$placeholder.'" class="form-control"  name="'.$name.'" id="'.$name.'" value="'.$w.'"  '.$x.' '.$bcolor.' onkeypress="return soloLetras_'.$name.'(event)">
+					</div>
+				</div>';
+					
+			//Ejecucion Javascript
+			$input .= '
+				<script src="'.DB_SITE_REPO.'/LIBS_js/bootstrap_colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+				<script src="'.DB_SITE_REPO.'/LIBS_js/bootstrap_colorpicker/dist/js/bootstrap-colorpicker-plus.js"></script>
+				<script type="text/javascript">
+					$(function(){
+						var color_'.$name.' = $("#'.$name.'");
+						color_'.$name.'.colorpickerplus();
+						color_'.$name.'.on("changeColor", function(e,color){
+							if(color==null)
+							$(this).val("transparent").css("background-color", "#fff");//tranparent
+							else
+							$(this).val(color).css("background-color", color);
+						});
+					});
+				</script>
+			';
+			
 			//Imprimir dato	
 			echo $input;
 		}
@@ -1381,21 +1515,18 @@ class Basic_Form_Inputs{
 	public function form_textarea($placeholder,$name, $value, $required, $height){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($height)&&$height!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $height en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $height ('.$height.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -1403,7 +1534,7 @@ class Basic_Form_Inputs{
 		if($errorn==0){
 			//Validacion de variables
 			if($value==''){    $w = '';             }else{$w=$value;}
-			if($required==1){  $x = '';             }elseif($required==2){ $x = 'required';}	
+			if($required==1){  $x = '';             }elseif($required==2){ $x = 'required';$_SESSION['form_require'].=','.$name;}	
 			if($height!=0){    $xheight = $height;  }elseif($height==0){   $xheight = '320';}	
 				
 			//filtrado de teclas
@@ -1420,7 +1551,7 @@ class Basic_Form_Inputs{
 			
 			//Ejecucion Javascript
 			$input .= '
-				<script src=\''.DB_SITE.'/LIBS_js/autosize/dist/autosize.js\'></script>
+				<script src=\''.DB_SITE_REPO.'/LIBS_js/autosize/dist/autosize.js\'></script>
 				<script>
 					autosize(document.querySelectorAll(\'textarea\'));
 				</script>
@@ -1452,9 +1583,6 @@ class Basic_Form_Inputs{
 	public function form_ckeditor($placeholder,$name, $value, $required, $tipo){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
@@ -1462,19 +1590,19 @@ class Basic_Form_Inputs{
 		$tipos     = array(1, 2, 3);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($tipo, $tipos)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $tipo entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $tipo ('.$tipo.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//Validacion de variables
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 				
 			//generacion del input
 			$input = '
@@ -1484,7 +1612,7 @@ class Basic_Form_Inputs{
 				</div>';
 				
 			//se cargan recursos					
-			$input .= '<script src="'.DB_SITE.'/LIBS_js/ckeditor/ckeditor.js"></script>';
+			$input .= '<script src="'.DB_SITE_REPO.'/LIBS_js/ckeditor/ckeditor.js"></script>';
 				
 			//ejecucion de script
 			$input .= '<script>';
@@ -1590,12 +1718,12 @@ class Basic_Form_Inputs{
 		$errorn = 0;
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($max_files)&&$max_files!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $max_files en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $max_files ('.$max_files.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($max_files)&&$max_files!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $max_files en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $max_files ('.$max_files.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -1610,20 +1738,19 @@ class Basic_Form_Inputs{
 					
 			//se cargan recursos
 			$input = '
-				<link href="'.DB_SITE.'/LIBS_js/bootstrap_fileinput/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
-				<link href="'.DB_SITE.'/LIBS_js/bootstrap_fileinput/themes/explorer/theme.css" media="all" rel="stylesheet" type="text/css"/>
-				<script src="'.DB_SITE.'/LIBS_js/bootstrap_fileinput/js/plugins/sortable.js" type="text/javascript"></script>
-				<script src="'.DB_SITE.'/LIBS_js/bootstrap_fileinput/js/fileinput.js" type="text/javascript"></script>
-				<script src="'.DB_SITE.'/LIBS_js/bootstrap_fileinput/js/locales/es.js" type="text/javascript"></script>
-				<script src="'.DB_SITE.'/LIBS_js/bootstrap_fileinput/themes/explorer/theme.js" type="text/javascript"></script>
+				<link href="'.DB_SITE_REPO.'/LIBS_js/bootstrap_fileinput/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
+				<link href="'.DB_SITE_REPO.'/LIBS_js/bootstrap_fileinput/themes/explorer/theme.css" media="all" rel="stylesheet" type="text/css"/>
+				<script src="'.DB_SITE_REPO.'/LIBS_js/bootstrap_fileinput/js/plugins/sortable.js" type="text/javascript"></script>
+				<script src="'.DB_SITE_REPO.'/LIBS_js/bootstrap_fileinput/js/fileinput.js" type="text/javascript"></script>
+				<script src="'.DB_SITE_REPO.'/LIBS_js/bootstrap_fileinput/js/locales/es.js" type="text/javascript"></script>
+				<script src="'.DB_SITE_REPO.'/LIBS_js/bootstrap_fileinput/themes/explorer/theme.js" type="text/javascript"></script>
 			';
 			
-			//Mostrar los tipos de archivos
-			$input .= '
-			<div class="alert alert-info" role="alert">
-				<strong><i class="fa fa-file-o" aria-hidden="true"></i> Archivos Permitidos: </strong>'.$type_files.'
-			</div>';	
-				
+			//Mostrar Maximo de archivos
+			$s_msg  = '<strong><i class="fa fa-file-o" aria-hidden="true"></i> Maximo de Archivos Permitidos: </strong>'.$max_files.'<br/>';
+			$s_msg .= '<strong><i class="fa fa-file-o" aria-hidden="true"></i> Extensiones de Archivos Permitidos: </strong><br/>'.$type_files;
+			$input .= alert_post_data(2,1,1,$s_msg );
+			
 			//generacion del input
 			$input .= '
 				<div class="form-group" id="div_'.$name.'">
@@ -1684,26 +1811,23 @@ class Basic_Form_Inputs{
 	public function form_checkbox($placeholder,$name, $value, $required, $data1, $data2, $table, $filter, $dbConn){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//si dato es requerido
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			//Filtro para el where
 			$filtro = '';
-			if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+			if ($filter!='0'){$filtro .="WHERE ".$filter;	}
 			//explode para poder crear cadena
 			$datos = explode(",", $data2);
 			if(count($datos)==1){
@@ -1782,7 +1906,7 @@ class Basic_Form_Inputs{
 				$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 				
 				//Devuelvo mensaje
-				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+				alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');		
 			}
 		}
 	}
@@ -1813,26 +1937,23 @@ class Basic_Form_Inputs{
 	public function form_checkbox_active($placeholder,$name, $value, $required, $data1, $data2, $table, $filter, $dbConn){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//si dato es requerido
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			//Filtro para el where
 			$filtro = '';
-			if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+			if ($filter!='0'){$filtro .="WHERE ".$filter;	}
 			//explode para poder crear cadena
 			$datos = explode(",", $data2);
 			if(count($datos)==1){
@@ -1853,7 +1974,7 @@ class Basic_Form_Inputs{
 				$arrTemp[$y] = $dato;
 				$y++;	
 			}
-
+	
 			//se trae un listado con todas las categorias
 			$arrSelect = array();
 			$query = "SELECT  
@@ -1895,6 +2016,7 @@ class Basic_Form_Inputs{
 								
 									$input .= '			
 									<div class="checkbox checkbox-primary">
+										<input                type="hidden"   value="1"      '.$w.' name="'.$name.'_'.$z.'" >
 										<input class="styled" type="checkbox" value="'.$m.'" '.$w.' name="'.$name.'_'.$z.'" id="'.$name.'_'.$z.'">
 										<label for="'.$name.'_'.$z.'">
 											'.$data_writing.'
@@ -1921,7 +2043,7 @@ class Basic_Form_Inputs{
 				$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 				
 				//Devuelvo mensaje
-				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+				alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');		
 			}
 		}
 	}
@@ -2016,36 +2138,33 @@ class Basic_Form_Inputs{
 	public function form_select($placeholder,$name, $value, $required, $data1, $data2, $table, $filter, $extrafilter, $dbConn){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
-		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+		/*if (!validarNumero($value)&&$value!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//si dato es requerido
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			//Filtro para el where
 			$filtro = '';
-			if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+			if ($filter!='0'){$filtro .="WHERE ".$filter;	}
 			//explode para poder crear cadena
 			$datos = explode(",", $data2);
 			if(count($datos)==1){
@@ -2061,7 +2180,7 @@ class Basic_Form_Inputs{
 				}
 			}
 			//Verifica si se enviaron mas datos
-				if(!isset($extrafilter) OR $extrafilter==''){$extrafilter = $order_by;}
+			if(!isset($extrafilter) OR $extrafilter==''){$extrafilter = $order_by;}
 
 			//se trae un listado con todas las categorias
 			$arrSelect = array();
@@ -2119,7 +2238,7 @@ class Basic_Form_Inputs{
 				$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 						
 				//Devuelvo mensaje
-				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+				alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');		
 			}
 		}
 	}
@@ -2152,26 +2271,23 @@ class Basic_Form_Inputs{
 	public function form_select_filter($placeholder,$name, $value, $required, $data1, $data2, $table, $filter, $extrafilter, $dbConn){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -2182,10 +2298,10 @@ class Basic_Form_Inputs{
 				$input = $this->form_select($placeholder,$name, $value, $required, $data1, $data2, $table, $filter, $extrafilter, $dbConn);
 			}else{
 				//si dato es requerido
-				if($required==1){$x='';}elseif($required==2){$x='required';}
+				if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 				//Filtro para el where
 				$filtro = '';
-				if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+				if ($filter!='0'){ $filtro .="WHERE ".$filter;	}
 				//explode para poder crear cadena
 				$datos = explode(",", $data2);
 				if(count($datos)==1){
@@ -2220,7 +2336,7 @@ class Basic_Form_Inputs{
 					}
 					mysqli_free_result($resultado);
 							
-					$input = '<link rel="stylesheet" href="'.DB_SITE.'/LIBS_js/chosen/chosen.css">';
+					$input = '<link rel="stylesheet" href="'.DB_SITE_REPO.'/LIBS_js/chosen/chosen.css">';
 					$input .= '<div class="form-group" id="div_'.$name.'">
 									<label for="text2" class="control-label col-sm-4" id="label_'.$name.'">'.$placeholder.'</label>
 									<div class="col-sm-8 field">
@@ -2249,8 +2365,8 @@ class Basic_Form_Inputs{
 									</div>
 								</div>
 									
-								<script src="'.DB_SITE.'/LIBS_js/chosen/chosen.jquery.js" type="text/javascript"></script>
-								<script src="'.DB_SITE.'/LIBS_js/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+								<script src="'.DB_SITE_REPO.'/LIBS_js/chosen/chosen.jquery.js" type="text/javascript"></script>
+								<script src="'.DB_SITE_REPO.'/LIBS_js/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
 								<script type="text/javascript">
 										
 									$.fn.oldChosen = $.fn.chosen
@@ -2277,7 +2393,7 @@ class Basic_Form_Inputs{
 					if($required==2){	
 						$input .='
 						<style>
-							#div_'.$name.' .chosen-single {background:url('.DB_SITE.'/LIB_assets/img/required.png) no-repeat 5px center !important;background-color: #fff !important;}
+							#div_'.$name.' .chosen-single {background:url('.DB_SITE_REPO.'/LIB_assets/img/required.png) no-repeat 5px center !important;background-color: #fff !important;}
 						</style>';
 					}
 
@@ -2294,7 +2410,7 @@ class Basic_Form_Inputs{
 					$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 							
 					//Devuelvo mensaje
-					echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+					alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');		
 				}
 			}
 		}
@@ -2327,36 +2443,33 @@ class Basic_Form_Inputs{
 	public function form_select_join($placeholder,$name, $value, $required, $data1, $data2, $table1, $table2, $filter, $dbConn){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//si dato es requerido
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			//Filtro para el where
 			$filtro = '';
-			if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+			if ($filter!='0'){$filtro .="WHERE ".$filter;	}
 				
 			//se trae un listado con todas las categorias
 			$arrSelect = array();
@@ -2408,7 +2521,7 @@ class Basic_Form_Inputs{
 				$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 						
 				//Devuelvo mensaje
-				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+				alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');		
 			}
 		}
 	}
@@ -2441,26 +2554,23 @@ class Basic_Form_Inputs{
 	public function form_select_join_filter($placeholder,$name, $value, $required, $data1, $data2, $table1, $table2, $filter, $dbConn){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -2471,10 +2581,10 @@ class Basic_Form_Inputs{
 				$input = $this->form_select_join($placeholder,$name, $value, $required, $data1, $data2, $table1, $table2, $filter, $dbConn);
 			}else{
 				//si dato es requerido
-				if($required==1){$x='';}elseif($required==2){$x='required';}
+				if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 				//Filtro para el where
 				$filtro = '';
-				if ($filter!='0'){$filtro .="WHERE ".$filter." ";	}
+				if ($filter!='0'){$filtro .="WHERE ".$filter;	}
 						
 				//se trae un listado con todas las categorias
 				$arrSelect = array();
@@ -2495,7 +2605,7 @@ class Basic_Form_Inputs{
 					}
 					mysqli_free_result($resultado);
 							
-					$input = '<link rel="stylesheet" href="'.DB_SITE.'/LIBS_js/chosen/chosen.css">';
+					$input = '<link rel="stylesheet" href="'.DB_SITE_REPO.'/LIBS_js/chosen/chosen.css">';
 					$input .= '<div class="form-group" id="div_'.$name.'">
 									<label for="text2" class="control-label col-sm-4" id="label_'.$name.'">'.$placeholder.'</label>
 									<div class="col-sm-8 field">
@@ -2516,8 +2626,8 @@ class Basic_Form_Inputs{
 											</div>
 										</div>
 									
-										<script src="'.DB_SITE.'/LIBS_js/chosen/chosen.jquery.js" type="text/javascript"></script>
-										<script src="'.DB_SITE.'/LIBS_js/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+										<script src="'.DB_SITE_REPO.'/LIBS_js/chosen/chosen.jquery.js" type="text/javascript"></script>
+										<script src="'.DB_SITE_REPO.'/LIBS_js/chosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
 										<script type="text/javascript">
 											$.fn.oldChosen = $.fn.chosen
 											$.fn.chosen = function(options) {
@@ -2542,7 +2652,7 @@ class Basic_Form_Inputs{
 							if($required==2){	
 								$input .='
 								<style>
-									#div_'.$name.' .chosen-single {background:url('.DB_SITE.'/LIB_assets/img/required.png) no-repeat 5px center !important;background-color: #fff !important;}
+									#div_'.$name.' .chosen-single {background:url('.DB_SITE_REPO.'/LIB_assets/img/required.png) no-repeat 5px center !important;background-color: #fff !important;}
 								</style>';
 							}        
 									
@@ -2559,7 +2669,7 @@ class Basic_Form_Inputs{
 					$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 							
 					//Devuelvo mensaje
-					echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+					alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');	
 				}
 			}
 		}
@@ -2590,33 +2700,30 @@ class Basic_Form_Inputs{
 	public function form_select_disabled($placeholder,$name, $value, $required, $data1, $data2, $table, $filter, $dbConn){
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//si dato es requerido
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 			$filtro = '';
 			//explode para poder crear cadena
 			$datos = explode(",", $data2);
@@ -2677,7 +2784,7 @@ class Basic_Form_Inputs{
 				$_SESSION['ErrorListing'][$vardata]['query']        = $query;
 						
 				//Devuelvo mensaje
-				echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador</div>';			
+				alert_post_data(4,1,1, 'Error en la consulta en <strong>'.$placeholder.'</strong>, consulte con el administrador');		
 			}
 		}
 	}
@@ -2704,53 +2811,50 @@ class Basic_Form_Inputs{
 	public function form_select_n_auto($placeholder,$name, $value, $required, $valor_ini, $valor_fin){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($valor_ini)&&$valor_ini!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $valor_ini en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $valor_ini ('.$valor_ini.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($valor_ini)&&$valor_ini!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $valor_ini en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $valor_ini ('.$valor_ini.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($valor_fin)&&$valor_fin!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $valor_fin en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $valor_fin ('.$valor_fin.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($valor_fin)&&$valor_fin!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $valor_fin en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $valor_fin ('.$valor_fin.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//Validacion de variables
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 
 			//generacion del input
 			$input = '
@@ -2796,33 +2900,30 @@ class Basic_Form_Inputs{
 	public function form_select_country($placeholder,$name, $value, $required, $dbConn){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required==2){$_SESSION['form_require'].=','.$name;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required ('.$required.') entregada en <strong>'.$placeholder.'</strong> no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value)&&$value!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value en <strong>'.$placeholder.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value ('.$value.') en <strong>'.$placeholder.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
 		//Ejecucion si no hay errores
 		if($errorn==0){
 			//si dato es requerido
-			if($required==1){$x='';}elseif($required==2){$x='required';}
+			if($required==1){$x='';}elseif($required==2){$x='required';$_SESSION['form_require'].=','.$name;}
 
 			//Variable
 			$pais = '0';
@@ -2841,10 +2942,10 @@ class Basic_Form_Inputs{
 					
 			//se cargan recursos
 			$input .= '
-			<link rel="stylesheet" href="'.DB_SITE.'/LIBS_js/country_picker/css/bootstrap-select.min.css">
-			<script src="'.DB_SITE.'/LIBS_js/country_picker/js/bootstrap-select.min.js"></script>
-			<script>var domain_val = "'.DB_SITE.'";</script>   	
-			<script src="'.DB_SITE.'/LIBS_js/country_picker/js/countrypicker.js"></script>'; 
+			<link rel="stylesheet" href="'.DB_SITE_REPO.'/LIBS_js/country_picker/css/bootstrap-select.min.css">
+			<script src="'.DB_SITE_REPO.'/LIBS_js/country_picker/js/bootstrap-select.min.js"></script>
+			<script>var domain_val = "'.DB_SITE_REPO.'";</script>   	
+			<script src="'.DB_SITE_REPO.'/LIBS_js/country_picker/js/countrypicker.js"></script>'; 
 					
 			//Imprimir dato	
 			echo $input;
@@ -2892,39 +2993,35 @@ class Basic_Form_Inputs{
 										$dbConn, $form_name){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required1==2){$_SESSION['form_require'].=','.$name1;}
-		if($required2==2){$_SESSION['form_require'].=','.$name2;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required1, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required1 entregada en '.$placeholder1.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required1 ('.$required1.') entregada en '.$placeholder1.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required2, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required2 entregada en '.$placeholder2.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required2 ('.$required2.') entregada en '.$placeholder2.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -2935,18 +3032,18 @@ class Basic_Form_Inputs{
 			
 			//DATOS REQUERIDOS
 			$required = array();
-			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';}
-			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';}
+			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';$_SESSION['form_require'].=','.$name1;}
+			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';$_SESSION['form_require'].=','.$name2;}
 			
 			//FILTROS
 			$filtro = array();
-			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1." ";	}
-			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2." ";	}
+			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1;	}
+			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2;	}
 			
 			//COMANDOS EXTRAS
 			$excom = array();
-			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1." ";	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
-			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2." ";	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
+			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1;	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
+			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2;	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
 			
 			//visualizar listado
 			$display = array();
@@ -2995,7 +3092,7 @@ class Basic_Form_Inputs{
 			}
 			//Primera Consulta estandar			
 			$arrSeleccion = array();
-			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1]."";
+			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1];
 			$resultado = mysqli_query ($dbConn, $query);
 			while ( $row = mysqli_fetch_assoc ($resultado)) {
 			array_push( $arrSeleccion,$row );
@@ -3044,7 +3141,7 @@ class Basic_Form_Inputs{
 				// Se trae un listado con los datos previamente seleccionados
 				if ($value[$i-1]!=0&&$value[$i-1]!=''){
 					$arrSeleccion = array();
-					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i]."";
+					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i];
 					$resultado = mysqli_query ($dbConn, $query);
 					while ( $row = mysqli_fetch_assoc ($resultado)) {
 					array_push( $arrSeleccion,$row );
@@ -3053,7 +3150,7 @@ class Basic_Form_Inputs{
 				} 
 				// Se trae un listado con todos los datos
 				$arrTodos = array();
-				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i]."";
+				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i];
 				$resultado = mysqli_query ($dbConn, $query);
 				while ( $row = mysqli_fetch_assoc ($resultado)) {
 				array_push( $arrTodos,$row );
@@ -3215,52 +3312,47 @@ class Basic_Form_Inputs{
 										$dbConn, $form_name){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required1==2){$_SESSION['form_require'].=','.$name1;}
-		if($required2==2){$_SESSION['form_require'].=','.$name2;}
-		if($required3==2){$_SESSION['form_require'].=','.$name3;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required1, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required1 entregada en '.$placeholder1.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required1 ('.$required1.') entregada en '.$placeholder1.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required2, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required2 entregada en '.$placeholder2.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required2 ('.$required2.') entregada en '.$placeholder2.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required3, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required3 entregada en '.$placeholder3.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required3 ('.$required3.') entregada en '.$placeholder3.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -3271,21 +3363,21 @@ class Basic_Form_Inputs{
 			
 			//DATOS REQUERIDOS
 			$required = array();
-			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';}
-			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';}
-			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';}
+			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';$_SESSION['form_require'].=','.$name1;}
+			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';$_SESSION['form_require'].=','.$name2;}
+			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';$_SESSION['form_require'].=','.$name3;}
 			
 			//FILTROS
 			$filtro = array();
-			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1." ";	}
-			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2." ";	}
-			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3." ";	}
+			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1;	}
+			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2;	}
+			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3;	}
 			
 			//COMANDOS EXTRAS
 			$excom = array();
-			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1." ";	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
-			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2." ";	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
-			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3." ";	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
+			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1;	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
+			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2;	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
+			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3;	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
 			
 			//visualizar listado
 			$display = array();
@@ -3341,7 +3433,7 @@ class Basic_Form_Inputs{
 			}
 			//Primera Consulta estandar			
 			$arrSeleccion = array();
-			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1]."";
+			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1];
 			$resultado = mysqli_query ($dbConn, $query);
 			while ( $row = mysqli_fetch_assoc ($resultado)) {
 			array_push( $arrSeleccion,$row );
@@ -3391,7 +3483,7 @@ class Basic_Form_Inputs{
 				// Se trae un listado con los datos previamente seleccionados
 				if ($value[$i-1]!=0&&$value[$i-1]!=''){
 					$arrSeleccion = array();
-					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i]."";
+					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i];
 					$resultado = mysqli_query ($dbConn, $query);
 					while ( $row = mysqli_fetch_assoc ($resultado)) {
 					array_push( $arrSeleccion,$row );
@@ -3400,7 +3492,7 @@ class Basic_Form_Inputs{
 				} 
 				// Se trae un listado con todos los datos
 				$arrTodos = array();
-				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i]."";
+				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i];
 				$resultado = mysqli_query ($dbConn, $query);
 				while ( $row = mysqli_fetch_assoc ($resultado)) {
 				array_push( $arrTodos,$row );
@@ -3559,65 +3651,59 @@ class Basic_Form_Inputs{
 										$dbConn, $form_name){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required1==2){$_SESSION['form_require'].=','.$name1;}
-		if($required2==2){$_SESSION['form_require'].=','.$name2;}
-		if($required3==2){$_SESSION['form_require'].=','.$name3;}
-		if($required4==2){$_SESSION['form_require'].=','.$name4;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required1, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required1 entregada en '.$placeholder1.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required1 ('.$required1.') entregada en '.$placeholder1.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required2, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required2 entregada en '.$placeholder2.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required2 ('.$required2.') entregada en '.$placeholder2.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required3, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required3 entregada en '.$placeholder3.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required3 ('.$required3.') entregada en '.$placeholder3.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required4, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required4 entregada en '.$placeholder4.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required4 ('.$required4.') entregada en '.$placeholder4.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value4)&&$value4!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value4 en <strong>'.$placeholder4.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value4 ('.$value4.') en <strong>'.$placeholder4.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value4)&&$value4!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value4 en <strong>'.$placeholder4.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value4 ('.$value4.') en <strong>'.$placeholder4.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -3628,24 +3714,24 @@ class Basic_Form_Inputs{
 			
 			//DATOS REQUERIDOS
 			$required = array();
-			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';}
-			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';}
-			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';}
-			if($required4==1){$required[4]='';      }elseif($required4==2){$required[4]='required';}
+			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';$_SESSION['form_require'].=','.$name1;}
+			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';$_SESSION['form_require'].=','.$name2;}
+			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';$_SESSION['form_require'].=','.$name3;}
+			if($required4==1){$required[4]='';      }elseif($required4==2){$required[4]='required';$_SESSION['form_require'].=','.$name4;}
 			
 			//FILTROS
 			$filtro = array();
-			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1." ";	}
-			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2." ";	}
-			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3." ";	}
-			$filtro[4] = '';  if ($filter4!='0') {$filtro[4] .=" AND ".$filter4." ";	}
+			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1;	}
+			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2;	}
+			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3;	}
+			$filtro[4] = '';  if ($filter4!='0') {$filtro[4] .=" AND ".$filter4;	}
 			
 			//COMANDOS EXTRAS
 			$excom = array();
-			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1." ";	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
-			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2." ";	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
-			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3." ";	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
-			$excom[4] = '';  if ($extracomand4!='0') {$excom[4] .=" ".$extracomand4." ";	} else{$excom[4] .=" ORDER BY Nombre ASC ";} 
+			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1;	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
+			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2;	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
+			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3;	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
+			$excom[4] = '';  if ($extracomand4!='0') {$excom[4] .=" ".$extracomand4;	} else{$excom[4] .=" ORDER BY Nombre ASC ";} 
 			
 			//visualizar listado
 			$display = array();
@@ -3708,7 +3794,7 @@ class Basic_Form_Inputs{
 			}
 			//Primera Consulta estandar			
 			$arrSeleccion = array();
-			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1]."";
+			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1];
 			$resultado = mysqli_query ($dbConn, $query);
 			while ( $row = mysqli_fetch_assoc ($resultado)) {
 			array_push( $arrSeleccion,$row );
@@ -3758,7 +3844,7 @@ class Basic_Form_Inputs{
 				// Se trae un listado con los datos previamente seleccionados
 				if ($value[$i-1]!=0&&$value[$i-1]!=''){
 					$arrSeleccion = array();
-					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i]."";
+					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i];
 					$resultado = mysqli_query ($dbConn, $query);
 					while ( $row = mysqli_fetch_assoc ($resultado)) {
 					array_push( $arrSeleccion,$row );
@@ -3767,7 +3853,7 @@ class Basic_Form_Inputs{
 				} 
 				// Se trae un listado con todos los datos
 				$arrTodos = array();
-				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i]."";
+				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i];
 				$resultado = mysqli_query ($dbConn, $query);
 				while ( $row = mysqli_fetch_assoc ($resultado)) {
 				array_push( $arrTodos,$row );
@@ -3927,78 +4013,71 @@ class Basic_Form_Inputs{
 										$dbConn, $form_name){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required1==2){$_SESSION['form_require'].=','.$name1;}
-		if($required2==2){$_SESSION['form_require'].=','.$name2;}
-		if($required3==2){$_SESSION['form_require'].=','.$name3;}
-		if($required4==2){$_SESSION['form_require'].=','.$name4;}
-		if($required5==2){$_SESSION['form_require'].=','.$name5;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required1, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required1 entregada en '.$placeholder1.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required1 ('.$required1.') entregada en '.$placeholder1.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required2, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required2 entregada en '.$placeholder2.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required2 ('.$required2.') entregada en '.$placeholder2.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required3, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required3 entregada en '.$placeholder3.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required3 ('.$required3.') entregada en '.$placeholder3.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required4, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required4 entregada en '.$placeholder4.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required4 ('.$required4.') entregada en '.$placeholder4.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required5, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required5 entregada en '.$placeholder5.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required5 ('.$required5.') entregada en '.$placeholder5.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value4)&&$value4!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value4 en <strong>'.$placeholder4.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value4 ('.$value4.') en <strong>'.$placeholder4.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value5)&&$value5!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value5 en <strong>'.$placeholder5.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value5 ('.$value5.') en <strong>'.$placeholder5.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value4)&&$value4!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value4 en <strong>'.$placeholder4.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value4 ('.$value4.') en <strong>'.$placeholder4.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value5)&&$value5!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value5 en <strong>'.$placeholder5.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value5 ('.$value5.') en <strong>'.$placeholder5.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -4009,27 +4088,27 @@ class Basic_Form_Inputs{
 			
 			//DATOS REQUERIDOS
 			$required = array();
-			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';}
-			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';}
-			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';}
-			if($required4==1){$required[4]='';      }elseif($required4==2){$required[4]='required';}
-			if($required5==1){$required[5]='';      }elseif($required5==2){$required[5]='required';}
+			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';$_SESSION['form_require'].=','.$name1;}
+			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';$_SESSION['form_require'].=','.$name2;}
+			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';$_SESSION['form_require'].=','.$name3;}
+			if($required4==1){$required[4]='';      }elseif($required4==2){$required[4]='required';$_SESSION['form_require'].=','.$name4;}
+			if($required5==1){$required[5]='';      }elseif($required5==2){$required[5]='required';$_SESSION['form_require'].=','.$name5;}
 			
 			//FILTROS
 			$filtro = array();
-			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1." ";	}
-			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2." ";	}
-			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3." ";	}
-			$filtro[4] = '';  if ($filter4!='0') {$filtro[4] .=" AND ".$filter4." ";	}
-			$filtro[5] = '';  if ($filter5!='0') {$filtro[5] .=" AND ".$filter5." ";	}
+			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1;	}
+			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2;	}
+			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3;	}
+			$filtro[4] = '';  if ($filter4!='0') {$filtro[4] .=" AND ".$filter4;	}
+			$filtro[5] = '';  if ($filter5!='0') {$filtro[5] .=" AND ".$filter5;	}
 			
 			//COMANDOS EXTRAS
 			$excom = array();
-			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1." ";	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
-			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2." ";	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
-			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3." ";	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
-			$excom[4] = '';  if ($extracomand4!='0') {$excom[4] .=" ".$extracomand4." ";	} else{$excom[4] .=" ORDER BY Nombre ASC ";} 
-			$excom[5] = '';  if ($extracomand5!='0') {$excom[5] .=" ".$extracomand5." ";	} else{$excom[5] .=" ORDER BY Nombre ASC ";}
+			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1;	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
+			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2;	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
+			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3;	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
+			$excom[4] = '';  if ($extracomand4!='0') {$excom[4] .=" ".$extracomand4;	} else{$excom[4] .=" ORDER BY Nombre ASC ";} 
+			$excom[5] = '';  if ($extracomand5!='0') {$excom[5] .=" ".$extracomand5;	} else{$excom[5] .=" ORDER BY Nombre ASC ";}
 			
 			//visualizar listado
 			$display = array();
@@ -4099,7 +4178,7 @@ class Basic_Form_Inputs{
 			}
 			//Primera Consulta estandar			
 			$arrSeleccion = array();
-			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1]."";
+			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1];
 			$resultado = mysqli_query ($dbConn, $query);
 			while ( $row = mysqli_fetch_assoc ($resultado)) {
 			array_push( $arrSeleccion,$row );
@@ -4149,7 +4228,7 @@ class Basic_Form_Inputs{
 				// Se trae un listado con los datos previamente seleccionados
 				if ($value[$i-1]!=0&&$value[$i-1]!=''){
 					$arrSeleccion = array();
-					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i]."";
+					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i];
 					$resultado = mysqli_query ($dbConn, $query);
 					while ( $row = mysqli_fetch_assoc ($resultado)) {
 					array_push( $arrSeleccion,$row );
@@ -4158,7 +4237,7 @@ class Basic_Form_Inputs{
 				} 
 				// Se trae un listado con todos los datos
 				$arrTodos = array();
-				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i]."";
+				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i];
 				$resultado = mysqli_query ($dbConn, $query);
 				while ( $row = mysqli_fetch_assoc ($resultado)) {
 				array_push( $arrTodos,$row );
@@ -4318,91 +4397,83 @@ class Basic_Form_Inputs{
 										$dbConn, $form_name){
 
 		/********************************************************/
-		//Dato obligatorio
-		if($required1==2){$_SESSION['form_require'].=','.$name1;}
-		if($required2==2){$_SESSION['form_require'].=','.$name2;}
-		if($required3==2){$_SESSION['form_require'].=','.$name3;}
-		if($required4==2){$_SESSION['form_require'].=','.$name4;}
-		if($required5==2){$_SESSION['form_require'].=','.$name5;}
-		if($required6==2){$_SESSION['form_require'].=','.$name6;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required1, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required1 entregada en '.$placeholder1.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required1 ('.$required1.') entregada en '.$placeholder1.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required2, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required2 entregada en '.$placeholder2.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required2 ('.$required2.') entregada en '.$placeholder2.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required3, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required3 entregada en '.$placeholder3.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required3 ('.$required3.') entregada en '.$placeholder3.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required4, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required4 entregada en '.$placeholder4.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required4 ('.$required4.') entregada en '.$placeholder4.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required5, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required5 entregada en '.$placeholder5.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required5 ('.$required5.') entregada en '.$placeholder5.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required6, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required6 entregada en '.$placeholder6.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required6 ('.$required6.') entregada en '.$placeholder6.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value4)&&$value4!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value4 en <strong>'.$placeholder4.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value4 ('.$value4.') en <strong>'.$placeholder4.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value5)&&$value5!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value5 en <strong>'.$placeholder5.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value5 ('.$value5.') en <strong>'.$placeholder5.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value6)&&$value6!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value6 en <strong>'.$placeholder6.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value6 ('.$value6.') en <strong>'.$placeholder6.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value4)&&$value4!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value4 en <strong>'.$placeholder4.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value4 ('.$value4.') en <strong>'.$placeholder4.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value5)&&$value5!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value5 en <strong>'.$placeholder5.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value5 ('.$value5.') en <strong>'.$placeholder5.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value6)&&$value6!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value6 en <strong>'.$placeholder6.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value6 ('.$value6.') en <strong>'.$placeholder6.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -4413,30 +4484,30 @@ class Basic_Form_Inputs{
 			
 			//DATOS REQUERIDOS
 			$required = array();
-			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';}
-			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';}
-			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';}
-			if($required4==1){$required[4]='';      }elseif($required4==2){$required[4]='required';}
-			if($required5==1){$required[5]='';      }elseif($required5==2){$required[5]='required';}
-			if($required6==1){$required[6]='';      }elseif($required6==2){$required[6]='required';}
+			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';$_SESSION['form_require'].=','.$name1;}
+			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';$_SESSION['form_require'].=','.$name2;}
+			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';$_SESSION['form_require'].=','.$name3;}
+			if($required4==1){$required[4]='';      }elseif($required4==2){$required[4]='required';$_SESSION['form_require'].=','.$name4;}
+			if($required5==1){$required[5]='';      }elseif($required5==2){$required[5]='required';$_SESSION['form_require'].=','.$name5;}
+			if($required6==1){$required[6]='';      }elseif($required6==2){$required[6]='required';$_SESSION['form_require'].=','.$name6;}
 			
 			//FILTROS
 			$filtro = array();
-			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1." ";	}
-			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2." ";	}
-			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3." ";	}
-			$filtro[4] = '';  if ($filter4!='0') {$filtro[4] .=" AND ".$filter4." ";	}
-			$filtro[5] = '';  if ($filter5!='0') {$filtro[5] .=" AND ".$filter5." ";	}
-			$filtro[6] = '';  if ($filter6!='0') {$filtro[6] .=" AND ".$filter6." ";	}
+			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1;	}
+			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2;	}
+			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3;	}
+			$filtro[4] = '';  if ($filter4!='0') {$filtro[4] .=" AND ".$filter4;	}
+			$filtro[5] = '';  if ($filter5!='0') {$filtro[5] .=" AND ".$filter5;	}
+			$filtro[6] = '';  if ($filter6!='0') {$filtro[6] .=" AND ".$filter6;	}
 			
 			//COMANDOS EXTRAS
 			$excom = array();
-			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1." ";	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
-			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2." ";	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
-			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3." ";	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
-			$excom[4] = '';  if ($extracomand4!='0') {$excom[4] .=" ".$extracomand4." ";	} else{$excom[4] .=" ORDER BY Nombre ASC ";} 
-			$excom[5] = '';  if ($extracomand5!='0') {$excom[5] .=" ".$extracomand5." ";	} else{$excom[5] .=" ORDER BY Nombre ASC ";}
-			$excom[6] = '';  if ($extracomand6!='0') {$excom[6] .=" ".$extracomand6." ";	} else{$excom[6] .=" ORDER BY Nombre ASC ";}
+			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1;	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
+			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2;	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
+			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3;	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
+			$excom[4] = '';  if ($extracomand4!='0') {$excom[4] .=" ".$extracomand4;	} else{$excom[4] .=" ORDER BY Nombre ASC ";} 
+			$excom[5] = '';  if ($extracomand5!='0') {$excom[5] .=" ".$extracomand5;	} else{$excom[5] .=" ORDER BY Nombre ASC ";}
+			$excom[6] = '';  if ($extracomand6!='0') {$excom[6] .=" ".$extracomand6;	} else{$excom[6] .=" ORDER BY Nombre ASC ";}
 			
 			//visualizar listado
 			$display = array();
@@ -4515,7 +4586,7 @@ class Basic_Form_Inputs{
 			}
 			//Primera Consulta estandar			
 			$arrSeleccion = array();
-			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1]."";
+			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1];
 			$resultado = mysqli_query ($dbConn, $query);
 			while ( $row = mysqli_fetch_assoc ($resultado)) {
 			array_push( $arrSeleccion,$row );
@@ -4566,7 +4637,7 @@ class Basic_Form_Inputs{
 				// Se trae un listado con los datos previamente seleccionados
 				if ($value[$i-1]!=0&&$value[$i-1]!=''){
 					$arrSeleccion = array();
-					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i]."";
+					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i];
 					$resultado = mysqli_query ($dbConn, $query);
 					while ( $row = mysqli_fetch_assoc ($resultado)) {
 					array_push( $arrSeleccion,$row );
@@ -4575,7 +4646,7 @@ class Basic_Form_Inputs{
 				} 
 				// Se trae un listado con todos los datos
 				$arrTodos = array();
-				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i]."";
+				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i];
 				$resultado = mysqli_query ($dbConn, $query);
 				while ( $row = mysqli_fetch_assoc ($resultado)) {
 				array_push( $arrTodos,$row );
@@ -4756,338 +4827,311 @@ class Basic_Form_Inputs{
 
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required1==2){$_SESSION['form_require'].=','.$name1;}
-		if($required2==2){$_SESSION['form_require'].=','.$name2;}
-		if($required3==2){$_SESSION['form_require'].=','.$name3;}
-		if($required4==2){$_SESSION['form_require'].=','.$name4;}
-		if($required5==2){$_SESSION['form_require'].=','.$name5;}
-		if($required6==2){$_SESSION['form_require'].=','.$name6;}
-		if($required7==2){$_SESSION['form_require'].=','.$name7;}
-		if($required8==2){$_SESSION['form_require'].=','.$name8;}
-		if($required9==2){$_SESSION['form_require'].=','.$name9;}
-		if($required10==2){$_SESSION['form_require'].=','.$name10;}
-		if($required11==2){$_SESSION['form_require'].=','.$name11;}
-		if($required12==2){$_SESSION['form_require'].=','.$name12;}
-		if($required13==2){$_SESSION['form_require'].=','.$name13;}
-		if($required14==2){$_SESSION['form_require'].=','.$name14;}
-		if($required15==2){$_SESSION['form_require'].=','.$name15;}
-		if($required16==2){$_SESSION['form_require'].=','.$name16;}
-		if($required17==2){$_SESSION['form_require'].=','.$name17;}
-		if($required18==2){$_SESSION['form_require'].=','.$name18;}
-		if($required19==2){$_SESSION['form_require'].=','.$name19;}
-		if($required20==2){$_SESSION['form_require'].=','.$name20;}
-		if($required21==2){$_SESSION['form_require'].=','.$name21;}
-		if($required22==2){$_SESSION['form_require'].=','.$name22;}
-		if($required23==2){$_SESSION['form_require'].=','.$name23;}
-		if($required24==2){$_SESSION['form_require'].=','.$name24;}
-		if($required25==2){$_SESSION['form_require'].=','.$name25;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required1, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required1 entregada en '.$placeholder1.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required1 ('.$required1.') entregada en '.$placeholder1.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required2, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required2 entregada en '.$placeholder2.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required2 ('.$required2.') entregada en '.$placeholder2.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required3, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required3 entregada en '.$placeholder3.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required3 ('.$required3.') entregada en '.$placeholder3.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required4, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required4 entregada en '.$placeholder4.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required4 ('.$required4.') entregada en '.$placeholder4.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required5, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required5 entregada en '.$placeholder5.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required5 ('.$required5.') entregada en '.$placeholder5.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required6, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required6 entregada en '.$placeholder6.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required6 ('.$required6.') entregada en '.$placeholder6.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required7, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required7 entregada en '.$placeholder7.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required7 ('.$required7.') entregada en '.$placeholder7.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required8, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required8 entregada en '.$placeholder8.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required8 ('.$required8.') entregada en '.$placeholder8.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required9, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required9 entregada en '.$placeholder9.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required9 ('.$required9.') entregada en '.$placeholder9.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required10, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required10 entregada en '.$placeholder10.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required10 ('.$required10.') entregada en '.$placeholder10.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required11, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required11 entregada en '.$placeholder11.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required11 ('.$required11.') entregada en '.$placeholder11.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required12, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required12 entregada en '.$placeholder12.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required12 ('.$required12.') entregada en '.$placeholder12.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required13, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required13 entregada en '.$placeholder13.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required13 ('.$required13.') entregada en '.$placeholder13.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required14, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required14 entregada en '.$placeholder14.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required14 ('.$required14.') entregada en '.$placeholder14.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required15, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required15 entregada en '.$placeholder15.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required15 ('.$required15.') entregada en '.$placeholder15.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required16, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required16 entregada en '.$placeholder16.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required16 ('.$required16.') entregada en '.$placeholder16.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required17, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required17 entregada en '.$placeholder17.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required17 ('.$required17.') entregada en '.$placeholder17.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required18, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required18 entregada en '.$placeholder18.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required18 ('.$required18.') entregada en '.$placeholder18.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required19, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required19 entregada en '.$placeholder19.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required19 ('.$required19.') entregada en '.$placeholder19.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required20, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required20 entregada en '.$placeholder20.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required20 ('.$required20.') entregada en '.$placeholder20.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required21, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required21 entregada en '.$placeholder21.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required21 ('.$required21.') entregada en '.$placeholder21.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required22, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required22 entregada en '.$placeholder22.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required22 ('.$required22.') entregada en '.$placeholder22.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required23, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required23 entregada en '.$placeholder23.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required23 ('.$required23.') entregada en '.$placeholder23.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required24, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required24 entregada en '.$placeholder24.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required24 ('.$required24.') entregada en '.$placeholder24.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required25, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required25 entregada en '.$placeholder25.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required25 ('.$required25.') entregada en '.$placeholder25.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value4)&&$value4!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value4 en <strong>'.$placeholder4.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value4 ('.$value4.') en <strong>'.$placeholder4.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value5)&&$value5!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value5 en <strong>'.$placeholder5.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value5 ('.$value5.') en <strong>'.$placeholder5.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value6)&&$value6!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value6 en <strong>'.$placeholder6.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value6 ('.$value6.') en <strong>'.$placeholder6.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value7)&&$value7!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value7 en <strong>'.$placeholder7.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value7 ('.$value7.') en <strong>'.$placeholder7.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value8)&&$value8!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value8 en <strong>'.$placeholder8.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value8 ('.$value8.') en <strong>'.$placeholder8.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value9)&&$value9!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value9 en <strong>'.$placeholder9.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value9 ('.$value9.') en <strong>'.$placeholder9.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value10)&&$value10!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value10 en <strong>'.$placeholder10.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value10 ('.$value10.') en <strong>'.$placeholder10.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value11)&&$value11!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value11 en <strong>'.$placeholder11.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value11 ('.$value11.') en <strong>'.$placeholder11.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value12)&&$value12!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value12 en <strong>'.$placeholder12.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value12 ('.$value12.') en <strong>'.$placeholder12.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value13)&&$value13!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value13 en <strong>'.$placeholder13.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value13 ('.$value13.') en <strong>'.$placeholder13.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value14)&&$value14!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value14 en <strong>'.$placeholder14.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value14 ('.$value14.') en <strong>'.$placeholder14.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value15)&&$value15!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value15 en <strong>'.$placeholder15.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value15 ('.$value15.') en <strong>'.$placeholder15.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value16)&&$value16!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value16 en <strong>'.$placeholder16.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value16 ('.$value16.') en <strong>'.$placeholder16.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value17)&&$value17!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value17 en <strong>'.$placeholder17.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value17 ('.$value17.') en <strong>'.$placeholder17.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value18)&&$value18!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value18 en <strong>'.$placeholder18.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value18 ('.$value18.') en <strong>'.$placeholder18.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value19)&&$value19!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value19 en <strong>'.$placeholder19.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value19 ('.$value19.') en <strong>'.$placeholder19.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value20)&&$value20!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value20 en <strong>'.$placeholder20.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value20 ('.$value20.') en <strong>'.$placeholder20.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value21)&&$value21!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value21 en <strong>'.$placeholder21.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value21 ('.$value21.') en <strong>'.$placeholder21.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value22)&&$value22!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value22 en <strong>'.$placeholder22.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value22 ('.$value22.') en <strong>'.$placeholder22.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value23)&&$value23!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value23 en <strong>'.$placeholder23.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value23 ('.$value23.') en <strong>'.$placeholder23.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value24)&&$value24!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value24 en <strong>'.$placeholder24.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value24 ('.$value24.') en <strong>'.$placeholder24.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value25)&&$value25!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value25 en <strong>'.$placeholder25.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value25 ('.$value25.') en <strong>'.$placeholder25.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value4)&&$value4!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value4 en <strong>'.$placeholder4.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value4 ('.$value4.') en <strong>'.$placeholder4.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value5)&&$value5!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value5 en <strong>'.$placeholder5.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value5 ('.$value5.') en <strong>'.$placeholder5.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value6)&&$value6!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value6 en <strong>'.$placeholder6.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value6 ('.$value6.') en <strong>'.$placeholder6.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value7)&&$value7!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value7 en <strong>'.$placeholder7.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value7 ('.$value7.') en <strong>'.$placeholder7.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value8)&&$value8!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value8 en <strong>'.$placeholder8.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value8 ('.$value8.') en <strong>'.$placeholder8.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value9)&&$value9!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value9 en <strong>'.$placeholder9.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value9 ('.$value9.') en <strong>'.$placeholder9.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value10)&&$value10!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value10 en <strong>'.$placeholder10.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value10 ('.$value10.') en <strong>'.$placeholder10.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value11)&&$value11!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value11 en <strong>'.$placeholder11.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value11 ('.$value11.') en <strong>'.$placeholder11.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value12)&&$value12!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value12 en <strong>'.$placeholder12.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value12 ('.$value12.') en <strong>'.$placeholder12.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value13)&&$value13!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value13 en <strong>'.$placeholder13.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value13 ('.$value13.') en <strong>'.$placeholder13.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value14)&&$value14!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value14 en <strong>'.$placeholder14.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value14 ('.$value14.') en <strong>'.$placeholder14.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value15)&&$value15!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value15 en <strong>'.$placeholder15.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value15 ('.$value15.') en <strong>'.$placeholder15.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value16)&&$value16!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value16 en <strong>'.$placeholder16.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value16 ('.$value16.') en <strong>'.$placeholder16.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value17)&&$value17!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value17 en <strong>'.$placeholder17.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value17 ('.$value17.') en <strong>'.$placeholder17.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value18)&&$value18!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value18 en <strong>'.$placeholder18.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value18 ('.$value18.') en <strong>'.$placeholder18.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value19)&&$value19!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value19 en <strong>'.$placeholder19.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value19 ('.$value19.') en <strong>'.$placeholder19.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value20)&&$value20!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value20 en <strong>'.$placeholder20.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value20 ('.$value20.') en <strong>'.$placeholder20.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value21)&&$value21!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value21 en <strong>'.$placeholder21.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value21 ('.$value21.') en <strong>'.$placeholder21.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value22)&&$value22!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value22 en <strong>'.$placeholder22.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value22 ('.$value22.') en <strong>'.$placeholder22.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value23)&&$value23!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value23 en <strong>'.$placeholder23.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value23 ('.$value23.') en <strong>'.$placeholder23.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value24)&&$value24!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value24 en <strong>'.$placeholder24.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value24 ('.$value24.') en <strong>'.$placeholder24.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value25)&&$value25!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value25 en <strong>'.$placeholder25.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value25 ('.$value25.') en <strong>'.$placeholder25.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -5098,87 +5142,87 @@ class Basic_Form_Inputs{
 			
 			//DATOS REQUERIDOS
 			$required = array();
-			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';}
-			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';}
-			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';}
-			if($required4==1){$required[4]='';      }elseif($required4==2){$required[4]='required';}
-			if($required5==1){$required[5]='';      }elseif($required5==2){$required[5]='required';}
-			if($required6==1){$required[6]='';      }elseif($required6==2){$required[6]='required';}
-			if($required7==1){$required[7]='';      }elseif($required7==2){$required[7]='required';}
-			if($required8==1){$required[8]='';      }elseif($required8==2){$required[8]='required';}
-			if($required9==1){$required[9]='';      }elseif($required9==2){$required[9]='required';}
-			if($required10==1){$required[10]='';    }elseif($required10==2){$required[10]='required';}
-			if($required11==1){$required[11]='';    }elseif($required11==2){$required[11]='required';}
-			if($required12==1){$required[12]='';    }elseif($required12==2){$required[12]='required';}
-			if($required13==1){$required[13]='';    }elseif($required13==2){$required[13]='required';}
-			if($required14==1){$required[14]='';    }elseif($required14==2){$required[14]='required';}
-			if($required15==1){$required[15]='';    }elseif($required15==2){$required[15]='required';}
-			if($required16==1){$required[16]='';    }elseif($required16==2){$required[16]='required';}
-			if($required17==1){$required[17]='';    }elseif($required17==2){$required[17]='required';}
-			if($required18==1){$required[18]='';    }elseif($required18==2){$required[18]='required';}
-			if($required19==1){$required[19]='';    }elseif($required19==2){$required[19]='required';}
-			if($required20==1){$required[20]='';    }elseif($required20==2){$required[20]='required';}
-			if($required21==1){$required[21]='';    }elseif($required21==2){$required[21]='required';}
-			if($required22==1){$required[22]='';    }elseif($required22==2){$required[22]='required';}
-			if($required23==1){$required[23]='';    }elseif($required23==2){$required[23]='required';}
-			if($required24==1){$required[24]='';    }elseif($required24==2){$required[24]='required';}
-			if($required25==1){$required[25]='';    }elseif($required25==2){$required[25]='required';}
+			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';$_SESSION['form_require'].=','.$name1;}
+			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';$_SESSION['form_require'].=','.$name2;}
+			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';$_SESSION['form_require'].=','.$name3;}
+			if($required4==1){$required[4]='';      }elseif($required4==2){$required[4]='required';$_SESSION['form_require'].=','.$name4;}
+			if($required5==1){$required[5]='';      }elseif($required5==2){$required[5]='required';$_SESSION['form_require'].=','.$name5;}
+			if($required6==1){$required[6]='';      }elseif($required6==2){$required[6]='required';$_SESSION['form_require'].=','.$name6;}
+			if($required7==1){$required[7]='';      }elseif($required7==2){$required[7]='required';$_SESSION['form_require'].=','.$name7;}
+			if($required8==1){$required[8]='';      }elseif($required8==2){$required[8]='required';$_SESSION['form_require'].=','.$name8;}
+			if($required9==1){$required[9]='';      }elseif($required9==2){$required[9]='required';$_SESSION['form_require'].=','.$name9;}
+			if($required10==1){$required[10]='';    }elseif($required10==2){$required[10]='required';$_SESSION['form_require'].=','.$name10;}
+			if($required11==1){$required[11]='';    }elseif($required11==2){$required[11]='required';$_SESSION['form_require'].=','.$name11;}
+			if($required12==1){$required[12]='';    }elseif($required12==2){$required[12]='required';$_SESSION['form_require'].=','.$name12;}
+			if($required13==1){$required[13]='';    }elseif($required13==2){$required[13]='required';$_SESSION['form_require'].=','.$name13;}
+			if($required14==1){$required[14]='';    }elseif($required14==2){$required[14]='required';$_SESSION['form_require'].=','.$name14;}
+			if($required15==1){$required[15]='';    }elseif($required15==2){$required[15]='required';$_SESSION['form_require'].=','.$name15;}
+			if($required16==1){$required[16]='';    }elseif($required16==2){$required[16]='required';$_SESSION['form_require'].=','.$name16;}
+			if($required17==1){$required[17]='';    }elseif($required17==2){$required[17]='required';$_SESSION['form_require'].=','.$name17;}
+			if($required18==1){$required[18]='';    }elseif($required18==2){$required[18]='required';$_SESSION['form_require'].=','.$name18;}
+			if($required19==1){$required[19]='';    }elseif($required19==2){$required[19]='required';$_SESSION['form_require'].=','.$name19;}
+			if($required20==1){$required[20]='';    }elseif($required20==2){$required[20]='required';$_SESSION['form_require'].=','.$name20;}
+			if($required21==1){$required[21]='';    }elseif($required21==2){$required[21]='required';$_SESSION['form_require'].=','.$name21;}
+			if($required22==1){$required[22]='';    }elseif($required22==2){$required[22]='required';$_SESSION['form_require'].=','.$name22;}
+			if($required23==1){$required[23]='';    }elseif($required23==2){$required[23]='required';$_SESSION['form_require'].=','.$name23;}
+			if($required24==1){$required[24]='';    }elseif($required24==2){$required[24]='required';$_SESSION['form_require'].=','.$name24;}
+			if($required25==1){$required[25]='';    }elseif($required25==2){$required[25]='required';$_SESSION['form_require'].=','.$name25;}
 			
 			//FILTROS
 			$filtro = array();
-			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1." ";	}
-			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2." ";	}
-			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3." ";	}
-			$filtro[4] = '';  if ($filter4!='0') {$filtro[4] .=" AND ".$filter4." ";	}
-			$filtro[5] = '';  if ($filter5!='0') {$filtro[5] .=" AND ".$filter5." ";	}
-			$filtro[6] = '';  if ($filter6!='0') {$filtro[6] .=" AND ".$filter6." ";	}
-			$filtro[7] = '';  if ($filter7!='0') {$filtro[7] .=" AND ".$filter7." ";	}
-			$filtro[8] = '';  if ($filter8!='0') {$filtro[8] .=" AND ".$filter8." ";	}
-			$filtro[9] = '';  if ($filter9!='0') {$filtro[9] .=" AND ".$filter9." ";	}
-			$filtro[10] = ''; if ($filter10!='0'){$filtro[10] .=" AND ".$filter10." ";	}
-			$filtro[11] = ''; if ($filter11!='0'){$filtro[11] .=" AND ".$filter11." ";	}
-			$filtro[12] = ''; if ($filter12!='0'){$filtro[12] .=" AND ".$filter12." ";	}
-			$filtro[13] = ''; if ($filter13!='0'){$filtro[13] .=" AND ".$filter13." ";	}
-			$filtro[14] = ''; if ($filter14!='0'){$filtro[14] .=" AND ".$filter14." ";	}
-			$filtro[15] = ''; if ($filter15!='0'){$filtro[15] .=" AND ".$filter15." ";	}
-			$filtro[16] = ''; if ($filter16!='0'){$filtro[16] .=" AND ".$filter16." ";	}
-			$filtro[17] = ''; if ($filter17!='0'){$filtro[17] .=" AND ".$filter17." ";	}
-			$filtro[18] = ''; if ($filter18!='0'){$filtro[18] .=" AND ".$filter18." ";	}
-			$filtro[19] = ''; if ($filter19!='0'){$filtro[19] .=" AND ".$filter19." ";	}
-			$filtro[20] = ''; if ($filter20!='0'){$filtro[20] .=" AND ".$filter20." ";	}
-			$filtro[21] = ''; if ($filter21!='0'){$filtro[21] .=" AND ".$filter21." ";	}
-			$filtro[22] = ''; if ($filter22!='0'){$filtro[22] .=" AND ".$filter22." ";	}
-			$filtro[23] = ''; if ($filter23!='0'){$filtro[23] .=" AND ".$filter23." ";	}
-			$filtro[24] = ''; if ($filter24!='0'){$filtro[24] .=" AND ".$filter24." ";	}
-			$filtro[25] = ''; if ($filter25!='0'){$filtro[25] .=" AND ".$filter25." ";	}
+			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1;	}
+			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2;	}
+			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3;	}
+			$filtro[4] = '';  if ($filter4!='0') {$filtro[4] .=" AND ".$filter4;	}
+			$filtro[5] = '';  if ($filter5!='0') {$filtro[5] .=" AND ".$filter5;	}
+			$filtro[6] = '';  if ($filter6!='0') {$filtro[6] .=" AND ".$filter6;	}
+			$filtro[7] = '';  if ($filter7!='0') {$filtro[7] .=" AND ".$filter7;	}
+			$filtro[8] = '';  if ($filter8!='0') {$filtro[8] .=" AND ".$filter8;	}
+			$filtro[9] = '';  if ($filter9!='0') {$filtro[9] .=" AND ".$filter9;	}
+			$filtro[10] = ''; if ($filter10!='0'){$filtro[10] .=" AND ".$filter10;	}
+			$filtro[11] = ''; if ($filter11!='0'){$filtro[11] .=" AND ".$filter11;	}
+			$filtro[12] = ''; if ($filter12!='0'){$filtro[12] .=" AND ".$filter12;	}
+			$filtro[13] = ''; if ($filter13!='0'){$filtro[13] .=" AND ".$filter13;	}
+			$filtro[14] = ''; if ($filter14!='0'){$filtro[14] .=" AND ".$filter14;	}
+			$filtro[15] = ''; if ($filter15!='0'){$filtro[15] .=" AND ".$filter15;	}
+			$filtro[16] = ''; if ($filter16!='0'){$filtro[16] .=" AND ".$filter16;	}
+			$filtro[17] = ''; if ($filter17!='0'){$filtro[17] .=" AND ".$filter17;	}
+			$filtro[18] = ''; if ($filter18!='0'){$filtro[18] .=" AND ".$filter18;	}
+			$filtro[19] = ''; if ($filter19!='0'){$filtro[19] .=" AND ".$filter19;	}
+			$filtro[20] = ''; if ($filter20!='0'){$filtro[20] .=" AND ".$filter20;	}
+			$filtro[21] = ''; if ($filter21!='0'){$filtro[21] .=" AND ".$filter21;	}
+			$filtro[22] = ''; if ($filter22!='0'){$filtro[22] .=" AND ".$filter22;	}
+			$filtro[23] = ''; if ($filter23!='0'){$filtro[23] .=" AND ".$filter23;	}
+			$filtro[24] = ''; if ($filter24!='0'){$filtro[24] .=" AND ".$filter24;	}
+			$filtro[25] = ''; if ($filter25!='0'){$filtro[25] .=" AND ".$filter25;	}
 			
 			//COMANDOS EXTRAS
 			$excom = array();
-			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1." ";	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
-			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2." ";	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
-			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3." ";	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
-			$excom[4] = '';  if ($extracomand4!='0') {$excom[4] .=" ".$extracomand4." ";	} else{$excom[4] .=" ORDER BY Nombre ASC ";} 
-			$excom[5] = '';  if ($extracomand5!='0') {$excom[5] .=" ".$extracomand5." ";	} else{$excom[5] .=" ORDER BY Nombre ASC ";}
-			$excom[6] = '';  if ($extracomand6!='0') {$excom[6] .=" ".$extracomand6." ";	} else{$excom[6] .=" ORDER BY Nombre ASC ";}
-			$excom[7] = '';  if ($extracomand7!='0') {$excom[7] .=" ".$extracomand7." ";	} else{$excom[7] .=" ORDER BY Nombre ASC ";}
-			$excom[8] = '';  if ($extracomand8!='0') {$excom[8] .=" ".$extracomand8." ";	} else{$excom[8] .=" ORDER BY Nombre ASC ";}
-			$excom[9] = '';  if ($extracomand9!='0') {$excom[9] .=" ".$extracomand9." ";	} else{$excom[9] .=" ORDER BY Nombre ASC ";}
-			$excom[10] = ''; if ($extracomand10!='0'){$excom[10] .=" ".$extracomand10." ";	} else{$excom[10] .=" ORDER BY Nombre ASC ";}
-			$excom[11] = ''; if ($extracomand11!='0'){$excom[11] .=" ".$extracomand11." ";	} else{$excom[11] .=" ORDER BY Nombre ASC ";}
-			$excom[12] = ''; if ($extracomand12!='0'){$excom[12] .=" ".$extracomand12." ";	} else{$excom[12] .=" ORDER BY Nombre ASC ";}
-			$excom[13] = ''; if ($extracomand13!='0'){$excom[13] .=" ".$extracomand13." ";	} else{$excom[13] .=" ORDER BY Nombre ASC ";}
-			$excom[14] = ''; if ($extracomand14!='0'){$excom[14] .=" ".$extracomand14." ";	} else{$excom[14] .=" ORDER BY Nombre ASC ";}
-			$excom[15] = ''; if ($extracomand15!='0'){$excom[15] .=" ".$extracomand15." ";	} else{$excom[15] .=" ORDER BY Nombre ASC ";}
-			$excom[16] = ''; if ($extracomand16!='0'){$excom[16] .=" ".$extracomand16." ";	} else{$excom[16] .=" ORDER BY Nombre ASC ";}
-			$excom[17] = ''; if ($extracomand17!='0'){$excom[17] .=" ".$extracomand17." ";	} else{$excom[17] .=" ORDER BY Nombre ASC ";}
-			$excom[18] = ''; if ($extracomand18!='0'){$excom[18] .=" ".$extracomand18." ";	} else{$excom[18] .=" ORDER BY Nombre ASC ";}
-			$excom[19] = ''; if ($extracomand19!='0'){$excom[19] .=" ".$extracomand19." ";	} else{$excom[19] .=" ORDER BY Nombre ASC ";}
-			$excom[20] = ''; if ($extracomand20!='0'){$excom[20] .=" ".$extracomand20." ";	} else{$excom[20] .=" ORDER BY Nombre ASC ";}
-			$excom[21] = ''; if ($extracomand21!='0'){$excom[21] .=" ".$extracomand21." ";	} else{$excom[21] .=" ORDER BY Nombre ASC ";}
-			$excom[22] = ''; if ($extracomand22!='0'){$excom[22] .=" ".$extracomand22." ";	} else{$excom[22] .=" ORDER BY Nombre ASC ";}
-			$excom[23] = ''; if ($extracomand23!='0'){$excom[23] .=" ".$extracomand23." ";	} else{$excom[23] .=" ORDER BY Nombre ASC ";}
-			$excom[24] = ''; if ($extracomand24!='0'){$excom[24] .=" ".$extracomand24." ";	} else{$excom[24] .=" ORDER BY Nombre ASC ";}
-			$excom[25] = ''; if ($extracomand25!='0'){$excom[25] .=" ".$extracomand25." ";	} else{$excom[25] .=" ORDER BY Nombre ASC ";}
+			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1;	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
+			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2;	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
+			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3;	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
+			$excom[4] = '';  if ($extracomand4!='0') {$excom[4] .=" ".$extracomand4;	} else{$excom[4] .=" ORDER BY Nombre ASC ";} 
+			$excom[5] = '';  if ($extracomand5!='0') {$excom[5] .=" ".$extracomand5;	} else{$excom[5] .=" ORDER BY Nombre ASC ";}
+			$excom[6] = '';  if ($extracomand6!='0') {$excom[6] .=" ".$extracomand6;	} else{$excom[6] .=" ORDER BY Nombre ASC ";}
+			$excom[7] = '';  if ($extracomand7!='0') {$excom[7] .=" ".$extracomand7;	} else{$excom[7] .=" ORDER BY Nombre ASC ";}
+			$excom[8] = '';  if ($extracomand8!='0') {$excom[8] .=" ".$extracomand8;	} else{$excom[8] .=" ORDER BY Nombre ASC ";}
+			$excom[9] = '';  if ($extracomand9!='0') {$excom[9] .=" ".$extracomand9;	} else{$excom[9] .=" ORDER BY Nombre ASC ";}
+			$excom[10] = ''; if ($extracomand10!='0'){$excom[10] .=" ".$extracomand10;	} else{$excom[10] .=" ORDER BY Nombre ASC ";}
+			$excom[11] = ''; if ($extracomand11!='0'){$excom[11] .=" ".$extracomand11;	} else{$excom[11] .=" ORDER BY Nombre ASC ";}
+			$excom[12] = ''; if ($extracomand12!='0'){$excom[12] .=" ".$extracomand12;	} else{$excom[12] .=" ORDER BY Nombre ASC ";}
+			$excom[13] = ''; if ($extracomand13!='0'){$excom[13] .=" ".$extracomand13;	} else{$excom[13] .=" ORDER BY Nombre ASC ";}
+			$excom[14] = ''; if ($extracomand14!='0'){$excom[14] .=" ".$extracomand14;	} else{$excom[14] .=" ORDER BY Nombre ASC ";}
+			$excom[15] = ''; if ($extracomand15!='0'){$excom[15] .=" ".$extracomand15;	} else{$excom[15] .=" ORDER BY Nombre ASC ";}
+			$excom[16] = ''; if ($extracomand16!='0'){$excom[16] .=" ".$extracomand16;	} else{$excom[16] .=" ORDER BY Nombre ASC ";}
+			$excom[17] = ''; if ($extracomand17!='0'){$excom[17] .=" ".$extracomand17;	} else{$excom[17] .=" ORDER BY Nombre ASC ";}
+			$excom[18] = ''; if ($extracomand18!='0'){$excom[18] .=" ".$extracomand18;	} else{$excom[18] .=" ORDER BY Nombre ASC ";}
+			$excom[19] = ''; if ($extracomand19!='0'){$excom[19] .=" ".$extracomand19;	} else{$excom[19] .=" ORDER BY Nombre ASC ";}
+			$excom[20] = ''; if ($extracomand20!='0'){$excom[20] .=" ".$extracomand20;	} else{$excom[20] .=" ORDER BY Nombre ASC ";}
+			$excom[21] = ''; if ($extracomand21!='0'){$excom[21] .=" ".$extracomand21;	} else{$excom[21] .=" ORDER BY Nombre ASC ";}
+			$excom[22] = ''; if ($extracomand22!='0'){$excom[22] .=" ".$extracomand22;	} else{$excom[22] .=" ORDER BY Nombre ASC ";}
+			$excom[23] = ''; if ($extracomand23!='0'){$excom[23] .=" ".$extracomand23;	} else{$excom[23] .=" ORDER BY Nombre ASC ";}
+			$excom[24] = ''; if ($extracomand24!='0'){$excom[24] .=" ".$extracomand24;	} else{$excom[24] .=" ORDER BY Nombre ASC ";}
+			$excom[25] = ''; if ($extracomand25!='0'){$excom[25] .=" ".$extracomand25;	} else{$excom[25] .=" ORDER BY Nombre ASC ";}
 			
 			//visualizar listado
 			$display = array();
@@ -5388,7 +5432,7 @@ class Basic_Form_Inputs{
 			}
 			//Primera Consulta estandar			
 			$arrSeleccion = array();
-			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1]."";
+			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1];
 			$resultado = mysqli_query ($dbConn, $query);
 			while ( $row = mysqli_fetch_assoc ($resultado)) {
 			array_push( $arrSeleccion,$row );
@@ -5439,7 +5483,7 @@ class Basic_Form_Inputs{
 				// Se trae un listado con los datos previamente seleccionados
 				if ($value[$i-1]!=0&&$value[$i-1]!=''){
 					$arrSeleccion = array();
-					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i]."";
+					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i];
 					$resultado = mysqli_query ($dbConn, $query);
 					while ( $row = mysqli_fetch_assoc ($resultado)) {
 					array_push( $arrSeleccion,$row );
@@ -5448,7 +5492,7 @@ class Basic_Form_Inputs{
 				} 
 				// Se trae un listado con todos los datos
 				$arrTodos = array();
-				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i]."";
+				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i];
 				$resultado = mysqli_query ($dbConn, $query);
 				while ( $row = mysqli_fetch_assoc ($resultado)) {
 				array_push( $arrTodos,$row );
@@ -5655,338 +5699,611 @@ class Basic_Form_Inputs{
 		
 		
 		/********************************************************/
-		//Dato obligatorio
-		if($required1==2){$_SESSION['form_require'].=','.$name1;}
-		if($required2==2){$_SESSION['form_require'].=','.$name2;}
-		if($required3==2){$_SESSION['form_require'].=','.$name3;}
-		if($required4==2){$_SESSION['form_require'].=','.$name4;}
-		if($required5==2){$_SESSION['form_require'].=','.$name5;}
-		if($required6==2){$_SESSION['form_require'].=','.$name6;}
-		if($required7==2){$_SESSION['form_require'].=','.$name7;}
-		if($required8==2){$_SESSION['form_require'].=','.$name8;}
-		if($required9==2){$_SESSION['form_require'].=','.$name9;}
-		if($required10==2){$_SESSION['form_require'].=','.$name10;}
-		if($required11==2){$_SESSION['form_require'].=','.$name11;}
-		if($required12==2){$_SESSION['form_require'].=','.$name12;}
-		if($required13==2){$_SESSION['form_require'].=','.$name13;}
-		if($required14==2){$_SESSION['form_require'].=','.$name14;}
-		if($required15==2){$_SESSION['form_require'].=','.$name15;}
-		if($required16==2){$_SESSION['form_require'].=','.$name16;}
-		if($required17==2){$_SESSION['form_require'].=','.$name17;}
-		if($required18==2){$_SESSION['form_require'].=','.$name18;}
-		if($required19==2){$_SESSION['form_require'].=','.$name19;}
-		if($required20==2){$_SESSION['form_require'].=','.$name20;}
-		if($required21==2){$_SESSION['form_require'].=','.$name21;}
-		if($required22==2){$_SESSION['form_require'].=','.$name22;}
-		if($required23==2){$_SESSION['form_require'].=','.$name23;}
-		if($required24==2){$_SESSION['form_require'].=','.$name24;}
-		if($required25==2){$_SESSION['form_require'].=','.$name25;}
-		/********************************************************/
 		//Definicion de errores
 		$errorn = 0;
 		//se definen las opciones disponibles
 		$requerido = array(1, 2);
 		//verifico si el dato ingresado existe dentro de las opciones
 		if (!in_array($required1, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required1 entregada en '.$placeholder1.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required1 ('.$required1.') entregada en '.$placeholder1.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required2, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required2 entregada en '.$placeholder2.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required2 ('.$required2.') entregada en '.$placeholder2.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required3, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required3 entregada en '.$placeholder3.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required3 ('.$required3.') entregada en '.$placeholder3.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required4, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required4 entregada en '.$placeholder4.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required4 ('.$required4.') entregada en '.$placeholder4.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required5, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required5 entregada en '.$placeholder5.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required5 ('.$required5.') entregada en '.$placeholder5.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required6, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required6 entregada en '.$placeholder6.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required6 ('.$required6.') entregada en '.$placeholder6.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required7, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required7 entregada en '.$placeholder7.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required7 ('.$required7.') entregada en '.$placeholder7.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required8, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required8 entregada en '.$placeholder8.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required8 ('.$required8.') entregada en '.$placeholder8.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required9, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required9 entregada en '.$placeholder9.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required9 ('.$required9.') entregada en '.$placeholder9.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required10, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required10 entregada en '.$placeholder10.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required10 ('.$required10.') entregada en '.$placeholder10.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required11, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required11 entregada en '.$placeholder11.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required11 ('.$required11.') entregada en '.$placeholder11.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required12, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required12 entregada en '.$placeholder12.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required12 ('.$required12.') entregada en '.$placeholder12.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required13, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required13 entregada en '.$placeholder13.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required13 ('.$required13.') entregada en '.$placeholder13.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required14, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required14 entregada en '.$placeholder14.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required14 ('.$required14.') entregada en '.$placeholder14.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required15, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required15 entregada en '.$placeholder15.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required15 ('.$required15.') entregada en '.$placeholder15.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required16, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required16 entregada en '.$placeholder16.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required16 ('.$required16.') entregada en '.$placeholder16.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required17, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required17 entregada en '.$placeholder17.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required17 ('.$required17.') entregada en '.$placeholder17.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required18, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required18 entregada en '.$placeholder18.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required18 ('.$required18.') entregada en '.$placeholder18.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required19, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required19 entregada en '.$placeholder19.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required19 ('.$required19.') entregada en '.$placeholder19.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required20, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required20 entregada en '.$placeholder20.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required20 ('.$required20.') entregada en '.$placeholder20.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required21, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required21 entregada en '.$placeholder21.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required21 ('.$required21.') entregada en '.$placeholder21.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required22, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required22 entregada en '.$placeholder22.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required22 ('.$required22.') entregada en '.$placeholder22.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required23, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required23 entregada en '.$placeholder23.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required23 ('.$required23.') entregada en '.$placeholder23.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required24, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required24 entregada en '.$placeholder24.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required24 ('.$required24.') entregada en '.$placeholder24.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		if (!in_array($required25, $requerido)) {
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> La configuracion $required25 entregada en '.$placeholder25.' no esta dentro de las opciones</div>';
+			alert_post_data(4,1,1, 'La configuracion $required25 ('.$required25.') entregada en '.$placeholder25.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required26, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required26 ('.$required26.') entregada en '.$placeholder26.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required27, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required27 ('.$required27.') entregada en '.$placeholder27.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required28, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required28 ('.$required28.') entregada en '.$placeholder28.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required29, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required29 ('.$required29.') entregada en '.$placeholder29.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required30, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required30 ('.$required30.') entregada en '.$placeholder30.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required31, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required31 ('.$required31.') entregada en '.$placeholder31.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required32, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required32 ('.$required32.') entregada en '.$placeholder32.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required33, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required33 ('.$required33.') entregada en '.$placeholder33.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required34, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required34 ('.$required34.') entregada en '.$placeholder34.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required35, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required35 ('.$required35.') entregada en '.$placeholder35.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required36, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required36 ('.$required36.') entregada en '.$placeholder36.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required37, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required37 ('.$required37.') entregada en '.$placeholder37.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required38, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required38 ('.$required38.') entregada en '.$placeholder38.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required39, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required39 ('.$required39.') entregada en '.$placeholder39.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required40, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required40 ('.$required40.') entregada en '.$placeholder40.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required41, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required41 ('.$required41.') entregada en '.$placeholder41.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required42, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required42 ('.$required42.') entregada en '.$placeholder42.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required43, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required43 ('.$required43.') entregada en '.$placeholder43.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required44, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required44 ('.$required44.') entregada en '.$placeholder44.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required45, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required45 ('.$required45.') entregada en '.$placeholder45.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required46, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required46 ('.$required46.') entregada en '.$placeholder46.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required47, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required47 ('.$required47.') entregada en '.$placeholder47.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required48, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required48 ('.$required48.') entregada en '.$placeholder48.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required49, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required49 ('.$required49.') entregada en '.$placeholder49.' no esta dentro de las opciones');
+			$errorn++;
+		}
+		if (!in_array($required50, $requerido)) {
+			alert_post_data(4,1,1, 'La configuracion $required50 ('.$required50.') entregada en '.$placeholder50.' no esta dentro de las opciones');
 			$errorn++;
 		}
 		//se verifica si es un numero lo que se recibe
 		if (!validarNumero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value4)&&$value4!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value4 en <strong>'.$placeholder4.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value4 ('.$value4.') en <strong>'.$placeholder4.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value5)&&$value5!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value5 en <strong>'.$placeholder5.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value5 ('.$value5.') en <strong>'.$placeholder5.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value6)&&$value6!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value6 en <strong>'.$placeholder6.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value6 ('.$value6.') en <strong>'.$placeholder6.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value7)&&$value7!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value7 en <strong>'.$placeholder7.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value7 ('.$value7.') en <strong>'.$placeholder7.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value8)&&$value8!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value8 en <strong>'.$placeholder8.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value8 ('.$value8.') en <strong>'.$placeholder8.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value9)&&$value9!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value9 en <strong>'.$placeholder9.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value9 ('.$value9.') en <strong>'.$placeholder9.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value10)&&$value10!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value10 en <strong>'.$placeholder10.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value10 ('.$value10.') en <strong>'.$placeholder10.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value11)&&$value11!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value11 en <strong>'.$placeholder11.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value11 ('.$value11.') en <strong>'.$placeholder11.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value12)&&$value12!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value12 en <strong>'.$placeholder12.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value12 ('.$value12.') en <strong>'.$placeholder12.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value13)&&$value13!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value13 en <strong>'.$placeholder13.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value13 ('.$value13.') en <strong>'.$placeholder13.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value14)&&$value14!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value14 en <strong>'.$placeholder14.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value14 ('.$value14.') en <strong>'.$placeholder14.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value15)&&$value15!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value15 en <strong>'.$placeholder15.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value15 ('.$value15.') en <strong>'.$placeholder15.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value16)&&$value16!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value16 en <strong>'.$placeholder16.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value16 ('.$value16.') en <strong>'.$placeholder16.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value17)&&$value17!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value17 en <strong>'.$placeholder17.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value17 ('.$value17.') en <strong>'.$placeholder17.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value18)&&$value18!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value18 en <strong>'.$placeholder18.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value18 ('.$value18.') en <strong>'.$placeholder18.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value19)&&$value19!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value19 en <strong>'.$placeholder19.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value19 ('.$value19.') en <strong>'.$placeholder19.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value20)&&$value20!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value20 en <strong>'.$placeholder20.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value20 ('.$value20.') en <strong>'.$placeholder20.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value21)&&$value21!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value21 en <strong>'.$placeholder21.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value21 ('.$value21.') en <strong>'.$placeholder21.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value22)&&$value22!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value22 en <strong>'.$placeholder22.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value22 ('.$value22.') en <strong>'.$placeholder22.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value23)&&$value23!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value23 en <strong>'.$placeholder23.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value23 ('.$value23.') en <strong>'.$placeholder23.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value24)&&$value24!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value24 en <strong>'.$placeholder24.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value24 ('.$value24.') en <strong>'.$placeholder24.'</strong> no es un numero');
 			$errorn++;
 		}
 		if (!validarNumero($value25)&&$value25!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value25 en <strong>'.$placeholder25.'</strong> no es un numero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value25 ('.$value25.') en <strong>'.$placeholder25.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value26)&&$value26!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value26 ('.$value26.') en <strong>'.$placeholder26.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value27)&&$value27!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value27 ('.$value27.') en <strong>'.$placeholder27.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value28)&&$value28!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value28 ('.$value28.') en <strong>'.$placeholder28.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value29)&&$value29!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value29 ('.$value29.') en <strong>'.$placeholder29.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value30)&&$value30!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value30 ('.$value30.') en <strong>'.$placeholder30.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value31)&&$value31!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value31 ('.$value31.') en <strong>'.$placeholder31.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value32)&&$value32!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value32 ('.$value32.') en <strong>'.$placeholder32.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value33)&&$value33!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value33 ('.$value33.') en <strong>'.$placeholder33.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value34)&&$value34!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value34 ('.$value34.') en <strong>'.$placeholder34.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value35)&&$value35!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value35 ('.$value35.') en <strong>'.$placeholder35.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value36)&&$value36!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value36 ('.$value36.') en <strong>'.$placeholder36.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value37)&&$value37!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value37 ('.$value37.') en <strong>'.$placeholder37.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value38)&&$value38!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value38 ('.$value38.') en <strong>'.$placeholder38.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value39)&&$value39!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value39 ('.$value39.') en <strong>'.$placeholder39.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value40)&&$value40!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value40 ('.$value40.') en <strong>'.$placeholder40.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value41)&&$value41!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value41 ('.$value41.') en <strong>'.$placeholder41.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value42)&&$value42!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value42 ('.$value42.') en <strong>'.$placeholder42.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value43)&&$value43!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value43 ('.$value43.') en <strong>'.$placeholder43.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value44)&&$value44!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value44 ('.$value44.') en <strong>'.$placeholder44.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value45)&&$value45!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value45 ('.$value45.') en <strong>'.$placeholder45.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value46)&&$value46!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value46 ('.$value46.') en <strong>'.$placeholder46.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value47)&&$value47!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value47 ('.$value47.') en <strong>'.$placeholder47.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value48)&&$value48!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value48 ('.$value48.') en <strong>'.$placeholder48.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value49)&&$value49!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value49 ('.$value49.') en <strong>'.$placeholder49.'</strong> no es un numero');
+			$errorn++;
+		}
+		if (!validarNumero($value50)&&$value50!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value50 ('.$value50.') en <strong>'.$placeholder50.'</strong> no es un numero');
 			$errorn++;
 		}
 		//Verifica si el numero recibido es un entero
 		if (!validaEntero($value1)&&$value1!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value1 en <strong>'.$placeholder1.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value1 ('.$value1.') en <strong>'.$placeholder1.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value2)&&$value2!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value2 en <strong>'.$placeholder2.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value2 ('.$value2.') en <strong>'.$placeholder2.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value3)&&$value3!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value3 en <strong>'.$placeholder3.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value3 ('.$value3.') en <strong>'.$placeholder3.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value4)&&$value4!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value4 en <strong>'.$placeholder4.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value4 ('.$value4.') en <strong>'.$placeholder4.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value5)&&$value5!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value5 en <strong>'.$placeholder5.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value5 ('.$value5.') en <strong>'.$placeholder5.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value6)&&$value6!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value6 en <strong>'.$placeholder6.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value6 ('.$value6.') en <strong>'.$placeholder6.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value7)&&$value7!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value7 en <strong>'.$placeholder7.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value7 ('.$value7.') en <strong>'.$placeholder7.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value8)&&$value8!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value8 en <strong>'.$placeholder8.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value8 ('.$value8.') en <strong>'.$placeholder8.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value9)&&$value9!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value9 en <strong>'.$placeholder9.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value9 ('.$value9.') en <strong>'.$placeholder9.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value10)&&$value10!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value10 en <strong>'.$placeholder10.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value10 ('.$value10.') en <strong>'.$placeholder10.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value11)&&$value11!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value11 en <strong>'.$placeholder11.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value11 ('.$value11.') en <strong>'.$placeholder11.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value12)&&$value12!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value12 en <strong>'.$placeholder12.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value12 ('.$value12.') en <strong>'.$placeholder12.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value13)&&$value13!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value13 en <strong>'.$placeholder13.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value13 ('.$value13.') en <strong>'.$placeholder13.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value14)&&$value14!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value14 en <strong>'.$placeholder14.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value14 ('.$value14.') en <strong>'.$placeholder14.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value15)&&$value15!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value15 en <strong>'.$placeholder15.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value15 ('.$value15.') en <strong>'.$placeholder15.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value16)&&$value16!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value16 en <strong>'.$placeholder16.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value16 ('.$value16.') en <strong>'.$placeholder16.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value17)&&$value17!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value17 en <strong>'.$placeholder17.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value17 ('.$value17.') en <strong>'.$placeholder17.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value18)&&$value18!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value18 en <strong>'.$placeholder18.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value18 ('.$value18.') en <strong>'.$placeholder18.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value19)&&$value19!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value19 en <strong>'.$placeholder19.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value19 ('.$value19.') en <strong>'.$placeholder19.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value20)&&$value20!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value20 en <strong>'.$placeholder20.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value20 ('.$value20.') en <strong>'.$placeholder20.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value21)&&$value21!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value21 en <strong>'.$placeholder21.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value21 ('.$value21.') en <strong>'.$placeholder21.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value22)&&$value22!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value22 en <strong>'.$placeholder22.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value22 ('.$value22.') en <strong>'.$placeholder22.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value23)&&$value23!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value23 en <strong>'.$placeholder23.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value23 ('.$value23.') en <strong>'.$placeholder23.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value24)&&$value24!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value24 en <strong>'.$placeholder24.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value24 ('.$value24.') en <strong>'.$placeholder24.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		if (!validaEntero($value25)&&$value25!=''){ 
-			echo '<div class="alert alert-danger" role="alert"><i class="fa fa-info-circle faa-bounce animated"></i> El valor ingresado en $value25 en <strong>'.$placeholder25.'</strong> no es un numero entero</div>';
+			alert_post_data(4,1,1, 'El valor ingresado en $value25 ('.$value25.') en <strong>'.$placeholder25.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value26)&&$value26!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value26 ('.$value26.') en <strong>'.$placeholder26.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value27)&&$value27!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value27 ('.$value27.') en <strong>'.$placeholder27.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value28)&&$value28!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value28 ('.$value28.') en <strong>'.$placeholder28.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value29)&&$value29!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value29 ('.$value29.') en <strong>'.$placeholder29.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value30)&&$value30!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value30 ('.$value30.') en <strong>'.$placeholder30.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value31)&&$value31!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value31 ('.$value31.') en <strong>'.$placeholder31.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value32)&&$value32!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value32 ('.$value32.') en <strong>'.$placeholder32.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value33)&&$value33!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value33 ('.$value33.') en <strong>'.$placeholder33.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value34)&&$value34!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value34 ('.$value34.') en <strong>'.$placeholder34.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value35)&&$value35!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value35 ('.$value35.') en <strong>'.$placeholder35.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value36)&&$value36!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value36 ('.$value36.') en <strong>'.$placeholder36.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value37)&&$value37!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value37 ('.$value37.') en <strong>'.$placeholder37.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value38)&&$value38!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value38 ('.$value38.') en <strong>'.$placeholder38.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value39)&&$value39!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value39 ('.$value39.') en <strong>'.$placeholder39.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value40)&&$value40!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value40 ('.$value40.') en <strong>'.$placeholder40.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value41)&&$value41!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value41 ('.$value41.') en <strong>'.$placeholder41.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value42)&&$value42!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value42 ('.$value42.') en <strong>'.$placeholder42.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value43)&&$value43!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value43 ('.$value43.') en <strong>'.$placeholder43.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value44)&&$value44!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value44 ('.$value44.') en <strong>'.$placeholder44.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value45)&&$value45!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value45 ('.$value45.') en <strong>'.$placeholder45.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value46)&&$value46!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value46 ('.$value46.') en <strong>'.$placeholder46.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value47)&&$value47!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value47 ('.$value47.') en <strong>'.$placeholder47.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value48)&&$value48!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value48 ('.$value48.') en <strong>'.$placeholder48.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value49)&&$value49!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value49 ('.$value49.') en <strong>'.$placeholder49.'</strong> no es un numero entero');
+			$errorn++;
+		}
+		if (!validaEntero($value50)&&$value50!=''){ 
+			alert_post_data(4,1,1, 'El valor ingresado en $value50 ('.$value50.') en <strong>'.$placeholder50.'</strong> no es un numero entero');
 			$errorn++;
 		}
 		/********************************************************/
@@ -5997,162 +6314,162 @@ class Basic_Form_Inputs{
 			
 			//DATOS REQUERIDOS
 			$required = array();
-			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';}
-			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';}
-			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';}
-			if($required4==1){$required[4]='';      }elseif($required4==2){$required[4]='required';}
-			if($required5==1){$required[5]='';      }elseif($required5==2){$required[5]='required';}
-			if($required6==1){$required[6]='';      }elseif($required6==2){$required[6]='required';}
-			if($required7==1){$required[7]='';      }elseif($required7==2){$required[7]='required';}
-			if($required8==1){$required[8]='';      }elseif($required8==2){$required[8]='required';}
-			if($required9==1){$required[9]='';      }elseif($required9==2){$required[9]='required';}
-			if($required10==1){$required[10]='';    }elseif($required10==2){$required[10]='required';}
-			if($required11==1){$required[11]='';    }elseif($required11==2){$required[11]='required';}
-			if($required12==1){$required[12]='';    }elseif($required12==2){$required[12]='required';}
-			if($required13==1){$required[13]='';    }elseif($required13==2){$required[13]='required';}
-			if($required14==1){$required[14]='';    }elseif($required14==2){$required[14]='required';}
-			if($required15==1){$required[15]='';    }elseif($required15==2){$required[15]='required';}
-			if($required16==1){$required[16]='';    }elseif($required16==2){$required[16]='required';}
-			if($required17==1){$required[17]='';    }elseif($required17==2){$required[17]='required';}
-			if($required18==1){$required[18]='';    }elseif($required18==2){$required[18]='required';}
-			if($required19==1){$required[19]='';    }elseif($required19==2){$required[19]='required';}
-			if($required20==1){$required[20]='';    }elseif($required20==2){$required[20]='required';}
-			if($required21==1){$required[21]='';    }elseif($required21==2){$required[21]='required';}
-			if($required22==1){$required[22]='';    }elseif($required22==2){$required[22]='required';}
-			if($required23==1){$required[23]='';    }elseif($required23==2){$required[23]='required';}
-			if($required24==1){$required[24]='';    }elseif($required24==2){$required[24]='required';}
-			if($required25==1){$required[25]='';    }elseif($required25==2){$required[25]='required';}
-			if($required26==1){$required[26]='';    }elseif($required26==2){$required[26]='required';}
-			if($required27==1){$required[27]='';    }elseif($required27==2){$required[27]='required';}
-			if($required28==1){$required[28]='';    }elseif($required28==2){$required[28]='required';}
-			if($required29==1){$required[29]='';    }elseif($required29==2){$required[29]='required';}
-			if($required30==1){$required[30]='';    }elseif($required30==2){$required[30]='required';}
-			if($required31==1){$required[31]='';    }elseif($required31==2){$required[31]='required';}
-			if($required32==1){$required[32]='';    }elseif($required32==2){$required[32]='required';}
-			if($required33==1){$required[33]='';    }elseif($required33==2){$required[33]='required';}
-			if($required34==1){$required[34]='';    }elseif($required34==2){$required[34]='required';}
-			if($required35==1){$required[35]='';    }elseif($required35==2){$required[35]='required';}
-			if($required36==1){$required[36]='';    }elseif($required36==2){$required[36]='required';}
-			if($required37==1){$required[37]='';    }elseif($required37==2){$required[37]='required';}
-			if($required38==1){$required[38]='';    }elseif($required38==2){$required[38]='required';}
-			if($required39==1){$required[39]='';    }elseif($required39==2){$required[39]='required';}
-			if($required40==1){$required[40]='';    }elseif($required40==2){$required[40]='required';}
-			if($required41==1){$required[41]='';    }elseif($required41==2){$required[41]='required';}
-			if($required42==1){$required[42]='';    }elseif($required42==2){$required[42]='required';}
-			if($required43==1){$required[43]='';    }elseif($required43==2){$required[43]='required';}
-			if($required44==1){$required[44]='';    }elseif($required44==2){$required[44]='required';}
-			if($required45==1){$required[45]='';    }elseif($required45==2){$required[45]='required';}
-			if($required46==1){$required[46]='';    }elseif($required46==2){$required[46]='required';}
-			if($required47==1){$required[47]='';    }elseif($required47==2){$required[47]='required';}
-			if($required48==1){$required[48]='';    }elseif($required48==2){$required[48]='required';}
-			if($required49==1){$required[49]='';    }elseif($required49==2){$required[49]='required';}
-			if($required50==1){$required[50]='';    }elseif($required50==2){$required[50]='required';}
+			if($required1==1){$required[1]='';      }elseif($required1==2){$required[1]='required';$_SESSION['form_require'].=','.$name1;}
+			if($required2==1){$required[2]='';      }elseif($required2==2){$required[2]='required';$_SESSION['form_require'].=','.$name2;}
+			if($required3==1){$required[3]='';      }elseif($required3==2){$required[3]='required';$_SESSION['form_require'].=','.$name3;}
+			if($required4==1){$required[4]='';      }elseif($required4==2){$required[4]='required';$_SESSION['form_require'].=','.$name4;}
+			if($required5==1){$required[5]='';      }elseif($required5==2){$required[5]='required';$_SESSION['form_require'].=','.$name5;}
+			if($required6==1){$required[6]='';      }elseif($required6==2){$required[6]='required';$_SESSION['form_require'].=','.$name6;}
+			if($required7==1){$required[7]='';      }elseif($required7==2){$required[7]='required';$_SESSION['form_require'].=','.$name7;}
+			if($required8==1){$required[8]='';      }elseif($required8==2){$required[8]='required';$_SESSION['form_require'].=','.$name8;}
+			if($required9==1){$required[9]='';      }elseif($required9==2){$required[9]='required';$_SESSION['form_require'].=','.$name9;}
+			if($required10==1){$required[10]='';    }elseif($required10==2){$required[10]='required';$_SESSION['form_require'].=','.$name10;}
+			if($required11==1){$required[11]='';    }elseif($required11==2){$required[11]='required';$_SESSION['form_require'].=','.$name11;}
+			if($required12==1){$required[12]='';    }elseif($required12==2){$required[12]='required';$_SESSION['form_require'].=','.$name12;}
+			if($required13==1){$required[13]='';    }elseif($required13==2){$required[13]='required';$_SESSION['form_require'].=','.$name13;}
+			if($required14==1){$required[14]='';    }elseif($required14==2){$required[14]='required';$_SESSION['form_require'].=','.$name14;}
+			if($required15==1){$required[15]='';    }elseif($required15==2){$required[15]='required';$_SESSION['form_require'].=','.$name15;}
+			if($required16==1){$required[16]='';    }elseif($required16==2){$required[16]='required';$_SESSION['form_require'].=','.$name16;}
+			if($required17==1){$required[17]='';    }elseif($required17==2){$required[17]='required';$_SESSION['form_require'].=','.$name17;}
+			if($required18==1){$required[18]='';    }elseif($required18==2){$required[18]='required';$_SESSION['form_require'].=','.$name18;}
+			if($required19==1){$required[19]='';    }elseif($required19==2){$required[19]='required';$_SESSION['form_require'].=','.$name19;}
+			if($required20==1){$required[20]='';    }elseif($required20==2){$required[20]='required';$_SESSION['form_require'].=','.$name20;}
+			if($required21==1){$required[21]='';    }elseif($required21==2){$required[21]='required';$_SESSION['form_require'].=','.$name21;}
+			if($required22==1){$required[22]='';    }elseif($required22==2){$required[22]='required';$_SESSION['form_require'].=','.$name22;}
+			if($required23==1){$required[23]='';    }elseif($required23==2){$required[23]='required';$_SESSION['form_require'].=','.$name23;}
+			if($required24==1){$required[24]='';    }elseif($required24==2){$required[24]='required';$_SESSION['form_require'].=','.$name24;}
+			if($required25==1){$required[25]='';    }elseif($required25==2){$required[25]='required';$_SESSION['form_require'].=','.$name25;}
+			if($required26==1){$required[26]='';    }elseif($required26==2){$required[26]='required';$_SESSION['form_require'].=','.$name26;}
+			if($required27==1){$required[27]='';    }elseif($required27==2){$required[27]='required';$_SESSION['form_require'].=','.$name27;}
+			if($required28==1){$required[28]='';    }elseif($required28==2){$required[28]='required';$_SESSION['form_require'].=','.$name28;}
+			if($required29==1){$required[29]='';    }elseif($required29==2){$required[29]='required';$_SESSION['form_require'].=','.$name29;}
+			if($required30==1){$required[30]='';    }elseif($required30==2){$required[30]='required';$_SESSION['form_require'].=','.$name30;}
+			if($required31==1){$required[31]='';    }elseif($required31==2){$required[31]='required';$_SESSION['form_require'].=','.$name31;}
+			if($required32==1){$required[32]='';    }elseif($required32==2){$required[32]='required';$_SESSION['form_require'].=','.$name32;}
+			if($required33==1){$required[33]='';    }elseif($required33==2){$required[33]='required';$_SESSION['form_require'].=','.$name33;}
+			if($required34==1){$required[34]='';    }elseif($required34==2){$required[34]='required';$_SESSION['form_require'].=','.$name34;}
+			if($required35==1){$required[35]='';    }elseif($required35==2){$required[35]='required';$_SESSION['form_require'].=','.$name35;}
+			if($required36==1){$required[36]='';    }elseif($required36==2){$required[36]='required';$_SESSION['form_require'].=','.$name36;}
+			if($required37==1){$required[37]='';    }elseif($required37==2){$required[37]='required';$_SESSION['form_require'].=','.$name37;}
+			if($required38==1){$required[38]='';    }elseif($required38==2){$required[38]='required';$_SESSION['form_require'].=','.$name38;}
+			if($required39==1){$required[39]='';    }elseif($required39==2){$required[39]='required';$_SESSION['form_require'].=','.$name39;}
+			if($required40==1){$required[40]='';    }elseif($required40==2){$required[40]='required';$_SESSION['form_require'].=','.$name40;}
+			if($required41==1){$required[41]='';    }elseif($required41==2){$required[41]='required';$_SESSION['form_require'].=','.$name41;}
+			if($required42==1){$required[42]='';    }elseif($required42==2){$required[42]='required';$_SESSION['form_require'].=','.$name42;}
+			if($required43==1){$required[43]='';    }elseif($required43==2){$required[43]='required';$_SESSION['form_require'].=','.$name43;}
+			if($required44==1){$required[44]='';    }elseif($required44==2){$required[44]='required';$_SESSION['form_require'].=','.$name44;}
+			if($required45==1){$required[45]='';    }elseif($required45==2){$required[45]='required';$_SESSION['form_require'].=','.$name45;}
+			if($required46==1){$required[46]='';    }elseif($required46==2){$required[46]='required';$_SESSION['form_require'].=','.$name46;}
+			if($required47==1){$required[47]='';    }elseif($required47==2){$required[47]='required';$_SESSION['form_require'].=','.$name47;}
+			if($required48==1){$required[48]='';    }elseif($required48==2){$required[48]='required';$_SESSION['form_require'].=','.$name48;}
+			if($required49==1){$required[49]='';    }elseif($required49==2){$required[49]='required';$_SESSION['form_require'].=','.$name49;}
+			if($required50==1){$required[50]='';    }elseif($required50==2){$required[50]='required';$_SESSION['form_require'].=','.$name50;}
 			
 			//FILTROS
 			$filtro = array();
-			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1." ";	}
-			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2." ";	}
-			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3." ";	}
-			$filtro[4] = '';  if ($filter4!='0') {$filtro[4] .=" AND ".$filter4." ";	}
-			$filtro[5] = '';  if ($filter5!='0') {$filtro[5] .=" AND ".$filter5." ";	}
-			$filtro[6] = '';  if ($filter6!='0') {$filtro[6] .=" AND ".$filter6." ";	}
-			$filtro[7] = '';  if ($filter7!='0') {$filtro[7] .=" AND ".$filter7." ";	}
-			$filtro[8] = '';  if ($filter8!='0') {$filtro[8] .=" AND ".$filter8." ";	}
-			$filtro[9] = '';  if ($filter9!='0') {$filtro[9] .=" AND ".$filter9." ";	}
-			$filtro[10] = ''; if ($filter10!='0'){$filtro[10] .=" AND ".$filter10." ";	}
-			$filtro[11] = ''; if ($filter11!='0'){$filtro[11] .=" AND ".$filter11." ";	}
-			$filtro[12] = ''; if ($filter12!='0'){$filtro[12] .=" AND ".$filter12." ";	}
-			$filtro[13] = ''; if ($filter13!='0'){$filtro[13] .=" AND ".$filter13." ";	}
-			$filtro[14] = ''; if ($filter14!='0'){$filtro[14] .=" AND ".$filter14." ";	}
-			$filtro[15] = ''; if ($filter15!='0'){$filtro[15] .=" AND ".$filter15." ";	}
-			$filtro[16] = ''; if ($filter16!='0'){$filtro[16] .=" AND ".$filter16." ";	}
-			$filtro[17] = ''; if ($filter17!='0'){$filtro[17] .=" AND ".$filter17." ";	}
-			$filtro[18] = ''; if ($filter18!='0'){$filtro[18] .=" AND ".$filter18." ";	}
-			$filtro[19] = ''; if ($filter19!='0'){$filtro[19] .=" AND ".$filter19." ";	}
-			$filtro[20] = ''; if ($filter20!='0'){$filtro[20] .=" AND ".$filter20." ";	}
-			$filtro[21] = ''; if ($filter21!='0'){$filtro[21] .=" AND ".$filter21." ";	}
-			$filtro[22] = ''; if ($filter22!='0'){$filtro[22] .=" AND ".$filter22." ";	}
-			$filtro[23] = ''; if ($filter23!='0'){$filtro[23] .=" AND ".$filter23." ";	}
-			$filtro[24] = ''; if ($filter24!='0'){$filtro[24] .=" AND ".$filter24." ";	}
-			$filtro[25] = ''; if ($filter25!='0'){$filtro[25] .=" AND ".$filter25." ";	}
-			$filtro[26] = ''; if ($filter26!='0'){$filtro[26] .=" AND ".$filter26." ";	}
-			$filtro[27] = ''; if ($filter27!='0'){$filtro[27] .=" AND ".$filter27." ";	}
-			$filtro[28] = ''; if ($filter28!='0'){$filtro[28] .=" AND ".$filter28." ";	}
-			$filtro[29] = ''; if ($filter29!='0'){$filtro[29] .=" AND ".$filter29." ";	}
-			$filtro[30] = ''; if ($filter30!='0'){$filtro[30] .=" AND ".$filter30." ";	}
-			$filtro[31] = ''; if ($filter31!='0'){$filtro[31] .=" AND ".$filter31." ";	}
-			$filtro[32] = ''; if ($filter32!='0'){$filtro[32] .=" AND ".$filter32." ";	}
-			$filtro[33] = ''; if ($filter33!='0'){$filtro[33] .=" AND ".$filter33." ";	}
-			$filtro[34] = ''; if ($filter34!='0'){$filtro[34] .=" AND ".$filter34." ";	}
-			$filtro[35] = ''; if ($filter35!='0'){$filtro[35] .=" AND ".$filter35." ";	}
-			$filtro[36] = ''; if ($filter36!='0'){$filtro[36] .=" AND ".$filter36." ";	}
-			$filtro[37] = ''; if ($filter37!='0'){$filtro[37] .=" AND ".$filter37." ";	}
-			$filtro[38] = ''; if ($filter38!='0'){$filtro[38] .=" AND ".$filter38." ";	}
-			$filtro[39] = ''; if ($filter39!='0'){$filtro[39] .=" AND ".$filter39." ";	}
-			$filtro[40] = ''; if ($filter40!='0'){$filtro[40] .=" AND ".$filter40." ";	}
-			$filtro[41] = ''; if ($filter41!='0'){$filtro[41] .=" AND ".$filter41." ";	}
-			$filtro[42] = ''; if ($filter42!='0'){$filtro[42] .=" AND ".$filter42." ";	}
-			$filtro[43] = ''; if ($filter43!='0'){$filtro[43] .=" AND ".$filter43." ";	}
-			$filtro[44] = ''; if ($filter44!='0'){$filtro[44] .=" AND ".$filter44." ";	}
-			$filtro[45] = ''; if ($filter45!='0'){$filtro[45] .=" AND ".$filter45." ";	}
-			$filtro[46] = ''; if ($filter46!='0'){$filtro[46] .=" AND ".$filter46." ";	}
-			$filtro[47] = ''; if ($filter47!='0'){$filtro[47] .=" AND ".$filter47." ";	}
-			$filtro[48] = ''; if ($filter48!='0'){$filtro[48] .=" AND ".$filter48." ";	}
-			$filtro[49] = ''; if ($filter49!='0'){$filtro[49] .=" AND ".$filter49." ";	}
-			$filtro[50] = ''; if ($filter50!='0'){$filtro[50] .=" AND ".$filter50." ";	}
+			$filtro[1] = '';  if ($filter1!='0') {$filtro[1] .=" AND ".$filter1;	}
+			$filtro[2] = '';  if ($filter2!='0') {$filtro[2] .=" AND ".$filter2;	}
+			$filtro[3] = '';  if ($filter3!='0') {$filtro[3] .=" AND ".$filter3;	}
+			$filtro[4] = '';  if ($filter4!='0') {$filtro[4] .=" AND ".$filter4;	}
+			$filtro[5] = '';  if ($filter5!='0') {$filtro[5] .=" AND ".$filter5;	}
+			$filtro[6] = '';  if ($filter6!='0') {$filtro[6] .=" AND ".$filter6;	}
+			$filtro[7] = '';  if ($filter7!='0') {$filtro[7] .=" AND ".$filter7;	}
+			$filtro[8] = '';  if ($filter8!='0') {$filtro[8] .=" AND ".$filter8;	}
+			$filtro[9] = '';  if ($filter9!='0') {$filtro[9] .=" AND ".$filter9;	}
+			$filtro[10] = ''; if ($filter10!='0'){$filtro[10] .=" AND ".$filter10;	}
+			$filtro[11] = ''; if ($filter11!='0'){$filtro[11] .=" AND ".$filter11;	}
+			$filtro[12] = ''; if ($filter12!='0'){$filtro[12] .=" AND ".$filter12;	}
+			$filtro[13] = ''; if ($filter13!='0'){$filtro[13] .=" AND ".$filter13;	}
+			$filtro[14] = ''; if ($filter14!='0'){$filtro[14] .=" AND ".$filter14;	}
+			$filtro[15] = ''; if ($filter15!='0'){$filtro[15] .=" AND ".$filter15;	}
+			$filtro[16] = ''; if ($filter16!='0'){$filtro[16] .=" AND ".$filter16;	}
+			$filtro[17] = ''; if ($filter17!='0'){$filtro[17] .=" AND ".$filter17;	}
+			$filtro[18] = ''; if ($filter18!='0'){$filtro[18] .=" AND ".$filter18;	}
+			$filtro[19] = ''; if ($filter19!='0'){$filtro[19] .=" AND ".$filter19;	}
+			$filtro[20] = ''; if ($filter20!='0'){$filtro[20] .=" AND ".$filter20;	}
+			$filtro[21] = ''; if ($filter21!='0'){$filtro[21] .=" AND ".$filter21;	}
+			$filtro[22] = ''; if ($filter22!='0'){$filtro[22] .=" AND ".$filter22;	}
+			$filtro[23] = ''; if ($filter23!='0'){$filtro[23] .=" AND ".$filter23;	}
+			$filtro[24] = ''; if ($filter24!='0'){$filtro[24] .=" AND ".$filter24;	}
+			$filtro[25] = ''; if ($filter25!='0'){$filtro[25] .=" AND ".$filter25;	}
+			$filtro[26] = ''; if ($filter26!='0'){$filtro[26] .=" AND ".$filter26;	}
+			$filtro[27] = ''; if ($filter27!='0'){$filtro[27] .=" AND ".$filter27;	}
+			$filtro[28] = ''; if ($filter28!='0'){$filtro[28] .=" AND ".$filter28;	}
+			$filtro[29] = ''; if ($filter29!='0'){$filtro[29] .=" AND ".$filter29;	}
+			$filtro[30] = ''; if ($filter30!='0'){$filtro[30] .=" AND ".$filter30;	}
+			$filtro[31] = ''; if ($filter31!='0'){$filtro[31] .=" AND ".$filter31;	}
+			$filtro[32] = ''; if ($filter32!='0'){$filtro[32] .=" AND ".$filter32;	}
+			$filtro[33] = ''; if ($filter33!='0'){$filtro[33] .=" AND ".$filter33;	}
+			$filtro[34] = ''; if ($filter34!='0'){$filtro[34] .=" AND ".$filter34;	}
+			$filtro[35] = ''; if ($filter35!='0'){$filtro[35] .=" AND ".$filter35;	}
+			$filtro[36] = ''; if ($filter36!='0'){$filtro[36] .=" AND ".$filter36;	}
+			$filtro[37] = ''; if ($filter37!='0'){$filtro[37] .=" AND ".$filter37;	}
+			$filtro[38] = ''; if ($filter38!='0'){$filtro[38] .=" AND ".$filter38;	}
+			$filtro[39] = ''; if ($filter39!='0'){$filtro[39] .=" AND ".$filter39;	}
+			$filtro[40] = ''; if ($filter40!='0'){$filtro[40] .=" AND ".$filter40;	}
+			$filtro[41] = ''; if ($filter41!='0'){$filtro[41] .=" AND ".$filter41;	}
+			$filtro[42] = ''; if ($filter42!='0'){$filtro[42] .=" AND ".$filter42;	}
+			$filtro[43] = ''; if ($filter43!='0'){$filtro[43] .=" AND ".$filter43;	}
+			$filtro[44] = ''; if ($filter44!='0'){$filtro[44] .=" AND ".$filter44;	}
+			$filtro[45] = ''; if ($filter45!='0'){$filtro[45] .=" AND ".$filter45;	}
+			$filtro[46] = ''; if ($filter46!='0'){$filtro[46] .=" AND ".$filter46;	}
+			$filtro[47] = ''; if ($filter47!='0'){$filtro[47] .=" AND ".$filter47;	}
+			$filtro[48] = ''; if ($filter48!='0'){$filtro[48] .=" AND ".$filter48;	}
+			$filtro[49] = ''; if ($filter49!='0'){$filtro[49] .=" AND ".$filter49;	}
+			$filtro[50] = ''; if ($filter50!='0'){$filtro[50] .=" AND ".$filter50;	}
 			
 			//COMANDOS EXTRAS
 			$excom = array();
-			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1." ";	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
-			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2." ";	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
-			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3." ";	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
-			$excom[4] = '';  if ($extracomand4!='0') {$excom[4] .=" ".$extracomand4." ";	} else{$excom[4] .=" ORDER BY Nombre ASC ";} 
-			$excom[5] = '';  if ($extracomand5!='0') {$excom[5] .=" ".$extracomand5." ";	} else{$excom[5] .=" ORDER BY Nombre ASC ";}
-			$excom[6] = '';  if ($extracomand6!='0') {$excom[6] .=" ".$extracomand6." ";	} else{$excom[6] .=" ORDER BY Nombre ASC ";}
-			$excom[7] = '';  if ($extracomand7!='0') {$excom[7] .=" ".$extracomand7." ";	} else{$excom[7] .=" ORDER BY Nombre ASC ";}
-			$excom[8] = '';  if ($extracomand8!='0') {$excom[8] .=" ".$extracomand8." ";	} else{$excom[8] .=" ORDER BY Nombre ASC ";}
-			$excom[9] = '';  if ($extracomand9!='0') {$excom[9] .=" ".$extracomand9." ";	} else{$excom[9] .=" ORDER BY Nombre ASC ";}
-			$excom[10] = ''; if ($extracomand10!='0'){$excom[10] .=" ".$extracomand10." ";	} else{$excom[10] .=" ORDER BY Nombre ASC ";}
-			$excom[11] = ''; if ($extracomand11!='0'){$excom[11] .=" ".$extracomand11." ";	} else{$excom[11] .=" ORDER BY Nombre ASC ";}
-			$excom[12] = ''; if ($extracomand12!='0'){$excom[12] .=" ".$extracomand12." ";	} else{$excom[12] .=" ORDER BY Nombre ASC ";}
-			$excom[13] = ''; if ($extracomand13!='0'){$excom[13] .=" ".$extracomand13." ";	} else{$excom[13] .=" ORDER BY Nombre ASC ";}
-			$excom[14] = ''; if ($extracomand14!='0'){$excom[14] .=" ".$extracomand14." ";	} else{$excom[14] .=" ORDER BY Nombre ASC ";}
-			$excom[15] = ''; if ($extracomand15!='0'){$excom[15] .=" ".$extracomand15." ";	} else{$excom[15] .=" ORDER BY Nombre ASC ";}
-			$excom[16] = ''; if ($extracomand16!='0'){$excom[16] .=" ".$extracomand16." ";	} else{$excom[16] .=" ORDER BY Nombre ASC ";}
-			$excom[17] = ''; if ($extracomand17!='0'){$excom[17] .=" ".$extracomand17." ";	} else{$excom[17] .=" ORDER BY Nombre ASC ";}
-			$excom[18] = ''; if ($extracomand18!='0'){$excom[18] .=" ".$extracomand18." ";	} else{$excom[18] .=" ORDER BY Nombre ASC ";}
-			$excom[19] = ''; if ($extracomand19!='0'){$excom[19] .=" ".$extracomand19." ";	} else{$excom[19] .=" ORDER BY Nombre ASC ";}
-			$excom[20] = ''; if ($extracomand20!='0'){$excom[20] .=" ".$extracomand20." ";	} else{$excom[20] .=" ORDER BY Nombre ASC ";}
-			$excom[21] = ''; if ($extracomand21!='0'){$excom[21] .=" ".$extracomand21." ";	} else{$excom[21] .=" ORDER BY Nombre ASC ";}
-			$excom[22] = ''; if ($extracomand22!='0'){$excom[22] .=" ".$extracomand22." ";	} else{$excom[22] .=" ORDER BY Nombre ASC ";}
-			$excom[23] = ''; if ($extracomand23!='0'){$excom[23] .=" ".$extracomand23." ";	} else{$excom[23] .=" ORDER BY Nombre ASC ";}
-			$excom[24] = ''; if ($extracomand24!='0'){$excom[24] .=" ".$extracomand24." ";	} else{$excom[24] .=" ORDER BY Nombre ASC ";}
-			$excom[25] = ''; if ($extracomand25!='0'){$excom[25] .=" ".$extracomand25." ";	} else{$excom[25] .=" ORDER BY Nombre ASC ";}
-			$excom[26] = ''; if ($extracomand26!='0'){$excom[26] .=" ".$extracomand26." ";	} else{$excom[26] .=" ORDER BY Nombre ASC ";}
-			$excom[27] = ''; if ($extracomand27!='0'){$excom[27] .=" ".$extracomand27." ";	} else{$excom[27] .=" ORDER BY Nombre ASC ";}
-			$excom[28] = ''; if ($extracomand28!='0'){$excom[28] .=" ".$extracomand28." ";	} else{$excom[28] .=" ORDER BY Nombre ASC ";}
-			$excom[29] = ''; if ($extracomand29!='0'){$excom[29] .=" ".$extracomand29." ";	} else{$excom[29] .=" ORDER BY Nombre ASC ";}
-			$excom[30] = ''; if ($extracomand30!='0'){$excom[30] .=" ".$extracomand30." ";	} else{$excom[30] .=" ORDER BY Nombre ASC ";}
-			$excom[31] = ''; if ($extracomand31!='0'){$excom[31] .=" ".$extracomand31." ";	} else{$excom[31] .=" ORDER BY Nombre ASC ";}
-			$excom[32] = ''; if ($extracomand32!='0'){$excom[32] .=" ".$extracomand32." ";	} else{$excom[32] .=" ORDER BY Nombre ASC ";}
-			$excom[33] = ''; if ($extracomand33!='0'){$excom[33] .=" ".$extracomand33." ";	} else{$excom[33] .=" ORDER BY Nombre ASC ";}
-			$excom[34] = ''; if ($extracomand34!='0'){$excom[34] .=" ".$extracomand34." ";	} else{$excom[34] .=" ORDER BY Nombre ASC ";}
-			$excom[35] = ''; if ($extracomand35!='0'){$excom[35] .=" ".$extracomand35." ";	} else{$excom[35] .=" ORDER BY Nombre ASC ";}
-			$excom[36] = ''; if ($extracomand36!='0'){$excom[36] .=" ".$extracomand36." ";	} else{$excom[36] .=" ORDER BY Nombre ASC ";}
-			$excom[37] = ''; if ($extracomand37!='0'){$excom[37] .=" ".$extracomand37." ";	} else{$excom[37] .=" ORDER BY Nombre ASC ";}
-			$excom[38] = ''; if ($extracomand38!='0'){$excom[38] .=" ".$extracomand38." ";	} else{$excom[38] .=" ORDER BY Nombre ASC ";}
-			$excom[39] = ''; if ($extracomand39!='0'){$excom[39] .=" ".$extracomand39." ";	} else{$excom[39] .=" ORDER BY Nombre ASC ";}
-			$excom[40] = ''; if ($extracomand40!='0'){$excom[40] .=" ".$extracomand40." ";	} else{$excom[40] .=" ORDER BY Nombre ASC ";} 
-			$excom[41] = ''; if ($extracomand41!='0'){$excom[41] .=" ".$extracomand41." ";	} else{$excom[41] .=" ORDER BY Nombre ASC ";} 
-			$excom[42] = ''; if ($extracomand42!='0'){$excom[42] .=" ".$extracomand42." ";	} else{$excom[42] .=" ORDER BY Nombre ASC ";} 
-			$excom[43] = ''; if ($extracomand43!='0'){$excom[43] .=" ".$extracomand43." ";	} else{$excom[43] .=" ORDER BY Nombre ASC ";} 
-			$excom[44] = ''; if ($extracomand44!='0'){$excom[44] .=" ".$extracomand44." ";	} else{$excom[44] .=" ORDER BY Nombre ASC ";} 
-			$excom[45] = ''; if ($extracomand45!='0'){$excom[45] .=" ".$extracomand45." ";	} else{$excom[45] .=" ORDER BY Nombre ASC ";} 
-			$excom[46] = ''; if ($extracomand46!='0'){$excom[46] .=" ".$extracomand46." ";	} else{$excom[46] .=" ORDER BY Nombre ASC ";} 
-			$excom[47] = ''; if ($extracomand47!='0'){$excom[47] .=" ".$extracomand47." ";	} else{$excom[47] .=" ORDER BY Nombre ASC ";} 
-			$excom[48] = ''; if ($extracomand48!='0'){$excom[48] .=" ".$extracomand48." ";	} else{$excom[48] .=" ORDER BY Nombre ASC ";} 
-			$excom[49] = ''; if ($extracomand49!='0'){$excom[49] .=" ".$extracomand49." ";	} else{$excom[49] .=" ORDER BY Nombre ASC ";} 
-			$excom[50] = ''; if ($extracomand50!='0'){$excom[50] .=" ".$extracomand50." ";	} else{$excom[50] .=" ORDER BY Nombre ASC ";}
+			$excom[1] = '';  if ($extracomand1!='0') {$excom[1] .=" ".$extracomand1;	} else{$excom[1] .=" ORDER BY Nombre ASC ";}
+			$excom[2] = '';  if ($extracomand2!='0') {$excom[2] .=" ".$extracomand2;	} else{$excom[2] .=" ORDER BY Nombre ASC ";}
+			$excom[3] = '';  if ($extracomand3!='0') {$excom[3] .=" ".$extracomand3;	} else{$excom[3] .=" ORDER BY Nombre ASC ";}
+			$excom[4] = '';  if ($extracomand4!='0') {$excom[4] .=" ".$extracomand4;	} else{$excom[4] .=" ORDER BY Nombre ASC ";} 
+			$excom[5] = '';  if ($extracomand5!='0') {$excom[5] .=" ".$extracomand5;	} else{$excom[5] .=" ORDER BY Nombre ASC ";}
+			$excom[6] = '';  if ($extracomand6!='0') {$excom[6] .=" ".$extracomand6;	} else{$excom[6] .=" ORDER BY Nombre ASC ";}
+			$excom[7] = '';  if ($extracomand7!='0') {$excom[7] .=" ".$extracomand7;	} else{$excom[7] .=" ORDER BY Nombre ASC ";}
+			$excom[8] = '';  if ($extracomand8!='0') {$excom[8] .=" ".$extracomand8;	} else{$excom[8] .=" ORDER BY Nombre ASC ";}
+			$excom[9] = '';  if ($extracomand9!='0') {$excom[9] .=" ".$extracomand9;	} else{$excom[9] .=" ORDER BY Nombre ASC ";}
+			$excom[10] = ''; if ($extracomand10!='0'){$excom[10] .=" ".$extracomand10;	} else{$excom[10] .=" ORDER BY Nombre ASC ";}
+			$excom[11] = ''; if ($extracomand11!='0'){$excom[11] .=" ".$extracomand11;	} else{$excom[11] .=" ORDER BY Nombre ASC ";}
+			$excom[12] = ''; if ($extracomand12!='0'){$excom[12] .=" ".$extracomand12;	} else{$excom[12] .=" ORDER BY Nombre ASC ";}
+			$excom[13] = ''; if ($extracomand13!='0'){$excom[13] .=" ".$extracomand13;	} else{$excom[13] .=" ORDER BY Nombre ASC ";}
+			$excom[14] = ''; if ($extracomand14!='0'){$excom[14] .=" ".$extracomand14;	} else{$excom[14] .=" ORDER BY Nombre ASC ";}
+			$excom[15] = ''; if ($extracomand15!='0'){$excom[15] .=" ".$extracomand15;	} else{$excom[15] .=" ORDER BY Nombre ASC ";}
+			$excom[16] = ''; if ($extracomand16!='0'){$excom[16] .=" ".$extracomand16;	} else{$excom[16] .=" ORDER BY Nombre ASC ";}
+			$excom[17] = ''; if ($extracomand17!='0'){$excom[17] .=" ".$extracomand17;	} else{$excom[17] .=" ORDER BY Nombre ASC ";}
+			$excom[18] = ''; if ($extracomand18!='0'){$excom[18] .=" ".$extracomand18;	} else{$excom[18] .=" ORDER BY Nombre ASC ";}
+			$excom[19] = ''; if ($extracomand19!='0'){$excom[19] .=" ".$extracomand19;	} else{$excom[19] .=" ORDER BY Nombre ASC ";}
+			$excom[20] = ''; if ($extracomand20!='0'){$excom[20] .=" ".$extracomand20;	} else{$excom[20] .=" ORDER BY Nombre ASC ";}
+			$excom[21] = ''; if ($extracomand21!='0'){$excom[21] .=" ".$extracomand21;	} else{$excom[21] .=" ORDER BY Nombre ASC ";}
+			$excom[22] = ''; if ($extracomand22!='0'){$excom[22] .=" ".$extracomand22;	} else{$excom[22] .=" ORDER BY Nombre ASC ";}
+			$excom[23] = ''; if ($extracomand23!='0'){$excom[23] .=" ".$extracomand23;	} else{$excom[23] .=" ORDER BY Nombre ASC ";}
+			$excom[24] = ''; if ($extracomand24!='0'){$excom[24] .=" ".$extracomand24;	} else{$excom[24] .=" ORDER BY Nombre ASC ";}
+			$excom[25] = ''; if ($extracomand25!='0'){$excom[25] .=" ".$extracomand25;	} else{$excom[25] .=" ORDER BY Nombre ASC ";}
+			$excom[26] = ''; if ($extracomand26!='0'){$excom[26] .=" ".$extracomand26;	} else{$excom[26] .=" ORDER BY Nombre ASC ";}
+			$excom[27] = ''; if ($extracomand27!='0'){$excom[27] .=" ".$extracomand27;	} else{$excom[27] .=" ORDER BY Nombre ASC ";}
+			$excom[28] = ''; if ($extracomand28!='0'){$excom[28] .=" ".$extracomand28;	} else{$excom[28] .=" ORDER BY Nombre ASC ";}
+			$excom[29] = ''; if ($extracomand29!='0'){$excom[29] .=" ".$extracomand29;	} else{$excom[29] .=" ORDER BY Nombre ASC ";}
+			$excom[30] = ''; if ($extracomand30!='0'){$excom[30] .=" ".$extracomand30;	} else{$excom[30] .=" ORDER BY Nombre ASC ";}
+			$excom[31] = ''; if ($extracomand31!='0'){$excom[31] .=" ".$extracomand31;	} else{$excom[31] .=" ORDER BY Nombre ASC ";}
+			$excom[32] = ''; if ($extracomand32!='0'){$excom[32] .=" ".$extracomand32;	} else{$excom[32] .=" ORDER BY Nombre ASC ";}
+			$excom[33] = ''; if ($extracomand33!='0'){$excom[33] .=" ".$extracomand33;	} else{$excom[33] .=" ORDER BY Nombre ASC ";}
+			$excom[34] = ''; if ($extracomand34!='0'){$excom[34] .=" ".$extracomand34;	} else{$excom[34] .=" ORDER BY Nombre ASC ";}
+			$excom[35] = ''; if ($extracomand35!='0'){$excom[35] .=" ".$extracomand35;	} else{$excom[35] .=" ORDER BY Nombre ASC ";}
+			$excom[36] = ''; if ($extracomand36!='0'){$excom[36] .=" ".$extracomand36;	} else{$excom[36] .=" ORDER BY Nombre ASC ";}
+			$excom[37] = ''; if ($extracomand37!='0'){$excom[37] .=" ".$extracomand37;	} else{$excom[37] .=" ORDER BY Nombre ASC ";}
+			$excom[38] = ''; if ($extracomand38!='0'){$excom[38] .=" ".$extracomand38;	} else{$excom[38] .=" ORDER BY Nombre ASC ";}
+			$excom[39] = ''; if ($extracomand39!='0'){$excom[39] .=" ".$extracomand39;	} else{$excom[39] .=" ORDER BY Nombre ASC ";}
+			$excom[40] = ''; if ($extracomand40!='0'){$excom[40] .=" ".$extracomand40;	} else{$excom[40] .=" ORDER BY Nombre ASC ";} 
+			$excom[41] = ''; if ($extracomand41!='0'){$excom[41] .=" ".$extracomand41;	} else{$excom[41] .=" ORDER BY Nombre ASC ";} 
+			$excom[42] = ''; if ($extracomand42!='0'){$excom[42] .=" ".$extracomand42;	} else{$excom[42] .=" ORDER BY Nombre ASC ";} 
+			$excom[43] = ''; if ($extracomand43!='0'){$excom[43] .=" ".$extracomand43;	} else{$excom[43] .=" ORDER BY Nombre ASC ";} 
+			$excom[44] = ''; if ($extracomand44!='0'){$excom[44] .=" ".$extracomand44;	} else{$excom[44] .=" ORDER BY Nombre ASC ";} 
+			$excom[45] = ''; if ($extracomand45!='0'){$excom[45] .=" ".$extracomand45;	} else{$excom[45] .=" ORDER BY Nombre ASC ";} 
+			$excom[46] = ''; if ($extracomand46!='0'){$excom[46] .=" ".$extracomand46;	} else{$excom[46] .=" ORDER BY Nombre ASC ";} 
+			$excom[47] = ''; if ($extracomand47!='0'){$excom[47] .=" ".$extracomand47;	} else{$excom[47] .=" ORDER BY Nombre ASC ";} 
+			$excom[48] = ''; if ($extracomand48!='0'){$excom[48] .=" ".$extracomand48;	} else{$excom[48] .=" ORDER BY Nombre ASC ";} 
+			$excom[49] = ''; if ($extracomand49!='0'){$excom[49] .=" ".$extracomand49;	} else{$excom[49] .=" ORDER BY Nombre ASC ";} 
+			$excom[50] = ''; if ($extracomand50!='0'){$excom[50] .=" ".$extracomand50;	} else{$excom[50] .=" ORDER BY Nombre ASC ";}
 			
 			//visualizar listado
 			$display = array();
@@ -6537,7 +6854,7 @@ class Basic_Form_Inputs{
 			}
 			//Primera Consulta estandar			
 			$arrSeleccion = array();
-			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1]."";
+			$query = "SELECT ".$dataA[1]." AS idData ".$data_requiredA." FROM `".$table[1]."` WHERE ".$dataA[1]."!='' ".$filtro[1]." ".$excom[1];
 			$resultado = mysqli_query ($dbConn, $query);
 			while ( $row = mysqli_fetch_assoc ($resultado)) {
 			array_push( $arrSeleccion,$row );
@@ -6588,7 +6905,7 @@ class Basic_Form_Inputs{
 				// Se trae un listado con los datos previamente seleccionados
 				if ($value[$i-1]!=0&&$value[$i-1]!=''){
 					$arrSeleccion = array();
-					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i]."";
+					$query = "SELECT ".$dataA[$i]." AS idData ".$data_requiredB."  FROM `".$table[$i]."` WHERE ".$dataA[$i-1]." = ".$value[$i-1]." ".$filtro[$i]." ".$excom[$i];
 					$resultado = mysqli_query ($dbConn, $query);
 					while ( $row = mysqli_fetch_assoc ($resultado)) {
 					array_push( $arrSeleccion,$row );
@@ -6597,7 +6914,7 @@ class Basic_Form_Inputs{
 				} 
 				// Se trae un listado con todos los datos
 				$arrTodos = array();
-				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i]."";
+				$query = "SELECT ".$dataA[$i]." AS idData, ".$dataA[$i-1]." AS idCat ".$data_requiredB." FROM `".$table[$i]."` WHERE ".$dataA[$i]."!='' ".$filtro[$i]." ".$excom[$i];
 				$resultado = mysqli_query ($dbConn, $query);
 				while ( $row = mysqli_fetch_assoc ($resultado)) {
 				array_push( $arrTodos,$row );

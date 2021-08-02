@@ -7,6 +7,12 @@ if( ! defined('XMBCXRXSKGC')) {
 }
 /*******************************************************************************************************************/
 /*                                                                                                                 */
+/*                                        Control de numero de funciones                                           */
+/*                                                                                                                 */
+/*******************************************************************************************************************/
+$n_funct_datadate = 0;
+/*******************************************************************************************************************/
+/*                                                                                                                 */
 /*                                                  Funciones                                                      */
 /*                                                                                                                 */
 /*******************************************************************************************************************/
@@ -26,6 +32,9 @@ if( ! defined('XMBCXRXSKGC')) {
 * Date     $Fecha   Fecha a Formatear
 * @return  String
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function Fecha_completa($Fecha){	
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -56,7 +65,7 @@ function Fecha_completa($Fecha){
 				return $cadena;
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -78,6 +87,9 @@ function Fecha_completa($Fecha){
 * Date     $Fecha    Fecha a Formatear
 * @return  String
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function Fecha_completa_alt($Fecha){	
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -108,7 +120,7 @@ function Fecha_completa_alt($Fecha){
 				return $cadena;
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -130,6 +142,9 @@ function Fecha_completa_alt($Fecha){
 * Date     $Fecha    Fecha a Formatear
 * @return  String
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function Dia_Mes($Fecha){	
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -139,8 +154,8 @@ function Dia_Mes($Fecha){
 				return 'Sin Fecha';
 			}else{
 				$mes_c = new DateTime($Fecha);
-				$dia = $mes_c->format('d');
-				$me = $mes_c->format('m');
+				$dia   = $mes_c->format('d');
+				$me    = $mes_c->format('m');
 				switch ($me) {
 					case 1:  $mes='Enero'; break;
 					case 2:  $mes='Febrero'; break;
@@ -159,7 +174,7 @@ function Dia_Mes($Fecha){
 				return $cadena;
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -181,6 +196,9 @@ function Dia_Mes($Fecha){
 * Date     $Fecha    Fecha a Formatear
 * @return  Date
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function Fecha_estandar($Fecha){
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -193,7 +211,7 @@ function Fecha_estandar($Fecha){
 				return date_format($date, 'd-m-Y');
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -215,6 +233,9 @@ function Fecha_estandar($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  Date
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function Fecha_estandar_c($Fecha){
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -227,7 +248,7 @@ function Fecha_estandar_c($Fecha){
 				return date_format($date, 'd-m-y');
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -249,19 +270,53 @@ function Fecha_estandar_c($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  Date
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function Fecha_normalizada($Fecha){
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
+		$Fecha = str_replace('/', '-', $Fecha);
 		//valido la fecha
-		if(validaFecha($Fecha)){
-			if($Fecha=='0000-00-00'){
-				return 'Sin Fecha';
-			}else{
-				$date = date_create($Fecha);
-				return date_format($date, 'Y-m-d');
-			}
+		if($Fecha=='0000-00-00' OR $Fecha=='00-00-0000'){
+			return 'Sin Fecha';
 		}else{
-			return 'El dato ingresado no es una fecha';
+			$date = date_create($Fecha);
+			return date_format($date, 'Y-m-d');
+		}
+	}else{
+		return 'Sin Fecha';
+	}	
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Formatea la fecha entregada
+* 
+*===========================     Detalles    ===========================
+* Cambia el formato de fecha por uno mas utilizado:
+* 19000101
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se formatea fecha
+* 	Fecha_archivos('2019-01-01');
+* 
+*===========================    Parametros   ===========================
+* Date     $Fecha   Fecha a Formatear
+* @return  Date
+************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
+function Fecha_archivos($Fecha){
+	//Se verifica que se recibe algo
+	if($Fecha!=''){
+		$Fecha = str_replace('/', '-', $Fecha);
+		//valido la fecha
+		if($Fecha=='0000-00-00' OR $Fecha=='00-00-0000'){
+			return 'Sin Fecha';
+		}else{
+			$date = date_create($Fecha);
+			return date_format($date, 'Ymd');
 		}
 	}else{
 		return 'Sin Fecha';
@@ -283,6 +338,9 @@ function Fecha_normalizada($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  String
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function Fecha_mes_ano($Fecha){	
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -292,8 +350,8 @@ function Fecha_mes_ano($Fecha){
 				return 'Sin Fecha';
 			}else{
 				$mes_c = new DateTime($Fecha);
-				$me = $mes_c->format('m');
-				$agno = $mes_c->format('Y');
+				$me    = $mes_c->format('m');
+				$agno  = $mes_c->format('Y');
 				switch ($me) {
 					case 1:  $mes='Enero'; break;
 					case 2:  $mes='Febrero'; break;
@@ -312,7 +370,7 @@ function Fecha_mes_ano($Fecha){
 				return $cadena;
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -334,6 +392,9 @@ function Fecha_mes_ano($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  Integer
 ************************************************************************/
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function fecha2NdiaMes($Fecha){
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -344,7 +405,7 @@ function fecha2NdiaMes($Fecha){
 			$datofinal = $subdato->format("j");
 			return $datofinal;
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -366,6 +427,9 @@ function fecha2NdiaMes($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  Integer
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function fecha2NdiaMesCon0($Fecha){	
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -379,7 +443,7 @@ function fecha2NdiaMesCon0($Fecha){
 				return $dia;
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -401,6 +465,9 @@ function fecha2NdiaMesCon0($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  Integer
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function fecha2NDiaSemana($Fecha){
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -414,7 +481,7 @@ function fecha2NDiaSemana($Fecha){
 				return $me;
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -435,6 +502,9 @@ function fecha2NDiaSemana($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  String
 ************************************************************************/
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function fecha2NombreDia($Fecha){
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -452,7 +522,7 @@ function fecha2NombreDia($Fecha){
 			}
 			return $dia;
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -473,6 +543,9 @@ function fecha2NombreDia($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  Integer
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function fecha2NSemana($Fecha){
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -486,7 +559,7 @@ function fecha2NSemana($Fecha){
 				return $datofinal;
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -497,7 +570,7 @@ function fecha2NSemana($Fecha){
 * Formatea la fecha entregada
 * 
 *===========================     Detalles    ===========================
-* Se obtiene el numero del mes en base a la fecha entregada
+* Se obtiene el numero del mes en base a la fecha entregada (1 a 12)
 *===========================    Modo de uso  ===========================
 * 	
 * 	//se formatea fecha
@@ -507,6 +580,9 @@ function fecha2NSemana($Fecha){
 * Date     $Fecha  Fecha a Formatear
 * @return  Integer
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function fecha2NMes($Fecha){
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -520,7 +596,7 @@ function fecha2NMes($Fecha){
 				return $datofinal;
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -541,6 +617,9 @@ function fecha2NMes($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  String
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function fecha2NombreMes($Fecha){	
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -567,7 +646,7 @@ function fecha2NombreMes($Fecha){
 				return $mes;
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -578,7 +657,8 @@ function fecha2NombreMes($Fecha){
 * Formatea la fecha entregada
 * 
 *===========================     Detalles    ===========================
-* Se obtiene el nombre abreviado del mes en base a una fecha ingresada
+* Se obtiene el nombre abreviado (3 primeras letras) del mes en base 
+* a una fecha ingresada
 *===========================    Modo de uso  ===========================
 * 	
 * 	//se formatea fecha
@@ -588,6 +668,9 @@ function fecha2NombreMes($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  String
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function fecha2NombreMesCorto($Fecha){	
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -614,7 +697,7 @@ function fecha2NombreMesCorto($Fecha){
 				return $mes;
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -635,6 +718,9 @@ function fecha2NombreMesCorto($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  Integer
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function fecha2Ano($Fecha){	
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -648,7 +734,7 @@ function fecha2Ano($Fecha){
 				return $ano;
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
@@ -671,6 +757,9 @@ function fecha2Ano($Fecha){
 * Date     $Fecha   Fecha a Formatear
 * @return  String
 ************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
 function Fecha_gringa($Fecha){
 	//Se verifica que se recibe algo
 	if($Fecha!=''){
@@ -683,11 +772,52 @@ function Fecha_gringa($Fecha){
 				return date_format($date, 'F d Y');
 			}
 		}else{
-			return 'El dato ingresado no es una fecha';
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
+		}
+	}else{
+		return 'Sin Fecha';
+	}	
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+* Entrega el ultimo dia del mes
+* 
+*===========================     Detalles    ===========================
+* Se obtiene el ultimo dia del mes de la fecha entregada
+*===========================    Modo de uso  ===========================
+* 	
+* 	//se formatea fecha
+* 	Fecha_ultimo_dia_mes('2019-01-01');
+* 
+*===========================    Parametros   ===========================
+* Date     $Fecha   Fecha a usar
+* @return  String
+************************************************************************/ 
+//control numero funciones
+$n_funct_datadate++;
+//Funcion
+function Fecha_ultimo_dia_mes($Fecha){
+	//Se verifica que se recibe algo
+	if($Fecha!=''){
+		//valido la fecha
+		if(validaFecha($Fecha)){
+			if($Fecha=='0000-00-00'){
+				return 'Sin Fecha';
+			}else{
+				//Ultimo dia de la fecha entregada
+				$LastDay = date("Y-m-t", strtotime($Fecha));
+				
+				return $LastDay;
+			}
+		}else{
+			return 'El dato ingresado no es una fecha ('.$Fecha.')';
 		}
 	}else{
 		return 'Sin Fecha';
 	}	
 }
 
+
+
+	
 ?>

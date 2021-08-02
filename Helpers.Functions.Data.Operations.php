@@ -7,6 +7,12 @@ if( ! defined('XMBCXRXSKGC')) {
 }
 /*******************************************************************************************************************/
 /*                                                                                                                 */
+/*                                        Control de numero de funciones                                           */
+/*                                                                                                                 */
+/*******************************************************************************************************************/
+$n_funct_dataoperations = 0;
+/*******************************************************************************************************************/
+/*                                                                                                                 */
 /*                                                  Funciones                                                      */
 /*                                                                                                                 */
 /*******************************************************************************************************************/
@@ -28,6 +34,9 @@ if( ! defined('XMBCXRXSKGC')) {
 * Integer  $divisor     Divisor de la hora
 * @return  Integer
 ************************************************************************/
+//control numero funciones
+$n_funct_dataoperations++;
+//Funcion
 function divHoras($hora,$divisor) {
 	//valido la hora
 	if(validaHora($hora)){
@@ -35,11 +44,8 @@ function divHoras($hora,$divisor) {
 		if (validarNumero($divisor)){ 
 			//Verifica si el numero recibido es un entero
 			if (validaEntero($divisor)){ 
-				$h1      = substr($hora,0,-3);
-				$m1      = substr($hora,3,2);
-				$minutos = (($h1*60)*60)+($m1*60);
-				$dif     = $minutos/$divisor;
-				$difm    = floor($dif/60);
+				$minutos = horas2minutos($hora);
+				$difm    = $minutos/$divisor;
 				return $difm;
 			} else { 
 				return 'El dato ingresado no es un numero entero';
@@ -48,7 +54,7 @@ function divHoras($hora,$divisor) {
 			return 'El dato ingresado no es un numero';
 		}
 	}else{
-		return 'El dato ingresado no es una hora';
+		return 'El dato ingresado no es una hora ('.$hora.')';
 	}  
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,6 +74,9 @@ function divHoras($hora,$divisor) {
 * Integer  $multiplicador   Multiplicador de la hora
 * @return  Time
 ************************************************************************/
+//control numero funciones
+$n_funct_dataoperations++;
+//Funcion
 function multHoras($hora,$multiplicador) {
 	//valido la hora
 	if(validaHora($hora)){
@@ -89,7 +98,7 @@ function multHoras($hora,$multiplicador) {
 			return 'El dato ingresado no es un numero';
 		}
 	}else{
-		return 'El dato ingresado no es una hora';
+		return 'El dato ingresado no es una hora ('.$hora.')';
 	} 
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,33 +119,44 @@ function multHoras($hora,$multiplicador) {
 * Time    $horaresta   Cantidad de horas a restar
 * @return  Time
 ************************************************************************/
+//control numero funciones
+$n_funct_dataoperations++;
+//Funcion
 function restahoras($hora, $horaresta){
+		
 	//valido la hora
 	if(validaHora($hora)&&validaHora($horaresta)){
+		
 		//Se verifica cual es el mayor
 		if(strtotime($hora)>strtotime($horaresta)){
 			$horaresta  = sumahoras($horaresta, '24:00:00');
 		}
 		
-		$horai = substr($hora,0,2);
-		$mini  = substr($hora,3,2);
-		$segi  = substr($hora,6,2);
+		//Separo la hora
+		$hora      = explode(":",$hora);
+		$horaresta = explode(":",$horaresta);
+		
+		//obtengo valores por separado
+		$horai = $hora[0];
+		$mini  = $hora[1];
+		$segi  = $hora[2];
 
-		$horaf = substr($horaresta,0,2);
-		$minf  = substr($horaresta,3,2);
-		$segf  = substr($horaresta,6,2);
-
+		//obtengo valores por separado
+		$horaf = $horaresta[0];
+		$minf  = $horaresta[1];
+		$segf  = $horaresta[2];
+		
+		//transformo a segundos
 		$ini   = ((($horai*60)*60)+($mini*60)+$segi);
 		$fin   = ((($horaf*60)*60)+($minf*60)+$segf);
 		
+		//ejecuto operacion
 		$dif   = $fin-$ini;
-
-		$difh  = floor($dif/3600);
-		$difm  = floor(($dif-($difh*3600))/60);
-		$difs  = $dif-($difm*60)-($difh*3600);
-		return date("H:i:s",mktime($difh,$difm,$difs));
+		
+		//devuelvo
+		return segundos2horas($dif);
 	}else{
-		return 'El dato ingresado no es una hora';
+		return 'El dato ingresado no es una hora ('.$hora.' - '.$horaresta.')';
 	} 
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,25 +172,43 @@ function restahoras($hora, $horaresta){
 * 	sumahoras('14:00:00', '07:00:00');
 * 
 *===========================    Parametros   ===========================
-* Time    $hora        Hora ingresada
-* Time    $horasuma    Cantidad de horas a sumar
+* Time     $hora        Hora ingresada
+* Time     $horasuma    Cantidad de horas a sumar
 * @return  Time
 ************************************************************************/
-//funcion para sumar horas
+//control numero funciones
+$n_funct_dataoperations++;
+//Funcion
 function sumahoras($hora,$horasuma){
 	//valido la hora
-	if(validaHora($hora)&&validaHora($horasuma)){
-		$hora=explode(":",$hora);
-		$horasuma=explode(":",$horasuma);
-		$horas=(int)$hora[0]+(int)$horasuma[0];
-		$minutos=(int)$hora[1]+(int)$horasuma[1];
-		$segundos=(int)$hora[2]+(int)$horasuma[2];
-		$horas+=(int)($minutos/60);
-		$minutos=(int)($minutos%60)+(int)($segundos/60);
-		$segundos=(int)($segundos%60);
-		return (intval($horas)<10?'0'.intval($horas):intval($horas)).':'.($minutos<10?'0'.$minutos:$minutos).':'.($segundos<10?'0'.$segundos:$segundos); 
+	//if(validaHora($hora)&&validaHora($horasuma)){
+	if(validaHora($hora)){	
+		
+		//Separo la hora
+		$hora     = explode(":",$hora);
+		$horasuma = explode(":",$horasuma);
+		
+		//obtengo valores por separado
+		$horai = $hora[0];
+		$mini  = $hora[1];
+		$segi  = $hora[2];
+
+		//obtengo valores por separado
+		$horaf = $horasuma[0];
+		$minf  = $horasuma[1];
+		$segf  = $horasuma[2];
+		
+		//transformo a segundos
+		$ini   = ((($horai*60)*60)+($mini*60)+$segi);
+		$fin   = ((($horaf*60)*60)+($minf*60)+$segf);
+		
+		//ejecuto operacion
+		$dif   = $fin+$ini;
+		
+		//devuelvo
+		return segundos2horas($dif);
 	}else{
-		return 'El dato ingresado no es una hora';
+		return 'El dato ingresado no es una hora ('.$hora.' + '.$horasuma.')';
 	} 
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,6 +227,9 @@ function sumahoras($hora,$horasuma){
 * Integer  $nDias   Cantidad de dias a sumar
 * @return  Date
 ************************************************************************/
+//control numero funciones
+$n_funct_dataoperations++;
+//Funcion
 function sumarDias($Fecha,$nDias){
 	//valido las fechas
 	if(validaFecha($Fecha)){
@@ -197,7 +238,7 @@ function sumarDias($Fecha,$nDias){
 			//Verifica si el numero recibido es un entero
 			if (validaEntero($nDias)){ 
 				$nuevafecha = strtotime ( '+'.$nDias.' day' , strtotime ( $Fecha ) ) ;
-				$nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+				$nuevafecha = date ( 'Y-m-d' , $nuevafecha );
 				return $nuevafecha;
 			} else { 
 				return 'El dato ingresado no es un numero entero';
@@ -206,7 +247,7 @@ function sumarDias($Fecha,$nDias){
 			return 'El dato ingresado no es un numero';
 		} 
 	}else{
-		return 'El dato ingresado no es una fecha';
+		return 'El dato ingresado no es una fecha ('.$Fecha.')';
 	}
 }  
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,6 +266,9 @@ function sumarDias($Fecha,$nDias){
 * Integer  $nDias   Cantidad de dias a restar
 * @return  Date
 ************************************************************************/
+//control numero funciones
+$n_funct_dataoperations++;
+//Funcion
 function restarDias($Fecha,$nDias){
 	//valido las fechas
 	if(validaFecha($Fecha)){
@@ -233,7 +277,7 @@ function restarDias($Fecha,$nDias){
 			//Verifica si el numero recibido es un entero
 			if (validaEntero($nDias)){ 
 				$nuevafecha = strtotime ( '-'.$nDias.' day' , strtotime ( $Fecha ) ) ;
-				$nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+				$nuevafecha = date ( 'Y-m-d' , $nuevafecha );
 				return $nuevafecha; 
 			} else { 
 				return 'El dato ingresado no es un numero entero';
@@ -242,7 +286,7 @@ function restarDias($Fecha,$nDias){
 			return 'El dato ingresado no es un numero';
 		} 
 	}else{
-		return 'El dato ingresado no es una fecha';
+		return 'El dato ingresado no es una fecha ('.$Fecha.')';
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,7 +294,7 @@ function restarDias($Fecha,$nDias){
 * Ver dias transcurridos entre fechas
 * 
 *===========================     Detalles    ===========================
-* Permite ver los dias transcurridos entre dos fechas entregadas
+* Permite ver el numero de los dias transcurridos entre dos fechas entregadas
 *===========================    Modo de uso  ===========================
 * 	
 * 	//se ejecuta operacion
@@ -261,15 +305,23 @@ function restarDias($Fecha,$nDias){
 * Date     $fecha_f   Fecha de termino
 * @return  Integer
 ************************************************************************/
-//funcion que indica la diferencia de dias entre fechas
+//control numero funciones
+$n_funct_dataoperations++;
+//Funcion
 function dias_transcurridos($fecha_i,$fecha_f){
 	//valido las fechas
-	if(validaFecha($fecha_i)&&validaFecha($fecha_f)){
-		$dias	= (strtotime($fecha_i)-strtotime($fecha_f))/86400;
-		$dias 	= abs($dias); $dias = floor($dias);		
-		return $dias;
+	if(validaFecha($fecha_i)){
+		if(validaFecha($fecha_f)){
+			$dias	= (strtotime($fecha_i)-strtotime($fecha_f))/86400;
+			$dias 	= abs($dias); 
+			$dias   = floor($dias);		
+			
+			return $dias;
+		}else{
+			return 'Fecha de termino no es una fecha';
+		}
 	}else{
-		return 'El dato ingresado no es una fecha';
+		return 'Fecha de inicio no es una fecha';
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -288,6 +340,9 @@ function dias_transcurridos($fecha_i,$fecha_f){
 * Date     $fechafinal     Fecha de termino
 * @return  Integer
 ************************************************************************/
+//control numero funciones
+$n_funct_dataoperations++;
+//Funcion
 function diferencia_meses( $fechainicial, $fechafinal ) {  
 	//valido las fechas
 	if(validaFecha($fechainicial)&&validaFecha($fechafinal)){
@@ -308,7 +363,7 @@ function diferencia_meses( $fechainicial, $fechafinal ) {
 
 		return $meses;
 	}else{
-		return 'El dato ingresado no es una fecha';
+		return 'El dato ingresado no es una fecha ('.$fechainicial.' - '.$fechafinal.')';
 	}
 }
 
