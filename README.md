@@ -1,7 +1,7 @@
 # function_collection
 Pequeña colección de funciones hechas para PHP que abarcan varias pequeñas tareas en las que se pueden utilizar, solo basta seguir sus instrucciones
 
-### Uso 🚀
+## Uso 🚀
 
 Para utilizarlas solo se debe copiar la función deseada y pegarla dentro del proyecto, pero si se desea importar el archivo directamente se debe hacer lo siguiente:
 
@@ -29,7 +29,7 @@ if( ! defined('XMBCXRXSKGC')) {
 ## Licencia 📄
 Este proyecto está bajo la Licencia GPL-3.0 license - ve el archivo [LICENSE](LICENSE) para detalles
 
-### Contacto 📖
+## Contacto 📖
 Puedes contactarte conmigo a traves de cualquier de los siguientes canales:
 - [Github](https://github.com/tenshi98)
 - [Linkedin](https://www.linkedin.com/in/victor-reyes-galvez/)
